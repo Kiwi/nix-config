@@ -22,6 +22,15 @@ defaultLocale = "en_US.UTF-8";
 
 time.timeZone = "America/Los_Angeles";
 
+environment.sessionVariables = {
+EDITOR = "emacsclient";
+VISUAL = "emacsclient";
+};
+
+environment.shells = [
+"${pkgs.zsh}/bin/bash"
+];
+
 environment.systemPackages = with pkgs; [
 wget
 curl
@@ -34,7 +43,17 @@ firefox
 tmux
 mpv
 wmctrl
+# xorg.xbacklight
+xorg.xmodmap
+xorg.xset
+xorg.xsetroot
+libnotify
+pkgs.acpilight
 ];
+
+nixpkgs.config.packageOverrides = super: {
+    acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
+  };
 
 programs.bash.enableCompletion = true;
 programs.mtr.enable = true;
@@ -65,6 +84,7 @@ Option "TearFree" "true"
 Option "AccelMethod" "glamor"
 '';
 displayManager.slim.enable = true;
+displayManager.slim.defaultUser = "adam";
 desktopManager = {
 default = "emacs";
 session = [ {
