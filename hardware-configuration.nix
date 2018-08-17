@@ -8,7 +8,7 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
@@ -17,13 +17,18 @@
       fsType = "zfs";
     };
 
-  fileSystems."/home" =
-    { device = "zroot/HOME";
+  fileSystems."/nix" =
+    { device = "zroot/NIX";
       fsType = "zfs";
     };
 
   fileSystems."/boot/grub" =
     { device = "zroot/BOOT";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "zroot/HOME";
       fsType = "zfs";
     };
 

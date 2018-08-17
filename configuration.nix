@@ -1,130 +1,143 @@
 { config, pkgs, ... }:
 
 {
-imports = [
-./hardware-configuration.nix
-];
+  imports = [
+    ./hardware-configuration.nix
+    ./rescue_boot.nix
+  ];
 
-boot.loader.grub.enable = true;
-boot.loader.grub.version = 2;
-boot.loader.grub.device = "/dev/sda";
-boot.supportedFilesystems = [ "zfs" ];
-boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt" ];
-networking.hostId = "007f0100";
-networking.hostName = "nixos";
-networking.networkmanager.enable = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.copyKernels = true;
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
+  networking.hostId = "007f0100";
 
-i18n = {
-consoleFont = "Lat2-Terminus16";
-consoleKeyMap = "us";
-defaultLocale = "en_US.UTF-8";
-};
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
 
-time.timeZone = "America/Los_Angeles";
+  i18n = {
+    consoleFont = "Lat2-Terminus16";
+    consoleKeyMap = "us";
+    defaultLocale = "en_US.UTF-8";
+  };
 
-environment.sessionVariables = {
-EDITOR = "emacsclient";
-VISUAL = "emacsclient";
-};
+  time.timeZone = "America/Los_Angeles";
 
-environment.shells = [
-"${pkgs.zsh}/bin/bash"
-];
+  environment.sessionVariables = {
+    EDITOR = "emacsclient";
+    VISUAL = "emacsclient";
+  };
 
-environment.systemPackages = with pkgs; [
-wget
-curl
-gnutls
-gnupg
-gnupg1compat
-pinentry
-git
-firefox
-tmux
-mpv
-wmctrl
-# xorg.xbacklight
-xorg.xmodmap
-xorg.xset
-xorg.xsetroot
-libnotify
-pkgs.acpilight
-];
+  environment.shells = [
+    "${pkgs.zsh}/bin/bash"
+  ];
 
-nixpkgs.config.packageOverrides = super: {
+  environment.systemPackages = with pkgs; [
+    wget
+    curl
+    gnutls
+    gnupg
+    gnupg1compat
+    pinentry
+    git
+    firefox
+    tmux
+    mpv
+    wmctrl
+    # xorg.xbacklight
+    xorg.xmodmap
+    xorg.xset
+    xorg.xsetroot
+    numlockx
+    libnotify
+    pkgs.acpilight
+  ];
+
+  nixpkgs.config.packageOverrides = super: {
     acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
   };
 
-programs.bash.enableCompletion = true;
-programs.mtr.enable = true;
-programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.bash.enableCompletion = true;
+  programs.mtr.enable = true;
+  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-services.openssh.enable = true;
+  services.openssh.enable = true;
 
-networking.firewall.allowedTCPPorts = [ 22 ];
-networking.firewall.allowedUDPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedUDPPorts = [ 22 ];
 
-sound.enable = true;
-hardware.pulseaudio.enable = true;
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
-hardware.opengl = {
-driSupport = true;
-driSupport32Bit = true;
-};
+  hardware.opengl = {
+    driSupport = true;
+    driSupport32Bit = true;
+  };
 
-services.xserver = {
-enable = true;
-layout = "us";
-libinput.enable = true;
-videoDrivers = [ "modesetting" ];
-useGlamor = true;
-deviceSection = ''
-Option "DRI" "3"
-Option "TearFree" "true"
-Option "AccelMethod" "glamor"
-'';
-displayManager.slim.enable = true;
-displayManager.slim.defaultUser = "adam";
-desktopManager = {
-default = "emacs";
-session = [ {
-manage = "desktop";
-name = "emacs";
-start = ''
-${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
-${pkgs.xlibs.xset}/bin/xset r rate 250 50
-${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
-${pkgs.emacs}/bin/emacs &
-waitPID=$!
-'';
-} ];
-};
-};
+  services.compton.enable = true;
+  services.compton.backend = "glx";
 
-fonts.fonts = with pkgs; [
-liberation_ttf
-noto-fonts
-noto-fonts-cjk
-noto-fonts-emoji
-source-code-pro
-font-awesome-ttf
-powerline-fonts
-];
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    libinput.enable = true;
+    libinput.accelSpeed = "0.9";
+    videoDrivers = [ "modesetting" ];
+    useGlamor = true;
+    deviceSection = ''
+      Option "DRI" "3"
+      Option "TearFree" "true"
+      Option "AccelMethod" "glamor"
+    '';
 
-users.users.adam =
-{ isNormalUser = true;
-home = "/home/adam";
-createHome = false;
-extraGroups = [ "wheel" "disk" "audio" "video" "networkmanager" "systemd-journal" ];
-};
-security.sudo.wheelNeedsPassword = false;
+    displayManager.slim.enable = true;
+    displayManager.slim.defaultUser = "adam";
+    displayManager.slim.autoLogin = true;
+    displayManager.sessionCommands = ''
+      ${pkgs.xlibs.xsetroot}/bin/numlockx
+      ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+      ${pkgs.xlibs.xset}/bin/xset r rate 250 50
+      ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
+    '';
 
-powerManagement.enable = true;
+    desktopManager = {
+      xterm.enable = false;
+      default = "none";
+    };
 
-# This value determines the NixOS release with which your system is to be
-# compatible, in order to avoid breaking some software such as database
-# servers. You should change this only after NixOS release notes say you
-# should.
-system.stateVersion = "18.03"; # Did you read the comment?
+    windowManager = {
+      exwm.enable = true;
+      exwm.enableDefaultConfig = true;
+      default = "exwm";
+    };
+  };
 
-}
+  fonts.fonts = with pkgs; [
+    liberation_ttf
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    source-code-pro
+    font-awesome-ttf
+    powerline-fonts
+  ];
+
+  users.users.adam =
+  { isNormalUser = true;
+    home = "/home/adam";
+    createHome = false;
+    extraGroups = [ "wheel" "disk" "audio" "video" "networkmanager" "systemd-journal" ];
+  };
+  security.sudo.wheelNeedsPassword = false;
+
+  powerManagement.enable = true;
+
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "18.03"; # Did you read the comment?
+
+} 
