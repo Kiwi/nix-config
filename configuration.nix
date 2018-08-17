@@ -11,6 +11,17 @@
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.copyKernels = true;
   boot.supportedFilesystems = [ "zfs" ];
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    frequent = 8;
+    hourly = 0;
+    daily = 21;
+    weekly = 0;
+    monthly = 0;
+  };
+  boot.zfs.forceImportAll = false;
+  boot.zfs.forceImportRoot = false;
   boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
   networking.hostId = "007f0100";
 
@@ -38,11 +49,12 @@
     wget
     curl
     gnutls
-    gnupg
     gnupg1compat
     pinentry
     git
     firefox
+    openvpn
+    qbittorrent
     tmux
     mpv
     wmctrl
@@ -53,6 +65,8 @@
     numlockx
     libnotify
     pkgs.acpilight
+  (python36.withPackages(ps: with ps; [ certifi ]))
+    pandoc
   ];
 
   nixpkgs.config.packageOverrides = super: {
@@ -115,10 +129,6 @@
   };
 
   fonts.fonts = with pkgs; [
-    liberation_ttf
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
     source-code-pro
     font-awesome-ttf
     powerline-fonts
@@ -140,4 +150,5 @@
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
 
-} 
+}
+    

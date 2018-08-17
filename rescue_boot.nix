@@ -6,12 +6,12 @@ let
         module
       ];
     };
-    module = {
-      # you will want to add options here to support your filesystem
-      # and also maybe ssh to let you in
+  module = {
+    # you will want to add options here to support your filesystem
+    # and also maybe ssh to let you in
       boot.supportedFilesystems = [ "zfs" ];
-      networking.networkmanager.enable = true;
-    };
+  };
+
 in {
   boot.loader.grub.extraEntries = ''
     menuentry "Nixos Installer" {
