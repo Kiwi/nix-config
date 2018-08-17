@@ -62,7 +62,6 @@ let myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;}
     tmux
     mpv
     wmctrl
-    # xorg.xbacklight
     xorg.xmodmap
     xorg.xset
     xorg.xsetroot
@@ -121,6 +120,12 @@ let myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;}
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
       ${myemacs}/bin/emacs
     '';
+
+    desktopManager = {
+      xterm.enable = false;
+      default = "none";
+    };
+    
   };
 
   fonts.fonts = with pkgs; [
