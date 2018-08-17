@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-{
+let myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;}); in {
   imports = [
     ./hardware-configuration.nix
     ./rescue_boot.nix
@@ -8,7 +8,10 @@
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.devices = [
+    "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
+    "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0"
+  ];
   boot.loader.grub.copyKernels = true;
   boot.supportedFilesystems = [ "zfs" ];
   services.zfs.autoScrub.enable = true;
@@ -46,6 +49,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    gptfdisk
     wget
     curl
     gnutls
@@ -63,6 +67,7 @@
     xorg.xset
     xorg.xsetroot
     numlockx
+    scrot
     libnotify
     pkgs.acpilight
   (python36.withPackages(ps: with ps; [ certifi ]))
@@ -110,10 +115,11 @@
     displayManager.slim.defaultUser = "adam";
     displayManager.slim.autoLogin = true;
     displayManager.sessionCommands = ''
-      ${pkgs.xlibs.xsetroot}/bin/numlockx
+      ${pkgs.numlockx}/bin/numlockx
       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
       ${pkgs.xlibs.xset}/bin/xset r rate 250 50
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
+      ${myemacs}/bin/emacs
     '';
 
     desktopManager = {
@@ -121,11 +127,11 @@
       default = "none";
     };
 
-    windowManager = {
-      exwm.enable = true;
-      exwm.enableDefaultConfig = true;
-      default = "exwm";
-    };
+    # windowManager = {
+    #   exwm.enable = true;
+    #   exwm.enableDefaultConfig = true;
+    #   default = "exwm";
+    # };
   };
 
   fonts.fonts = with pkgs; [
@@ -152,3 +158,4 @@
 
 }
     
+  
