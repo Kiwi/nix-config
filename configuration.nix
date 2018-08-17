@@ -42,7 +42,7 @@
   };
 
   environment.shells = [
-    "${pkgs.zsh}/bin/bash"
+    "${pkgs.bash}/bin/bash"
   ];
 
   environment.systemPackages = with pkgs; [
