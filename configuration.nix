@@ -121,17 +121,6 @@ let myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;}
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
       ${myemacs}/bin/emacs
     '';
-
-    desktopManager = {
-      xterm.enable = false;
-      default = "none";
-    };
-
-    # windowManager = {
-    #   exwm.enable = true;
-    #   exwm.enableDefaultConfig = true;
-    #   default = "exwm";
-    # };
   };
 
   fonts.fonts = with pkgs; [
