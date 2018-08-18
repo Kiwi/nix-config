@@ -57,6 +57,7 @@ let myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;}
     pinentry
     git
     firefox
+    thunderbird
     openvpn
     qbittorrent
     tmux
