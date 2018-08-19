@@ -15,6 +15,7 @@
    ];
    boot.loader.grub.copyKernels = true;
    boot.supportedFilesystems = [ "zfs" ];
+   services.smartd.enable = true;
    services.zfs.autoScrub.enable = true;
    services.zfs.autoSnapshot = {
      enable = true;

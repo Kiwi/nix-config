@@ -1,7 +1,7 @@
-{ config, pkgs, expr, buildVM, ... }:
+{ config, pkgs, ... }:
 
 let
-  myemacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+  myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
   iconTheme = pkgs.breeze-icons.out;
   themeEnv = ''
     # QT: remove local user overrides (for determinism, causes hard to find bugs)
@@ -54,6 +54,7 @@ in {
       Option "AccelMethod" "glamor"
     '';
 
+    displayManager.job.logToJournal = true;
     displayManager.slim.enable = true;
     displayManager.slim.defaultUser = "adam";
     displayManager.slim.autoLogin = true;
@@ -63,7 +64,7 @@ in {
       ${pkgs.xlibs.xset}/bin/xset r rate 250 50
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
       ${pkgs.dunst}/bin/dunst &
-      ${myemacs}/bin/emacs
+      ${myEmacs}/bin/emacs
     '';
 
     desktopManager = {
@@ -82,7 +83,6 @@ in {
     font-awesome-ttf
     powerline-fonts
   ];
-
 
   environment.shells = [
     "${pkgs.bash}/bin/bash"
@@ -135,7 +135,7 @@ in {
     hicolor_icon_theme
   ];
 
-  # Make applications find files in <prefix>/share
-environment.pathsToLink = [ "/share" ];
+  # (This is good for desktops, is set with nixos KDE by default)
+    environment.pathsToLink = [ "/share" ];
 
 }
