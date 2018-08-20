@@ -36,10 +36,7 @@ in {
   services.compton = {
     enable = true;
     backend = "glx";
-    extraOptions = ''
-      paint-on-overlay = true;
-      vsync = opengl-mswc;
-    '';};
+  };
 
   services.xserver = {
     enable = true;
@@ -54,22 +51,28 @@ in {
       Option "AccelMethod" "glamor"
     '';
 
-    displayManager.job.logToJournal = true;
-    displayManager.slim.enable = true;
-    displayManager.slim.defaultUser = "adam";
-    displayManager.slim.autoLogin = true;
+    displayManager.sddm.enable = true;
+    displayManager.sddm.autoLogin.enable = true;
+    displayManager.sddm.autoLogin.user = "adam"; 
+    displayManager.sddm.autoNumlock = true;
     displayManager.sessionCommands = ''
-      ${pkgs.numlockx}/bin/numlockx
       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
       ${pkgs.xlibs.xset}/bin/xset r rate 250 50
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
       ${pkgs.dunst}/bin/dunst &
-      ${myEmacs}/bin/emacs
     '';
 
     desktopManager = {
       xterm.enable = false;
-      default = "none";
+      default = "emacs";
+      session = [ {
+        manage = "desktop";
+        name = "emacs";
+        start = ''
+          ${myEmacs}/bin/emacs &
+          waitPID=$!
+        '';
+      } ];
     };
 
   };
