@@ -31,8 +31,8 @@
    boot.kernelModules = [ "coretemp" "kvm-intel" ];
    networking.hostId = "007f0100";
 
-   networking.hostName = "nixos";
-   networking.networkmanager.enable = true;
+   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+   networking.hostName = "nix";
 
    i18n = {
      consoleFont = "Lat2-Terminus16";
@@ -45,40 +45,21 @@
    environment.systemPackages = with pkgs; [
      man man-pages posix_man_pages stdman
 
-     gptfdisk pmutils psmisc which file binutils bc utillinuxCurses exfat
-     dosfstools patchutils moreutils unzip zip
+     wget curl inetutils nix-prefetch-scripts gptfdisk pmutils psmisc which file
+     binutils bc utillinuxCurses exfat dosfstools patchutils moreutils unzip zip
+     pciutils lshw usbutils
 
-     lm_sensors htop iotop powertop
-
-     ltrace strace linuxPackages.perf
-
-     smartmontools pciutils lshw usbutils
-
-     tmux wget curl inetutils nix-prefetch-scripts
+     lm_sensors htop iotop powertop ltrace strace linuxPackages.perf
+     smartmontools
 
      (python36.withPackages(ps: with ps; [ certifi ]))
-
      gnutls gnupg gnupg1compat pinentry
-
-     gitAndTools.gitFull gitAndTools.gitflow
-     pandoc
-
-     chromium firefox thunderbird qbittorrent
-     openvpn
-     virtmanager
-
-     mpv
-     wmctrl scrot
-     pkgs.acpilight
-     xorg.xmodmap xorg.xset xorg.xsetroot xclip xsel numlockx 
-     libnotify 
    ];
 
-   nixpkgs.config.packageOverrides = super: {
-     acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
-   };
-
    programs.bash.enableCompletion = true;
+   environment.shells = [
+     "${pkgs.bash}/bin/bash"
+   ];
    programs.mtr.enable = true;
    programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
@@ -86,24 +67,9 @@
    networking.firewall.allowedTCPPorts = [ 22 ];
    networking.firewall.allowedUDPPorts = [ 22 ];
 
-   sound.enable = true;
-   hardware.pulseaudio.enable = true;
+   services.openssh.enable = true; 
 
-   hardware.opengl = {
-     driSupport = true;
-     driSupport32Bit = true;
-   };
-
-   services.tlp.enable = true;
-   services.openssh.enable = true;
-   services.samba.enable = true;
-   services.locate.enable = true;
-   services.printing.enable = true;
-   services.avahi.enable = true;
-   services.avahi.nssmdns = true;
-   services.dnsmasq.enable = true;
-   services.dbus.socketActivated = true;
-
+   services.dnsmasq.enable = true; 
    virtualisation.libvirtd.enable = true;
    environment.variables.LIBVIRT_DEFAULT_URI = "qemu:///system";
 
@@ -116,31 +82,12 @@
      };
    security.sudo.wheelNeedsPassword = false;
 
-   services.logind.extraConfig = ''
-     HandleLidSwitchDocked=suspend
-   '';
+   powerManagement.enable = true;
 
-   security.polkit.enable = true;
-   security.polkit.extraConfig = ''
-     polkit.addRule(function(action, subject) {
-     var YES = polkit.Result.YES;
-     var permission = {
-     "org.freedesktop.udisks2.filesystem-mount": YES,
-     "org.freedesktop.udisks2.filesystem-mount-system": YES,
-     "org.freedesktop.udisks2.eject-media": YES
-     };
-     return permission[action.id];
-     });
-   '';
-
-powerManagement.enable = true;
-
-  # This value determines the NixOS release with which your system is to be
-    # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+   # This value determines the NixOS release with which your system is to be
+     # compatible, in order to avoid breaking some software such as database
+   # servers. You should change this only after NixOS release notes say you
+   # should.
+   system.stateVersion = "18.03"; # Did you read the comment?
 
  }
-
-
