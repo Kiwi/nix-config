@@ -2,7 +2,9 @@
 (use-package nix-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.nix?\\'" . nix-mode))
-  (add-hook 'before-save-hook #'nix-mode-format)
+  ;; (add-hook 'before-save-hook #'nix-mode-format)
+  (add-hook 'nix-mode-hook
+            (lambda () (add-hook 'before-save-hook nix-mode-format nil 'local)))
   :config
 
   (defun nix-mode-make-regexp (parts)

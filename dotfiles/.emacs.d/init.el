@@ -71,15 +71,6 @@
 
 ;; Begin installing packages using the `use-package' macro for now on.
 
-;; Some other cool libs for Emacs hackers. (Because why not.)
-(require 'seq)
-(require 'subr-x)
-(require 'cl)
-(use-package dash)
-(use-package ht)
-(use-package s)
-(use-package a)
-
 ;; Begin lisp.d/ execution.
 
 (defun load-directory (directory)

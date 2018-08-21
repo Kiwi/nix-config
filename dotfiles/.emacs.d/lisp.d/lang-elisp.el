@@ -1,5 +1,14 @@
 ;;; -*- lexical-binding: t; -*-
 
+;; Make some cool libs available for Emacs hackers. (Because why not.)
+(require 'seq)
+(require 'subr-x)
+(require 'cl)
+(use-package dash)
+(use-package ht)
+(use-package s)
+(use-package a)
+
 (use-package elisp-slime-nav :init
   ;; enable elisp-slime-nav-mode
   (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
