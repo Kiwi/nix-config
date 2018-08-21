@@ -1,6 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-(setq explicit-shell-file-name "/run/current-system/sw/bin/bash")
 ;; Debugging options.
 ;; (setq debug-on-error t)
 ;; (setq debug-on-quit t)

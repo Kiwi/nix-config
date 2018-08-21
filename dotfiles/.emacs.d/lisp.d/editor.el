@@ -115,10 +115,6 @@
   :config 
   (setq midnight-period 7200))
 
-;; make a shell script executable automatically on save
-(add-hook 'after-save-hook
-          'executable-make-buffer-file-executable-if-script-p)
-
 ;; saner regex syntax
 (use-package re-builder :demand
   :config
@@ -163,16 +159,6 @@
 
 (require 'winner)
 (winner-mode 1)
-
-;; use real bash-completion with shell-mode
-(use-package bash-completion
-  :bind (("C-c as" . shell))
-  :config
-  (autoload 'bash-completion-dynamic-complete
-    "bash-completion"
-    "BASH completion hook")
-  (add-hook 'shell-dynamic-complete-functions
-            'bash-completion-dynamic-complete))
 
 (provide 'editor)
 
