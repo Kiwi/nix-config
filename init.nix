@@ -5,7 +5,8 @@
      ./modules/desktop.nix
    ];
 
-   boot.cleanTmpDir = true;
+   boot.kernelModules = [ "coretemp" "kvm-intel" ];
+   boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
    boot.loader.grub.enable = true;
    boot.loader.grub.version = 2;
    boot.loader.grub.devices = [
@@ -14,7 +15,9 @@
    ];
    boot.loader.grub.copyKernels = true;
    boot.supportedFilesystems = [ "zfs" ];
-   services.smartd.enable = true;
+   boot.zfs.forceImportAll = false;
+   boot.zfs.forceImportRoot = false; 
+   networking.hostId = "007f0100";
    services.zfs.autoScrub.enable = true;
    services.zfs.autoSnapshot = {
      enable = true;
@@ -24,11 +27,11 @@
      weekly = 0;
      monthly = 0;
    };
-   boot.zfs.forceImportAll = false;
-   boot.zfs.forceImportRoot = false;
-   boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
-   boot.kernelModules = [ "coretemp" "kvm-intel" ];
-   networking.hostId = "007f0100";
+   services.smartd.enable = true;
+   nix.gc.automatic = true;
+   nix.gc.dates = "weekly";
+   nix.gc.options = "--delete-older-than 30d";
+   boot.cleanTmpDir = true;
 
    networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
    networking.hostName = "nix";
@@ -66,9 +69,9 @@
    networking.firewall.allowedTCPPorts = [ 22 ];
    networking.firewall.allowedUDPPorts = [ 22 ];
 
-   services.openssh.enable = true; 
+   services.openssh.enable = true;
 
-   services.dnsmasq.enable = true; 
+   services.dnsmasq.enable = true;
    virtualisation.libvirtd.enable = true;
    environment.variables.LIBVIRT_DEFAULT_URI = "qemu:///system";
 

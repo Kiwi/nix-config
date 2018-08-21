@@ -3,6 +3,15 @@
 let
   myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
   adamDotfiles = "/nixcfg/dotfiles";
+  cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
+    set -e
+    mkdir ~/repos/
+    cd ~/repos/
+    git clone git@github.com:cooslug/cooslug.github.io.git
+    git clone git@github.com:a-schaefers/a-schaefers.github.io.git
+    git clone git@github.com:a-schaefers/grubbe-mkconfig.git
+    git clone git@github.com:a-schaefers/funtutorials.git
+  '';
 in {
   imports = [
     "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
@@ -91,6 +100,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    cloneRepos
     tmux
     gitAndTools.gitFull gitAndTools.gitflow
     pandoc
