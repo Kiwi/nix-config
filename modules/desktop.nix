@@ -16,6 +16,15 @@ let
     git clone git@github.com:purcell/emacs.d.git
     git clone git@github.com:emacs-tw/awesome-emacs.git
   '';
+  cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
+    cd ~/
+    find -name "*" | egrep -v \
+    "ssh|gnupg|gpg|chromium|thunderbird|qBittorrent|mozilla|emacs|slime|repos|Pictures|Documents|Downloads" \
+    | xargs rm -rf
+    sudo nixos-rebuild switch || exit
+    sudo systemctl restart home-manager-adam || exit
+    sudo systemctl restart display-manager
+  '';
 in {
   imports = [
     "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
@@ -28,8 +37,8 @@ in {
     home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
     home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
     home.file."/bin".source = "${adamDotfiles}/bin";
-    home.file.".config/mimi/mime.conf".source = "${adamDotfiles}/.config/mimi/mime.conf";
-    home.file.".config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
+    home.file."/.config/mimi/mime.conf".source = "${adamDotfiles}/.config/mimi/mime.conf";
+    home.file."/.config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
     home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
@@ -71,7 +80,7 @@ in {
       Option "AccelMethod" "glamor"
     '';
     displayManager.slim.enable = true;
-    displayManager.slim.autoLogin = false;
+    displayManager.slim.autoLogin = true;
     displayManager.slim.defaultUser = "adam";
     displayManager.sessionCommands = ''
       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
@@ -100,26 +109,24 @@ in {
   environment.sessionVariables = {
     EDITOR = "emacsclient";
     VISUAL = "emacsclient";
-    PATH="$HOME/bin:$HOME/.local/bin:$PATH";
+    PATH = "$HOME/bin:$HOME/.local/bin:$PATH";
   };
 
   environment.systemPackages = with pkgs; [
     cloneRepos
+    cleanHome
     tmux
     gitAndTools.gitFull gitAndTools.gitflow
     pandoc
     pavucontrol
     chromium firefox thunderbird qbittorrent
-    gimp
-    kdenlive
-    darktable
-    krita
+    gimp kdenlive darktable krita
     openvpn
     virtmanager
     mpv
     wmctrl scrot
     pkgs.acpilight
-    xorg.xmodmap xorg.xev xorg.xset xorg.xsetroot numlockx xclip xsel
+    xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot xorg.xcursorthemes numlockx xclip xsel
     libnotify dunst
   ];
 
