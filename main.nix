@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
  {
    imports = [
-     ./rescue_boot.nix
-     ./desktop.nix
+     ./modules/rescue_boot.nix
+     ./modules/desktop.nix
    ];
 
    boot.cleanTmpDir = true;

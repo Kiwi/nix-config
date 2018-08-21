@@ -16,6 +16,7 @@ in {
     home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
     home.file."/bin".source = "${adamDotfiles}/bin";
     home.file.".config/mimi/mime.conf".source = "${adamDotfiles}/.config/mimi/mime.conf";
+    home.file.".config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
     home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
@@ -56,7 +57,6 @@ in {
       Option "TearFree" "true"
       Option "AccelMethod" "glamor"
     '';
-
     displayManager.slim.enable = true;
     displayManager.slim.autoLogin = false;
     displayManager.slim.defaultUser = "adam";
@@ -67,7 +67,6 @@ in {
       ${pkgs.numlockx}/bin/numlockx
       ${pkgs.dunst}/bin/dunst &
     '';
-
     desktopManager = {
       xterm.enable = false;
       default = "emacs";
@@ -76,8 +75,7 @@ in {
         name = "emacs";
         start = ''
           ${myEmacs}/bin/emacs
-        '';}];};
-  };
+        '';}];};};
 
   fonts.fonts = with pkgs; [
     dejavu_fonts
@@ -112,7 +110,7 @@ in {
   ];
 
   nixpkgs.config.packageOverrides = super: {
-    acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
+    acpilight = pkgs.callPackage ./acpilight.nix {};
   };
 
 }
