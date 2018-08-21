@@ -98,7 +98,8 @@ in {
         manage = "desktop";
         name = "emacs";
         start = ''
-          ${myEmacs}/bin/emacs
+          ${myEmacs}/bin/emacs &
+          waitPID=$!
         '';}];};};
 
   fonts.fonts = with pkgs; [
