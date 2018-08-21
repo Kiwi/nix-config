@@ -9,6 +9,8 @@ in {
   ];
 
   home-manager.users.adam = {
+    home.file.".emacs.d/init.el".source = "${adamDotfiles}/.emacs.d/init.el";
+    home.file.".emacs.d/lisp.d".source = "${adamDotfiles}/.emacs.d/lisp.d";
     home.file.".gitconfig".source = "${adamDotfiles}/.gitconfig";
     home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
     home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
