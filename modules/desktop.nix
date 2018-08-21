@@ -17,12 +17,14 @@ let
     git clone git@github.com:emacs-tw/awesome-emacs.git
   '';
   cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
+    # remove $HOME cruft with a list of exceptions to keep.
     cd ~/
     find -name "*" | egrep -v \
-    "ssh|gnupg|gpg|chromium|thunderbird|qBittorrent|mozilla|emacs|slime|repos|Pictures|Documents|Downloads" \
+    "ssh|gnupg|gpg|thunderbird|mozilla|qBittorrent|emacs|slime|repos|Pictures|Documents|Downloads|Desktop" \
     | xargs rm -rf
-    sudo nixos-rebuild switch || exit
-    sudo systemctl restart home-manager-adam || exit
+    # re-create all symlinks
+    sudo systemctl restart home-manager-adam || sudo systemctl status home-manager-adam
+    # log out and back in again
     sudo systemctl restart display-manager
   '';
 in {
