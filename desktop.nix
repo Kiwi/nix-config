@@ -2,8 +2,22 @@
 
 let
   myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+  adamDotfiles = "/home/adam/repos/dotfiles";
 in {
-  imports = [];
+  imports = [
+    "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
+  ];
+
+  home-manager.users.adam = {
+    home.file.".gitconfig".source = "${adamDotfiles}/.gitconfig";
+    home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
+    home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
+    home.file."/bin".source = "${adamDotfiles}/bin";
+    home.file.".config/mimi/mime.conf".source = "${adamDotfiles}/.config/mimi/mime.conf";
+    home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
+    home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
+    home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
+  };
 
   services.dbus.socketActivated = true;
   services.tlp.enable = true;
@@ -41,14 +55,14 @@ in {
       Option "AccelMethod" "glamor"
     '';
 
-    displayManager.sddm.enable = true;
-    displayManager.sddm.autoLogin.enable = true;
-    displayManager.sddm.autoLogin.user = "adam"; 
-    displayManager.sddm.autoNumlock = true;
+    displayManager.slim.enable = true;
+    displayManager.slim.autoLogin = false;
+    displayManager.slim.defaultUser = "adam";
     displayManager.sessionCommands = ''
       ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
       ${pkgs.xlibs.xset}/bin/xset r rate 250 50
       ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
+      ${pkgs.numlockx}/bin/numlockx
       ${pkgs.dunst}/bin/dunst &
     '';
 
@@ -60,16 +74,10 @@ in {
         name = "emacs";
         start = ''
           ${myEmacs}/bin/emacs
-        '';
-      } ];
-    };
-
+        '';}];};
   };
 
   fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
     dejavu_fonts
     source-code-pro
     font-awesome-ttf
@@ -97,12 +105,12 @@ in {
     mpv
     wmctrl scrot
     pkgs.acpilight
-    xorg.xmodmap xorg.xev xorg.xset xorg.xsetroot xclip xsel
+    xorg.xmodmap xorg.xev xorg.xset xorg.xsetroot numlockx xclip xsel
     libnotify dunst
   ];
 
-nixpkgs.config.packageOverrides = super: {
-  acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
-};
+  nixpkgs.config.packageOverrides = super: {
+    acpilight = pkgs.callPackage ./pkgs/acpilight.nix {};
+  };
 
 }
