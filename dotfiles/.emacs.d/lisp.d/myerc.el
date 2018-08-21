@@ -52,18 +52,10 @@
   (defadvice erc-track-modified-channels (around erc-track-modified-channels-promote-query activate)
     (if (erc-query-buffer-p) (setq erc-track-priority-faces-only 'nil))
     ad-do-it
-    (if (erc-query-buffer-p) (setq erc-track-priority-faces-only 'all)))
-
-  ;; misc
-  (setq erc-log-channels-directory "~/Erc"
-        erc-save-buffer-on-part t
-        erc-log-insert-log-on-open nil)
-  
-  (with-eval-after-load "erc"
-    '(add-to-list 'erc-modules 'log)))
+    (if (erc-query-buffer-p) (setq erc-track-priority-faces-only 'all))))
 
 
-(provide 'erc)
+(provide 'myerc)
 
 ;; Local Variables:
 ;; coding: utf-8
