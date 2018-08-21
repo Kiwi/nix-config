@@ -9,9 +9,12 @@ let
     git clone git@github.com:cooslug/cooslug.github.io.git
     git clone git@github.com:a-schaefers/a-schaefers.github.io.git
     git clone git@github.com:a-schaefers/grubbe-mkconfig.git
-    git clone git@github.com:a-schaefers/funtutorials.git
     git clone git@github.com:apoptosis/episteme.git
     git clone git@github.com:dustinlacewell/emacs-nougat.git
+    git clone git@github.com:bbatsov/prelude.git
+    git clone git@github.com:syl20bnr/spacemacs.git
+    git clone git@github.com:purcell/emacs.d.git
+    git clone git@github.com:emacs-tw/awesome-emacs.git
   '';
 in {
   imports = [
