@@ -1,0 +1,29 @@
+!| 66 | 37 | 133 | 64 | <SPACE> | 108 | 134 | 135 | 105 |
+!| capslock | control | super | meta | | meta | super | menu | control |
+!| f16 | f17 | super | control | <SPACE> | meta | hyper | f18 | f19 |
+
+clear lock
+clear control
+clear mod1
+clear mod4
+clear mod5
+
+! caps-lock
+keycode 66 = F16
+! left control
+keycode 37 = F17
+! left super
+keycode 133 = Super_L
+! left meta
+keycode 64 = Control_L
+! right super
+keycode 134 = Hyper_L
+! right menu
+keycode 135 = F18
+! right control
+keycode 105 = F19
+
+add control = Control_L Control_R
+add mod1 = Alt_L Meta_L Alt_R Meta_R
+add mod4 = Super_L
+add mod5 = Hyper_L

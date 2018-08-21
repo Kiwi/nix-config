@@ -2,7 +2,7 @@
 
 let
   myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
-  adamDotfiles = "/home/adam/repos/dotfiles";
+  adamDotfiles = "/nixcfg/dotfiles";
 in {
   imports = [
     "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"

@@ -1,0 +1,5 @@
+[user]
+	name = Adam Schaefers
+	email = sch@efers.org
+[pull]
+	rebase = true

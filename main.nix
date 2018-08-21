@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
  {
    imports = [
-     ./hardware-configuration.nix
      ./rescue_boot.nix
      ./desktop.nix
    ];
