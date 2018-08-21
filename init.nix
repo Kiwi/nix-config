@@ -78,7 +78,7 @@
    users.users.adam =
      { isNormalUser = true;
        home = "/home/adam";
-       createHome = false;
+       createHome = true;
        extraGroups = [ "wheel" "disk" "audio" "video" "systemd-journal"
          "networkmanager" "libvirtd" ];
      };
