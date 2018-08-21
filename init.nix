@@ -5,7 +5,7 @@
      ./modules/desktop.nix
    ];
 
-   boot.kernelModules = [ "coretemp" "kvm-intel" ];
+   boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ]; 
    boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
    boot.loader.grub.enable = true;
    boot.loader.grub.version = 2;
@@ -16,7 +16,7 @@
    boot.loader.grub.copyKernels = true;
    boot.supportedFilesystems = [ "zfs" ];
    boot.zfs.forceImportAll = false;
-   boot.zfs.forceImportRoot = false; 
+   boot.zfs.forceImportRoot = false;
    networking.hostId = "007f0100";
    services.zfs.autoScrub.enable = true;
    services.zfs.autoSnapshot = {
@@ -54,7 +54,7 @@
      lm_sensors htop iotop powertop ltrace strace linuxPackages.perf
      smartmontools
 
-     (python36.withPackages(ps: with ps; [ certifi ]))
+     (python36.withPackages(ps: with ps; [ certifi ])) 
      gnutls gnupg gnupg1compat pinentry
    ];
 
