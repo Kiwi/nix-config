@@ -28,7 +28,7 @@
     (sp-local-tag "=" "<%= " " %>")
     (sp-local-tag "#" "<%# " " %>")))
 
-(provide '60lang-web)
+(provide 'lang-web)
 
 ;; Local Variables:
 ;; coding: utf-8

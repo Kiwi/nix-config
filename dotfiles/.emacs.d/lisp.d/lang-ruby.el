@@ -18,7 +18,7 @@
 
   (add-hook 'ruby-mode-hook 'prelude-ruby-mode-defaults))
 
-(provide '60lang-ruby)
+(provide 'lang-ruby)
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

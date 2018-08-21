@@ -12,7 +12,7 @@
     (haskell-indentation-mode +1)
     (interactive-haskell-mode +1)))
 
-(provide '60lang-haskell)
+(provide 'lang-haskell)
 
 ;; Local Variables:
 ;; coding: utf-8

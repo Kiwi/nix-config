@@ -68,7 +68,7 @@
 
   (add-hook 'python-mode-hook 'prelude-python-mode-defaults))
 
-(provide '60lang-py)
+(provide 'lang-py)
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

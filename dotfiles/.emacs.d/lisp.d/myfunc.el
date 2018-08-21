@@ -88,7 +88,7 @@
       (eval target)
     default))
 
-(provide '10myfunc)
+(provide 'myfunc)
 
 ;; Local Variables:
 ;; coding: utf-8

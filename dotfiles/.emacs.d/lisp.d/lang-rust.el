@@ -21,7 +21,7 @@
     ;; CamelCase aware editing operations
     (subword-mode +1)))
 
-(provide '60lang-rust)
+(provide 'lang-rust)
 
 ;; Local Variables:
 ;; coding: utf-8

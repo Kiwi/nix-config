@@ -45,9 +45,7 @@
         slime-auto-start 'always)
   (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector))
 
-(provide '65lang-commonlisp)
-
-;;; 65lang-commonlisp.el ends here
+(provide 'lang-commonlisp)
 
 ;; Local Variables:
 ;; coding: utf-8

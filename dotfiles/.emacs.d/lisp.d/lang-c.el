@@ -16,7 +16,7 @@
 
   (add-hook 'makefile-mode-hook 'prelude-makefile-mode-defaults))
 
-(provide '60lang-c)
+(provide 'lang-c)
 
 ;; Local Variables:
 ;; coding: utf-8

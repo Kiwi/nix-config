@@ -77,7 +77,7 @@
   :bind
   (("C-c aeh" . helm-emms)))
 
-(provide '30helm)
+(provide 'helm)
 
 ;; Local Variables:
 ;; coding: utf-8

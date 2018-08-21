@@ -174,7 +174,7 @@
   (add-hook 'shell-dynamic-complete-functions
             'bash-completion-dynamic-complete))
 
-(provide '10editor)
+(provide 'editor)
 
 ;; Local Variables:
 ;; coding: utf-8

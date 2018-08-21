@@ -21,7 +21,6 @@
     ;; (erc-tls :server "chat.freenode.net" :port "6697")
     )
   :config
-
   (setq erc-pals '("bayprogrammer"
                    "asx"
                    "hotaronohanako"))
@@ -57,11 +56,14 @@
 
   ;; misc
   (setq erc-log-channels-directory "~/Erc"
-	erc-save-buffer-on-part t
-	erc-log-insert-log-on-open nil)
-  (add-to-list 'erc-modules 'log))
+        erc-save-buffer-on-part t
+        erc-log-insert-log-on-open nil)
+  
+  (with-eval-after-load "erc"
+    '(add-to-list 'erc-modules 'log)))
 
-(provide '80erc)
+
+(provide 'erc)
 
 ;; Local Variables:
 ;; coding: utf-8

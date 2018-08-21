@@ -110,7 +110,7 @@
         desktop-environment-brightness-small-increment "-inc 5"
         desktop-environment-brightness-normal-increment "-inc 20"
         desktop-environment-brightness-normal-decrement "-dec 10"))
-(provide '20exwm)
+(provide 'exwm)
 
 ;; Local Variables:
 ;; coding: utf-8

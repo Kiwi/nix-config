@@ -14,7 +14,7 @@
   :config
   (pdf-tools-install t))
 
-(provide '80multimedia)
+(provide 'multimedia)
 
 ;; Local Variables:
 ;; coding: utf-8

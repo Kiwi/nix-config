@@ -22,7 +22,7 @@
   :config
   (guru-global-mode +1))
 
-(provide '99workarounds)
+(provide 'workarounds)
 
 ;; Local Variables:
 ;; coding: utf-8

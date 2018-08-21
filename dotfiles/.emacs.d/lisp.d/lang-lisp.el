@@ -27,7 +27,7 @@
 
 (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
 
-(provide '60lang-lisp)
+(provide 'lang-lisp)
 
 ;; Local Variables:
 ;; coding: utf-8

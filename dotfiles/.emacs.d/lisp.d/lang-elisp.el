@@ -51,8 +51,7 @@ Start `ielm' if it's not already running."
       (smartparens-mode 1)))
 (add-hook 'minibuffer-setup-hook 'conditionally-enable-smartparens-mode)
 
-(provide '65lang-elisp)
-;;; 65lang-elisp.el ends here
+(provide 'lang-elisp)
 
 ;; Local Variables:
 ;; coding: utf-8

@@ -16,7 +16,7 @@
 
   (add-hook 'js2-mode-hook 'prelude-js-mode-defaults))
 
-(provide '60lang-js)
+(provide 'lang-js)
 
 ;; Local Variables:
 ;; coding: utf-8

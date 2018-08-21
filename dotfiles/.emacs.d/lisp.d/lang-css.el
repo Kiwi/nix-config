@@ -10,7 +10,7 @@
   (defun prelude-css-mode-defaults ()
     (rainbow-mode +1)))
 
-(provide '60lang-css)
+(provide 'lang-css)
 
 ;; Local Variables:
 ;; coding: utf-8

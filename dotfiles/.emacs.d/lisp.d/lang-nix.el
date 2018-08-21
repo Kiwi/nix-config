@@ -77,6 +77,8 @@
 ;; TODO https://github.com/shlevy/nix-buffer
 ;; https://github.com/travisbhartwell/nix-emacs
 
+(provide 'nix)
+
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

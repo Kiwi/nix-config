@@ -9,7 +9,7 @@
   :config
   (setq-default magit-diff-refine-hunk t)
   (setq magit-repository-directories '(("~/repos" . 1)
-                                       ("~/.emacs.d/straight/repos . 1")
+                                       ("~/.emacs.d/straight/repos" . 1)
                                        ("/nixcfg" . 0)))
   ;; (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
   (use-package fullframe :config
@@ -307,7 +307,7 @@
   (goto-address-prog-mode 1)) ;; always make url clickable in prog-mode
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
-(provide '40ide)
+(provide 'ide)
 
 ;; Local Variables:
 ;; coding: utf-8
