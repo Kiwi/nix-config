@@ -1,10 +1,9 @@
 { config, pkgs, ... }:
+# all dell latitude e6430 laptop specific settings
  {
    imports = [
      ./modules/libvirt.nix
    ];
-
-   # all dell latitude e6430 laptop specific settings
 
    boot.kernelParams = [ "elevator=noop iommu=pt intel_iommu=igfx_off boot.shell_on_fail i915.enable_fbc=1" ];
 
@@ -34,10 +33,9 @@
 
    # graphics
    services.xserver.videoDrivers = [ "modesetting" ];
-   services.xserver.useGlamor = true;
-   services.xserver.deviceSection = ''
-     Option "DRI" "3"
-     Option "AccelMethod" "glamor"
+      services.xserver.deviceSection = ''
+        Option "DRI" "3"
+        Option "AccelMethod" "glamor"
    '';
 
    # glx activates driver vsync automatically in this particular laptop,

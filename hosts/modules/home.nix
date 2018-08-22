@@ -1,6 +1,16 @@
 { config, pkgs, ... }:
+# all $HOME and user settngs
+
+# TODO, consider installing and doing more things user-locally
+# and consider exploring home-manager features more beyond symlink management.
+
 let
+  # location of dotfiles
   adamDotfiles = "/nixcfg/dotfiles";
+
+  # create some helper cli commands
+
+  # clone all of my favorite repos
   cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
     mkdir ~/repos/
     cd ~/repos/
@@ -12,22 +22,32 @@ let
     git clone git@github.com:dustinlacewell/emacs-nougat.git
     git clone git@github.com:bbatsov/prelude.git
   '';
-  cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
-    # remove $HOME cruft with a list of exceptions to keep.
-    cd ~/
-    find -name "*" | egrep -v \
-    "bash_history|ssh|gnupg|gpg|chromium|qBittorrent|emacs|slime|repos|Pictures|Documents|Downloads" \
-    | xargs rm -f
-    find . -type d -empty -delete
-    sudo systemctl restart home-manager-adam || exit
-    pkill emacs
-  '';
+
+  # remove $HOME cruft with a list of exceptions to keep.
+    cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
+      cd ~/
+      find -name "*" | egrep -v \
+      "bash_history|ssh|gnupg|gpg|chromium|qBittorrent|emacs|slime|repos|Documents|Downloads" \
+      | xargs rm -f
+      find . -type d -empty -delete
+      sudo systemctl restart home-manager-adam || exit
+      pkill emacs
+    '';
 in
 {
+
   imports = [
+    # make home-manager available https://nixos.wiki/wiki/Home_Manager
     "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
   ];
 
+  # make the helper bash functions available
+  environment.systemPackages = with pkgs; [
+    cloneRepos
+    cleanHome
+  ];
+
+  # setup users
   users.users.adam =
     { isNormalUser = true;
       home = "/home/adam";
@@ -37,7 +57,9 @@ in
     };
   security.sudo.wheelNeedsPassword = false;
 
+  # home-manager for "adam" section
   home-manager.users.adam = {
+    # create symlinks to my dotfiles (recreated every time the home-manager-adam service restarts)
     home.file.".emacs.d/init.el".source = "${adamDotfiles}/.emacs.d/init.el";
     home.file.".emacs.d/lisp.d".source = "${adamDotfiles}/.emacs.d/lisp.d";
     home.file.".gitconfig".source = "${adamDotfiles}/.gitconfig";
@@ -50,10 +72,5 @@ in
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
   };
-
-  environment.systemPackages = with pkgs; [
-    cloneRepos
-    cleanHome
-  ];
 
 }

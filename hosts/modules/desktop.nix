@@ -1,12 +1,14 @@
 { config, pkgs, ... }:
-
+ # all system-wide, machine independant desktop settings
 let
+  # build emacs without gtk
   myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in {
   imports = [];
 
-  programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+
+  # misc services I don't really use
 
   # services.samba.enable = true;
   # services.locate.enable = true;
@@ -14,18 +16,21 @@ in {
   # services.avahi.enable = true;
   # services.avahi.nssmdns = true;
 
+  # pulseaudio
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # mesa
   hardware.opengl = {
     driSupport = true;
     driSupport32Bit = true;
   };
 
-  # exwm
+  # Xorg, Slim and Exwm
   services.xserver = {
     enable = true;
     layout = "us";
+    useGlamor = true;
     displayManager.slim.enable = true;
     displayManager.slim.autoLogin = true;
     displayManager.slim.defaultUser = "adam";
@@ -55,7 +60,6 @@ in {
   environment.sessionVariables = {
     EDITOR = "emacsclient";
     VISUAL = "emacsclient";
-    PATH = "$HOME/bin:$HOME/.local/bin:$PATH";
   };
 
   environment.systemPackages = with pkgs; [
@@ -65,7 +69,7 @@ in {
     tmux
     openvpn
 
-    # desktop support
+    # desktop support applications
     wmctrl
     scrot
     xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot

@@ -1,11 +1,15 @@
 { config, pkgs, ... }:
+ # all system-wide, machine independant general settings
  {
    imports = [
-     ./hosts/latitudeE6430.nix
-     # ./hosts/hpZ620.nix
-     ./hosts/modules/rescue_boot.nix
-     ./hosts/modules/desktop.nix
-     ./hosts/modules/home.nix
+     # system-wide imports
+     ./hosts/latitudeE6430.nix # my laptop specific settings
+     # ./hosts/hpZ620.nix # my workstation specific settings
+     ./hosts/modules/rescue_boot.nix # puts a rescue kernel and initrd in /boot and a menuentry on grub
+     ./hosts/modules/desktop.nix # all desktop specific settings
+
+     # TODO local-user imports
+     ./hosts/modules/home.nix # all home specific settings and "home-manager"
    ];
 
    boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
@@ -56,6 +60,7 @@
      gnutls gnupg gnupg1compat pinentry
    ];
 
+   programs.mtr.enable = true;
    programs.bash.enableCompletion = true;
    environment.shells = [
      "${pkgs.bash}/bin/bash"
