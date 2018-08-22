@@ -23,7 +23,8 @@
   :config
   (setq erc-pals '("bayprogrammer"
                    "asx"
-                   "hotaronohanako"))
+                   "hotaronohanako"
+                   "ldlework"))
 
   ;; only mentions and pals on my modeline
   (setq erc-format-query-as-channel-p t

@@ -119,6 +119,7 @@ in {
   environment.systemPackages = with pkgs; [
     cloneRepos
     cleanHome
+    myEmacs
     tmux
     gitAndTools.gitFull gitAndTools.gitflow
     pandoc 

@@ -43,9 +43,9 @@
   :config (dumb-jump-mode 1)
   (setq dumb-jump-selector 'helm))
 
-;; 80 char rule
 (use-package whitespace :init
   (add-hook 'prog-mode-hook 'whitespace-mode)
+  (add-hook 'before-save-hook 'whitespace-cleanup)
   :config
   (setq whitespace-style '(face empty tabs lines-tail trailing)))
 
