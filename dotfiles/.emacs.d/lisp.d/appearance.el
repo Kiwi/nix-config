@@ -1,11 +1,16 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package doom-themes
+  :disabled
+  :config
+  (load-theme 'doom-city-lights t))
+
+(use-package gruvbox-theme
   :demand
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'gruvbox-dark-hard t))
 
-(use-package rich-minority 
+(use-package rich-minority
   :init
   (add-hook 'after-init-hook 'rich-minority-mode)
   :config

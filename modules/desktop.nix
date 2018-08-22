@@ -45,6 +45,11 @@ in {
     home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
+
+    home.file.".gtkrc-2.0".source = "${adamDotfiles}/.gtkrc-2.0";
+    home.file."/.config/.gtk-3.0/settings.ini".source = "${adamDotfiles}/.config/.gtk-3.0/settings.ini";
+    home.file."/.icons/default/index.theme".source = "${adamDotfiles}/.icons/default/index.theme";
+    home.file.".Xresources".source = "${adamDotfiles}/.Xresources";
   };
 
   services.dbus.socketActivated = true;
@@ -66,7 +71,7 @@ in {
   };
 
   services.compton = {
-    enable = true;
+  enable = true;
     backend = "glx";
   };
 
@@ -99,11 +104,15 @@ in {
         manage = "desktop";
         name = "emacs";
         start = ''
-          ${myEmacs}/bin/emacs &
+          ${pkgs.emacs}/bin/emacs &
+          # ${myEmacs}/bin/emacs &
           waitPID=$!
         '';}];};};
 
   fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
     dejavu_fonts
     source-code-pro
     font-awesome-ttf
@@ -117,12 +126,17 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    numix-cursor-theme
+    numix-gtk-theme
+    numix-icon-theme
+    lxappearance
     cloneRepos
     cleanHome
-    myEmacs
+    emacs
+    # myEmacs
     tmux
     gitAndTools.gitFull gitAndTools.gitflow
-    pandoc 
+    pandoc
     chromium qbittorrent gimp kdenlive darktable krita virtmanager pavucontrol
     openvpn
     mpv wmctrl scrot

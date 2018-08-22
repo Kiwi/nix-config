@@ -26,7 +26,7 @@
       user-mail-address "sch@efers.org")
 
 ;; Startup settings.
-(setq inhibit-startup-screen nil
+(setq inhibit-startup-screen t
       initial-major-mode 'emacs-lisp-mode
       initial-scratch-message nil)
 
