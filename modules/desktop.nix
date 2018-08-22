@@ -130,7 +130,6 @@ in {
     numix-cursor-theme
     numix-gtk-theme
     numix-icon-theme
-    lxappearance
     cloneRepos
     cleanHome
     emacs
