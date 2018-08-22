@@ -10,15 +10,18 @@
   (setq-default magit-diff-refine-hunk t)
   (setq magit-repository-directories '(("~/repos" . 1)
                                        ("~/.emacs.d/straight/repos" . 1)
-                                       ("/nixcfg" . 0)))
-  ;; (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
-  (use-package fullframe :config
+                                       ("/nixcfg" . 0))))
+(with-eval-after-load 'magit
+  (use-package fullframe :demand
+    :config
     (fullframe magit-status magit-mode-quit-window)
     (fullframe projectile-vc magit-mode-quit-window)
     (fullframe magit-diff-staged magit-quit-window)
     (fullframe magit-diff-unstaged magit-mode-quit-window)
     (fullframe magit-diff magit-mode-quit-window))
-  (use-package magit-gitflow :config
+
+  (use-package magit-gitflow :demand
+    :config
     (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))
 
 ;; project awareness
