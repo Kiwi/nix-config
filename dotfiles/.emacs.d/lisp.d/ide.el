@@ -85,8 +85,9 @@
   (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
 
 ;; discoverable binds
-(use-package which-key :demand
-  :config (which-key-mode 1)
+(use-package which-key :init
+  (add-hook 'after-init-hook 'which-key-mode)
+  :config
   (setq which-key-idle-delay 0.0))
 
 ;; auto-completion

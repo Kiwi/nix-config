@@ -54,7 +54,7 @@
      lm_sensors htop iotop powertop ltrace strace linuxPackages.perf
      smartmontools
 
-     (python36.withPackages(ps: with ps; [ certifi ])) 
+     (python36.withPackages(ps: with ps; [ certifi ]))
      gnutls gnupg gnupg1compat pinentry
    ];
 
