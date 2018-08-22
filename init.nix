@@ -3,21 +3,16 @@
    imports = [
      ./modules/rescue_boot.nix
      ./modules/desktop.nix
+     ./hosts/laptop.nix
+     # ./hosts/workstation.nix
    ];
 
-   boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ]; 
-   boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
    boot.loader.grub.enable = true;
    boot.loader.grub.version = 2;
-   boot.loader.grub.devices = [
-     "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
-     "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0"
-   ];
    boot.loader.grub.copyKernels = true;
    boot.supportedFilesystems = [ "zfs" ];
    boot.zfs.forceImportAll = false;
    boot.zfs.forceImportRoot = false;
-   networking.hostId = "007f0100";
    services.zfs.autoScrub.enable = true;
    services.zfs.autoSnapshot = {
      enable = true;
@@ -32,9 +27,6 @@
    nix.gc.dates = "weekly";
    nix.gc.options = "--delete-older-than 30d";
    boot.cleanTmpDir = true;
-
-   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-   networking.hostName = "nix";
 
    i18n = {
      consoleFont = "Lat2-Terminus16";
@@ -68,6 +60,8 @@
    networking.firewall.allowPing = true;
    networking.firewall.allowedTCPPorts = [ 22 ];
    networking.firewall.allowedUDPPorts = [ 22 ];
+   networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+   networking.hostName = "nix";
 
    services.openssh.enable = true;
 

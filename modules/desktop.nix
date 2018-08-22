@@ -23,9 +23,7 @@ let
     "bash_history|ssh|gnupg|gpg|chromium|qBittorrent|emacs|slime|repos|Pictures|Documents|Downloads" \
     | xargs rm -f
     find . -type d -empty -delete
-    # re-create symlinks
     sudo systemctl restart home-manager-adam || exit
-    # log out and back in again
     pkill emacs
   '';
 in {
@@ -45,21 +43,13 @@ in {
     home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
-
-    # gtk theme
-    home.file.".gtkrc-2.0".source = "${adamDotfiles}/.gtkrc-2.0";
-    home.file."/.config/gtk-3.0/settings.ini".source = "${adamDotfiles}/.config/gtk-3.0/settings.ini";
-    home.file."/.icons/default/index.theme".source = "${adamDotfiles}/.icons/default/index.theme";
-    home.file.".Xresources".source = "${adamDotfiles}/.Xresources";
   };
 
-  services.dbus.socketActivated = true;
-  services.tlp.enable = true;
-  services.samba.enable = true;
-  services.locate.enable = true;
-  services.printing.enable = true;
-  services.avahi.enable = true;
-  services.avahi.nssmdns = true;
+  # services.samba.enable = true;
+  # services.locate.enable = true;
+  # services.printing.enable = true;
+  # services.avahi.enable = true;
+  # services.avahi.nssmdns = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -105,19 +95,13 @@ in {
         manage = "desktop";
         name = "emacs";
         start = ''
-          ${pkgs.emacs}/bin/emacs &
-          # ${myEmacs}/bin/emacs &
+          ${myEmacs}/bin/emacs &
           waitPID=$!
         '';}];};};
 
   fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
     dejavu_fonts
     source-code-pro
-    font-awesome-ttf
-    powerline-fonts
   ];
 
   environment.sessionVariables = {
@@ -127,26 +111,25 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    numix-cursor-theme
-    numix-gtk-theme
-    numix-icon-theme
     cloneRepos
     cleanHome
-    emacs
-    # myEmacs
+    myEmacs
     tmux
-    gitAndTools.gitFull gitAndTools.gitflow
-    pandoc
-    chromium qbittorrent gimp kdenlive darktable krita virtmanager pavucontrol
     openvpn
-    mpv wmctrl scrot
-    xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot numlockx xclip xsel
+    pandoc
+    virtmanager
+    gitAndTools.gitFull gitAndTools.gitflow
+    chromium
+    qbittorrent
+    gimp kdenlive darktable krita inkscape
+    mpv pavucontrol
+    wmctrl
+    scrot
+    xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
+    numlockx
+    xclip xsel
     pkgs.acpilight
-    libnotify dunst
+    dunst
   ];
-
-  nixpkgs.config.packageOverrides = super: {
-    acpilight = pkgs.callPackage ./acpilight.nix {};
-  };
 
 }
