@@ -5,10 +5,9 @@
   (load-theme 'doom-city-lights t))
 
 (use-package smart-mode-line :demand
-  :config
-  (setq sml/no-confirm-load-theme t)
-  (sml/setup)
-  (setq sml/theme 'respectful))
+  :init (setq sml/theme 'respectful)
+  :after doom-themes
+  :config (sml/setup))
 
 (use-package rich-minority
   :init
