@@ -46,8 +46,9 @@ in {
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
 
+    # gtk theme
     home.file.".gtkrc-2.0".source = "${adamDotfiles}/.gtkrc-2.0";
-    home.file."/.config/.gtk-3.0/settings.ini".source = "${adamDotfiles}/.config/.gtk-3.0/settings.ini";
+    home.file."/.config/gtk-3.0/settings.ini".source = "${adamDotfiles}/.config/gtk-3.0/settings.ini";
     home.file."/.icons/default/index.theme".source = "${adamDotfiles}/.icons/default/index.theme";
     home.file.".Xresources".source = "${adamDotfiles}/.Xresources";
   };
