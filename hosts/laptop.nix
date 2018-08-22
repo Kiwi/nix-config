@@ -12,10 +12,29 @@
 
    networking.hostId = "007f0100";
 
+   environment.systemPackages = with pkgs; [
+     pkgs.acpilight
+   ];
+
    nixpkgs.config.packageOverrides = super: {
      acpilight = pkgs.callPackage ../modules/acpilight.nix {};
    };
 
    services.tlp.enable = true;
+
+   services.xserver.libinput.enable = true;
+   services.xserver.libinput.accelSpeed = "0.9";
+   services.xserver.videoDrivers = [ "modesetting" ];
+   services.xserver.useGlamor = true;
+   services.xserver.deviceSection = ''
+     Option "DRI" "3"
+     Option "TearFree" "true"
+     Option "AccelMethod" "glamor"
+   '';
+
+   services.compton = {
+     enable = true;
+     backend = "glx";
+   };
 
  }

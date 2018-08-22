@@ -37,17 +37,23 @@
    time.timeZone = "America/Los_Angeles";
 
    environment.systemPackages = with pkgs; [
-     man man-pages posix_man_pages stdman
-
+     # misc utilities
      wget curl inetutils nix-prefetch-scripts gptfdisk pmutils psmisc which file
      binutils bc utillinuxCurses exfat dosfstools patchutils moreutils unzip zip
      pciutils lshw usbutils
 
-     lm_sensors htop iotop powertop ltrace strace linuxPackages.perf
+     # performance / monitoring
+     lm_sensors
+     htop iotop powertop
+     ltrace strace linuxPackages.perf
      smartmontools
+
+     # misc
 
      (python36.withPackages(ps: with ps; [ certifi ]))
      gnutls gnupg gnupg1compat pinentry
+
+     virtmanager
    ];
 
    programs.bash.enableCompletion = true;
@@ -56,6 +62,8 @@
    ];
    programs.mtr.enable = true;
    programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+
+   networking.networkmanager.enable = true;
 
    networking.firewall.allowPing = true;
    networking.firewall.allowedTCPPorts = [ 22 ];

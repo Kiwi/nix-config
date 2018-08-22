@@ -9,12 +9,10 @@ let
     git clone git@github.com:cooslug/cooslug.github.io.git
     git clone git@github.com:a-schaefers/a-schaefers.github.io.git
     git clone git@github.com:a-schaefers/grubbe-mkconfig.git
+    git clone git@github.com:TemptorSent/Funtools.git
     git clone git@github.com:apoptosis/episteme.git
     git clone git@github.com:dustinlacewell/emacs-nougat.git
     git clone git@github.com:bbatsov/prelude.git
-    git clone git@github.com:syl20bnr/spacemacs.git
-    git clone git@github.com:purcell/emacs.d.git
-    git clone git@github.com:emacs-tw/awesome-emacs.git
   '';
   cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
     # remove $HOME cruft with a list of exceptions to keep.
@@ -54,30 +52,15 @@ in {
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  networking.networkmanager.enable = true;
-
   hardware.opengl = {
     driSupport = true;
     driSupport32Bit = true;
   };
 
-  services.compton = {
-  enable = true;
-    backend = "glx";
-  };
-
+  # exwm
   services.xserver = {
     enable = true;
     layout = "us";
-    libinput.enable = true;
-    libinput.accelSpeed = "0.9";
-    videoDrivers = [ "modesetting" ];
-    useGlamor = true;
-    deviceSection = ''
-      Option "DRI" "3"
-      Option "TearFree" "true"
-      Option "AccelMethod" "glamor"
-    '';
     displayManager.slim.enable = true;
     displayManager.slim.autoLogin = true;
     displayManager.slim.defaultUser = "adam";
@@ -111,25 +94,27 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    # dev / misc
     cloneRepos
     cleanHome
     myEmacs
+    gitAndTools.gitFull gitAndTools.gitflow
     tmux
     openvpn
-    pandoc
-    virtmanager
-    gitAndTools.gitFull gitAndTools.gitflow
-    chromium
-    qbittorrent
-    gimp kdenlive darktable krita inkscape
-    mpv pavucontrol
+
+    # desktop support
     wmctrl
     scrot
     xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
     numlockx
     xclip xsel
     pkgs.acpilight
-    dunst
+    libnotify dunst
+
+    # desktop apps
+    pandoc
+    chromium qbittorrent mpv pavucontrol
+    gimp kdenlive darktable krita inkscape
   ];
 
 }
