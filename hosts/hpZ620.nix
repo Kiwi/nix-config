@@ -13,4 +13,10 @@
    # TODO
    networking.hostId = "";
 
+   services.xserver.deviceSection = ''
+     Option "DRI" "3"
+     Option "TearFree" "true"
+     Option "AccelMethod" "glamor"
+   '';
+
  }
