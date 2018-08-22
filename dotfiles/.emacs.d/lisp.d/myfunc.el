@@ -1,22 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
 
-(defun my/compile-init ()
-  "Auto byte compile everything if needed."
-  (interactive)
-  (byte-recompile-directory "~/.emacs.d/lisp.d" 0)
-  (byte-compile-file "~/.emacs.d/init.el"))
-;; (unless (file-exists-p "~/.emacs.d/init.elc")
-;;   (add-hook 'emacs-startup-hook 'my/compile-init))
-
-(defun my/update-init ()
-  "This is how I sync my configuration across machines."
-  (interactive)
-  (async-shell-command "~/.emacs.d/update-init.sh"))
-
-(defun my/xprofile-reload ()
-  (interactive)
-  (start-process-shell-command "" nil "bash ~/.xprofile"))
-
 (defun spacemacs/alternate-buffer (&optional window)
   "Switch back and forth between current and last buffer in the current WINDOW."
   (interactive)
@@ -49,7 +32,7 @@
   (my-startup-screen-hook))
 (global-set-key (kbd "C-c K") 'my/kill-all-buffers)
 
-;; nougat boilerplate functions
+;; nougat boilerplate
 
 (defun global-kbd-or (&rest args)
   (let* ((pairs (-partition 2 args)))

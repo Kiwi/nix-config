@@ -86,18 +86,11 @@
 ;; abbrev config
 (add-hook 'text-mode-hook 'abbrev-mode)
 
-;; eww browser default, use firefox as external browser with (&)
-(setq browse-url-default-browser 'eww
-      browse-url-browser-function 'eww-browse-url
-      eww-search-prefix "https://www.google.com/search?q=")
-(setq shr-external-browser 'browse-url-generic
-      browse-url-generic-program "firefox")
-(global-set-key (kbd "C-c ab") 'eww)
+;; default browsers
+(setq browse-url-browser-function 'browse-url-chromium)
 
-;; ediff use vsplit and winner-undo hook afterwards to resume layout.
-(setq ediff-window-setup-function 'ediff-setup-windows-plain
-      ediff-diff-options "-w"
-      ediff-split-window-function 'split-window-horizontally)
+;; ediff winner-undo hook afterwards to resume layout.
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 
 ;; load all the dired features also use dired-async-mode for performance.
@@ -114,32 +107,6 @@
 (use-package midnight :demand
   :config 
   (setq midnight-period 7200))
-
-;; saner regex syntax
-(use-package re-builder :demand
-  :config
-  (setq reb-re-syntax 'string))
-
-(use-package easy-kill :demand
-  :config
-  (global-set-key [remap kill-ring-save] 'easy-kill)
-  (global-set-key [remap mark-sexp] 'easy-mark))
-
-(use-package operate-on-number :demand)
-(use-package smartrep :demand
-  :config
-  (smartrep-define-key global-map "C-c ."
-    '(("+" . apply-operation-to-number-at-point)
-      ("-" . apply-operation-to-number-at-point)
-      ("*" . apply-operation-to-number-at-point)
-      ("/" . apply-operation-to-number-at-point)
-      ("\\" . apply-operation-to-number-at-point)
-      ("^" . apply-operation-to-number-at-point)
-      ("<" . apply-operation-to-number-at-point)
-      (">" . apply-operation-to-number-at-point)
-      ("#" . apply-operation-to-number-at-point)
-      ("%" . apply-operation-to-number-at-point)
-      ("'" . operate-on-number-at-point))))
 
 (require 'recentf)
 (recentf-mode 1)

@@ -20,12 +20,13 @@ let
     # remove $HOME cruft with a list of exceptions to keep.
     cd ~/
     find -name "*" | egrep -v \
-    "ssh|gnupg|gpg|thunderbird|mozilla|qBittorrent|emacs|slime|repos|Pictures|Documents|Downloads|Desktop" \
-    | xargs rm -rf
-    # re-create all symlinks
-    sudo systemctl restart home-manager-adam || sudo systemctl status home-manager-adam
+    "bash_history|ssh|gnupg|gpg|chromium|qBittorrent|emacs|slime|repos|Pictures|Documents|Downloads" \
+    | xargs rm -f
+    find . -type d -empty -delete
+    # re-create symlinks
+    sudo systemctl restart home-manager-adam || exit
     # log out and back in again
-    sudo systemctl restart display-manager
+    pkill emacs
   '';
 in {
   imports = [
@@ -120,16 +121,12 @@ in {
     cleanHome
     tmux
     gitAndTools.gitFull gitAndTools.gitflow
-    pandoc
-    pavucontrol
-    chromium firefox thunderbird qbittorrent
-    gimp kdenlive darktable krita
+    pandoc 
+    chromium qbittorrent gimp kdenlive darktable krita virtmanager pavucontrol
     openvpn
-    virtmanager
-    mpv
-    wmctrl scrot
+    mpv wmctrl scrot
+    xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot numlockx xclip xsel
     pkgs.acpilight
-    xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot xorg.xcursorthemes numlockx xclip xsel
     libnotify dunst
   ];
 
