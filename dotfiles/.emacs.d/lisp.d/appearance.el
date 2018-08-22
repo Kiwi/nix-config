@@ -1,18 +1,18 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package doom-themes
-  :disabled
+(use-package doom-themes :demand
   :config
   (load-theme 'doom-city-lights t))
 
-(use-package gruvbox-theme
-  :demand
+(use-package smart-mode-line :demand
   :config
-  (load-theme 'gruvbox-dark-hard t))
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup)
+  (setq sml/theme 'respectful))
 
 (use-package rich-minority
   :init
-  (add-hook 'after-init-hook 'rich-minority-mode)
+  ;; (add-hook 'after-init-hook 'rich-minority-mode)
   :config
   (setf rm-blacklist ""))
 
