@@ -1,10 +1,10 @@
 { config, pkgs, ... }:
  {
    imports = [
-     ./modules/rescue_boot.nix
-     ./modules/desktop.nix
-     ./hosts/laptop.nix
-     # ./hosts/workstation.nix
+     ./pkgs/rescue_boot.nix
+     ./hosts/modules/desktop.nix
+     ./hosts/latitudeE6430.nix
+     # ./hosts/hpZ620.nix
    ];
 
    boot.loader.grub.enable = true;

@@ -17,7 +17,7 @@
    ];
 
    nixpkgs.config.packageOverrides = super: {
-     acpilight = pkgs.callPackage ../modules/acpilight.nix {};
+     acpilight = pkgs.callPackage ../pkgs/acpilight.nix {};
    };
 
    services.tlp.enable = true;
