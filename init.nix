@@ -2,14 +2,11 @@
  # all system-wide, machine independant general settings
  {
    imports = [
-     # system-wide imports
+     ./hosts/modules/rescue_boot.nix # puts a full nixos rescue iso disk on grub
      ./hosts/latitudeE6430.nix # my laptop specific settings
      # ./hosts/hpZ620.nix # my workstation specific settings
-     ./hosts/modules/rescue_boot.nix # puts a rescue kernel and initrd in /boot and a menuentry on grub
      ./hosts/modules/desktop.nix # all desktop specific settings
-
-     # TODO local-user imports
-     ./hosts/modules/home.nix # all home specific settings and "home-manager"
+     ./hosts/modules/home.nix # all home / user settings and "home-manager"
    ];
 
    boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
