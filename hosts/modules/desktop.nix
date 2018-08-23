@@ -86,4 +86,6 @@ in {
 
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
+ # TODO udisks, diskie ? polkit rules and udev rules for acpilight w/o sudo
+
 }

@@ -41,10 +41,12 @@ in
     "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
   ];
 
-  # make the helper bash functions available
+  # system-wide developer environment packages
   environment.systemPackages = with pkgs; [
     cloneRepos
     cleanHome
+    gitAndTools.gitFull gitAndTools.gitflow
+    tmux
   ];
 
   # setup users
@@ -72,5 +74,7 @@ in
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
     home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
   };
+
+  # TODO home-manager for root
 
 }

@@ -1,13 +1,12 @@
 { config, pkgs, ... }:
- # all system-wide, machine independant general settings
+ # all system-wide general settings
  {
    imports = [
+     ./hosts/latitudeE6430.nix       # machine specific settings
+     # ./hosts/hpZ620.nix            # machine specific settings
+     ./hosts/modules/desktop.nix     # system-wide desktop settings
+     ./hosts/modules/home.nix        # home settings
      ./hosts/modules/rescue_boot.nix # puts a full nixos rescue iso disk on grub
-     ./hosts/latitudeE6430.nix # my laptop specific settings
-     # ./hosts/hpZ620.nix # my workstation specific settings
-     ./hosts/modules/desktop.nix # all desktop specific settings
-     ./hosts/modules/develop.nix # system-wide developer specific settings
-     ./hosts/modules/home.nix # all home / user settings and "home-manager"
    ];
 
    boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
@@ -41,12 +40,9 @@
    time.timeZone = "America/Los_Angeles";
 
    environment.systemPackages = with pkgs; [
-     # misc utilities
      wget curl inetutils nix-prefetch-scripts gptfdisk pmutils psmisc which file
      binutils bc utillinuxCurses exfat dosfstools patchutils moreutils unzip zip
      pciutils lshw usbutils
-
-     # performance / monitoring
      lm_sensors
      htop iotop powertop
      ltrace strace linuxPackages.perf
@@ -55,9 +51,7 @@
 
    programs.mtr.enable = true;
    programs.bash.enableCompletion = true;
-   environment.shells = [
-     "${pkgs.bash}/bin/bash"
-   ];
+   environment.shells = [ "${pkgs.bash}/bin/bash" ];
 
    networking.networkmanager.enable = true;
 
