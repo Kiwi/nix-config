@@ -10,7 +10,7 @@
   (setq-default magit-diff-refine-hunk t)
   (setq magit-repository-directories '(("~/repos" . 1)
                                        ("~/.emacs.d/straight/repos" . 1)
-                                       ("/nixcfg" . 0))))
+                                       ("/nix-config" . 0))))
 (with-eval-after-load 'magit
   (use-package fullframe :demand
     :config

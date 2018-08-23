@@ -6,7 +6,7 @@
 
 let
   # location of dotfiles
-  adamDotfiles = "/nixcfg/dotfiles";
+  adamDotfiles = "/nix-config/dotfiles";
 
   # create some helper cli commands
 
