@@ -5,18 +5,17 @@
      ../modules
    ];
 
+   networking.hostName = "E6430";
+
    mine.zfsCare.enable = true;
    mine.home.enable = true;
    mine.workstation.enable = true;
    mine.libvirtd.enable = true;
    mine.acpilight.enable = true;
 
-   networking.hostName = "nix";
-
    boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
    boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];
 
-   # grub / hardware (using id's instead of /dev/sda /dev/sdb is better)
    boot.loader.grub.devices = [
      "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
      "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0"
@@ -25,14 +24,11 @@
    # important!! for the specific ZFS pool of this computer!
    networking.hostId = "007f0100";
 
-   # extra power savings
    services.tlp.enable = true;
 
-   # touchpad
    services.xserver.libinput.enable = true;
    services.xserver.libinput.accelSpeed = "0.9";
 
-   # graphics
    services.xserver.videoDrivers = [ "modesetting" ];
       services.xserver.deviceSection = ''
         Option "DRI" "3"
