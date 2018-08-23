@@ -6,6 +6,7 @@
    ];
 
    mine.zfsCare.enable = true;
+   mine.home.enable = true;
    mine.workstation.enable = true;
    mine.libvirtd.enable = true;
 
