@@ -1,11 +1,15 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
+  let
+    # build emacs without gtk
+  myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+in
 {
   options.mine.workstation.enable = mkEnableOption "Workstation Profile";
 
   config = mkIf config.mine.workstation.enable {
+
     # misc services I don't really use
 
     # services.samba.enable = true;
@@ -36,8 +40,8 @@ with lib;
       openvpn
     ];
 
-    mine.workstation = {
-      # pulseaudio
+
+    # pulseaudio
       sound.enable = true;
       hardware.pulseaudio.enable = true;
 
@@ -48,10 +52,6 @@ with lib;
       };
 
       # Xorg, Slim, Emacs
-      xserver.enable = true;
-
-    };
-
-
+    services.xserver.enable = true;
   };
 }
