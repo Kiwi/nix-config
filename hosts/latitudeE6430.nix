@@ -3,9 +3,9 @@
  {
    imports = [
      ../modules
-     ./developer-setup
-     ./opt/libvirt.nix
    ];
+
+   config.mine.workstation.enable = true;
 
    boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
    boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];

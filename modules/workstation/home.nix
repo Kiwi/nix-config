@@ -64,15 +64,15 @@ in
     # create symlinks to my dotfiles (recreated every time the home-manager-adam service restarts)
     home.file.".emacs.d/init.el".source = "${adamDotfiles}/.emacs.d/init.el";
     home.file.".emacs.d/lisp.d".source = "${adamDotfiles}/.emacs.d/lisp.d";
+    home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
     home.file.".gitconfig".source = "${adamDotfiles}/.gitconfig";
     home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
     home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
+    home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file."/bin".source = "${adamDotfiles}/bin";
     home.file."/.config/mimi/mime.conf".source = "${adamDotfiles}/.config/mimi/mime.conf";
-    home.file."/.config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
-    home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
     home.file.".mailcap".source = "${adamDotfiles}/.mailcap";
-    home.file.".Xmodmap".source = "${adamDotfiles}/.Xmodmap";
+    home.file."/.config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
   };
 
   # TODO home-manager for root
