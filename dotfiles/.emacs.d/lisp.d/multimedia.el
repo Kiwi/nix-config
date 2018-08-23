@@ -5,7 +5,7 @@
   :bind (("C-c aef" . emms-play-file))
   :bind (("C-c aed" . emms-play-directory))
   :config
-  (setq emms-source-file-default-directory "/mnt/ZSTORE/")
+  (setq emms-source-file-default-directory "~/Downloads")
   (emms-all)
   (emms-default-players))
 

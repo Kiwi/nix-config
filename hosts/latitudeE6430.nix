@@ -2,7 +2,7 @@
 # all dell latitude e6430 laptop specific settings
  {
    imports = [
-     ../modules/libvirt.nix
+     ../modules
    ];
 
    boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];
