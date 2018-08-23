@@ -64,7 +64,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; use-package integration
+;; `use-package' integration
 (setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
 (setq use-package-always-defer t)
@@ -87,8 +87,6 @@
         (load (file-name-sans-extension fullpath)))))))
 
 (load-directory "~/.emacs.d/lisp.d")
-
-(provide 'init)
 
 ;; Local Variables:
 ;; coding: utf-8

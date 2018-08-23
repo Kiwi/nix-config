@@ -20,8 +20,6 @@
     (subword-mode +1)
     (run-hooks 'prelude-interactive-lisp-coding-hook)))
 
-(provide 'lang-clojure)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

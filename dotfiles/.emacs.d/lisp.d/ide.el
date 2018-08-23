@@ -311,8 +311,6 @@
   (goto-address-prog-mode 1)) ;; always make url clickable in prog-mode
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
-(provide 'ide)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

@@ -17,8 +17,6 @@
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
 
-(provide 'lang-shell)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

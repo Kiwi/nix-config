@@ -21,8 +21,6 @@
     ;; CamelCase aware editing operations
     (subword-mode +1)))
 
-(provide 'lang-rust)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

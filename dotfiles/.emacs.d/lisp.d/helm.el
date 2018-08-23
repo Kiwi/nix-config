@@ -62,7 +62,7 @@
   (helm-projectile-on))
 
 ;; add swoop
-(use-package helm-swoop 
+(use-package helm-swoop
   :bind
   (("C-S-s" . helm-swoop)
    ("M-i" . helm-swoop)
@@ -73,11 +73,9 @@
    ("C-x M-i" . helm-multi-swoop-all)))
 
 ;; add emms
-(use-package helm-emms 
+(use-package helm-emms
   :bind
   (("C-c aeh" . helm-emms)))
-
-(provide 'helm)
 
 ;; Local Variables:
 ;; coding: utf-8

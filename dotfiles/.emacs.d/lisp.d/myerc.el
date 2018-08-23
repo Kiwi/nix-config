@@ -55,9 +55,6 @@
     ad-do-it
     (if (erc-query-buffer-p) (setq erc-track-priority-faces-only 'all))))
 
-
-(provide 'myerc)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

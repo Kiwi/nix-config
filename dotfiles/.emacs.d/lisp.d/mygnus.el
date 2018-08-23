@@ -73,7 +73,7 @@
   ;; Don't spam the minibuffer! "No news is good news"
   (setq gnus-no-groups-message "")
 
-  ;; Have Gnus check for new mail every ~1 minutes if idle  
+  ;; Have Gnus check for new mail every ~1 minutes if idle
   (gnus-demon-add-handler 'gnus-demon-scan-news 1 t)
 
   ;; work around issue of gnus demon hang emacs upon connection loss
@@ -240,8 +240,6 @@ contains new messages"))
 
   (add-hook 'gnus-summary-exit-hook
             'gnus-mst-show-groups-with-new-messages))
-
-(provide 'mygnus.el)
 
 ;; Local Variables:
 ;; coding: utf-8

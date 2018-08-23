@@ -14,8 +14,6 @@
   :config
   (pdf-tools-install t))
 
-(provide 'multimedia)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

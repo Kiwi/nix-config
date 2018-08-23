@@ -105,7 +105,7 @@
 
 ;; clean up obsolete buffers every 2 hours.
 (use-package midnight :demand
-  :config 
+  :config
   (setq midnight-period 7200))
 
 (require 'recentf)
@@ -126,8 +126,6 @@
 
 (require 'winner)
 (winner-mode 1)
-
-(provide 'editor)
 
 ;; Local Variables:
 ;; coding: utf-8

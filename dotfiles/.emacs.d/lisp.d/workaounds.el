@@ -9,8 +9,6 @@
 ;; Tramp gives me problems opening large text files without this.
 (setq tramp-copy-size-limit nil)
 
-(provide 'workarounds)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

@@ -71,8 +71,6 @@
       (eval target)
     default))
 
-(provide 'myfunc)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

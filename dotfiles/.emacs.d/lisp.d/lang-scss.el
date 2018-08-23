@@ -10,8 +10,6 @@
   (defun prelude-scss-mode-defaults ()
     (prelude-css-mode-defaults)))
 
-(provide 'lang-scss)
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t
