@@ -2,9 +2,8 @@
 
 with lib;
   let
-    # build emacs without gtk
-  myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
-in
+    myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+  in
 {
   options.mine.workstation.enable = mkEnableOption "Workstation Profile";
 

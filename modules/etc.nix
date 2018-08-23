@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
- # some configurations for all of my systems
+{ config, ... }:
+ # shared configurations for all hosts
  {
    imports = [];
 
@@ -9,6 +9,7 @@
    boot.supportedFilesystems = [ "zfs" ];
    boot.zfs.forceImportAll = false;
    boot.zfs.forceImportRoot = false;
+
    services.zfs.autoScrub.enable = true;
    services.zfs.autoSnapshot = {
      enable = true;
@@ -18,7 +19,9 @@
      weekly = 0;
      monthly = 0;
    };
+
    services.smartd.enable = true;
+
    nix.gc.automatic = true;
    nix.gc.dates = "weekly";
    nix.gc.options = "--delete-older-than 30d";
@@ -33,16 +36,16 @@
    time.timeZone = "America/Los_Angeles";
 
    programs.mtr.enable = true;
+
    programs.bash.enableCompletion = true;
-   environment.shells = [ "${pkgs.bash}/bin/bash" ];
 
    networking.networkmanager.enable = true;
 
    networking.firewall.allowPing = true;
    networking.firewall.allowedTCPPorts = [ 22 ];
    networking.firewall.allowedUDPPorts = [ 22 ];
+
    networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-   networking.hostName = "nix";
 
    services.openssh.enable = true;
 

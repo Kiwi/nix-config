@@ -1,6 +1,6 @@
 { pkgs, ... }:
-# builds a rescue kernel and initrd in /boot less than 500MB full operating system.
-# it puts the nix rescue iso on the grub menu with ZFS support-- pretty handy.
+# builds a rescue kernel and initrd in /boot less than 500MB
+# it puts the nix rescue iso on the grub menu with ZFS support
   let
   netboot = import (pkgs.path + "/nixos/lib/eval-config.nix") {
       modules = [

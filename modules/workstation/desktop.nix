@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
   # system-wide, machine independant desktop configurations
 let
-  # build emacs without gtk
   myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in {
   imports = [];
