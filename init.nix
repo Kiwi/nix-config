@@ -1,11 +1,14 @@
 { ... }:
  {
    imports = [
-     ./hosts/latitudeE6430.nix       # machine specific settings
-     # ./hosts/hpZ620.nix            # machine specific settings
-     ./hosts/modules/etc.nix         # system-wide general settings
-     ./hosts/modules/desktop.nix     # system-wide desktop settings
-     ./hosts/modules/home.nix        # home settings
+     # Machine specific, uncomment only one:
+     ./hosts/latitudeE6430.nix
+     # ./hosts/hpZ620.nix
+
+     # Machine independant:
+     ./hosts/modules/etc.nix         # General configurations
+     ./hosts/modules/desktop.nix     # Desktop configurations
+     ./hosts/modules/home.nix        # $HOME and developer environment setup
      ./hosts/modules/rescue_boot.nix # NixOS rescue on the grub menu
    ];
  }
