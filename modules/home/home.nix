@@ -29,7 +29,6 @@ let
   '';
 in
   {
-
     imports = [
       # make home-manager available https://nixos.wiki/wiki/Home_Manager
       "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
@@ -72,6 +71,11 @@ in
         home.file."/.config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
       };
 
-      # TODO home-manager for root
+      home-manager.users.root = {
+        home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
+        home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
+        home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
+      };
+
     };
   }
