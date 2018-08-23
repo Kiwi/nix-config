@@ -26,7 +26,8 @@ in {
     driSupport32Bit = true;
   };
 
-  # Xorg, Slim and Exwm
+  # Xorg, Slim and Emacs
+  # (Exwm & Emacs pkgs are maintained in /nix-config/dotfiles/.emacs.d using straight.el)
   services.xserver = {
     enable = true;
     layout = "us";

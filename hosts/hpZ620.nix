@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-# all hpZ62 workstation specific settings
+# all hpZ620 workstation specific settings
  {
    imports = [  ];
 
