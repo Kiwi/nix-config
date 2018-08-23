@@ -14,9 +14,9 @@ let
 
 in {
   boot.loader.grub.extraEntries = ''
-    menuentry "Nixos Installer" {
-      linux ($drive1)//ROOT/nixos/@/boot/rescue-kernel init=${netboot.config.system.build.toplevel}/init ${toString netboot.config.boot.kernelParams}
-      initrd ($drive1)//ROOT/nixos/@/boot/rescue-initrd
+    menuentry "NixOS - Rescue" {
+    linux ($drive1)//ROOT/nixos/@/boot/rescue-kernel init=${netboot.config.system.build.toplevel}/init ${toString netboot.config.boot.kernelParams}
+    initrd ($drive1)//ROOT/nixos/@/boot/rescue-initrd
     }
   '';
   boot.loader.grub.extraFiles = {
