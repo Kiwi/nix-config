@@ -17,6 +17,8 @@ with lib;
     # services.avahi.enable = true;
     # services.avahi.nssmdns = true;
 
+    services.smartd.enable = true;
+
     # pulseaudio
     sound.enable = true;
     hardware.pulseaudio.enable = true;
@@ -26,10 +28,6 @@ with lib;
       driSupport = true;
       driSupport32Bit = true;
     };
-
-    fonts.fonts = with pkgs; [
-      dejavu_fonts
-      source-code-pro ];
 
     # Xorg, Slim, Emacs
     services.xserver = {
@@ -62,6 +60,11 @@ with lib;
       VISUAL = "emacsclient";
     };
 
+    # some basic xft fonts
+    fonts.fonts = with pkgs; [
+      dejavu_fonts
+      source-code-pro ];
+
     environment.systemPackages = with pkgs; [
       myEmacs
 
@@ -78,7 +81,7 @@ with lib;
       chromium qbittorrent mpv pavucontrol
       gimp kdenlive darktable krita inkscape
 
-      # crypto / security
+      # security
       (python36.withPackages(ps: with ps; [ certifi ]))
       gnutls gnupg gnupg1compat pinentry
       openvpn

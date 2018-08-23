@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 # all $HOME and user configurations
 
 # TODO, consider installing and doing more things user-locally
 # and consider exploring home-manager features more beyond symlink management.
-
-let
-  # location of dotfiles
+with lib;
+  let
+    # location of dotfiles
   adamDotfiles = "/nix-config/dotfiles";
 
   # create some helper cli commands
@@ -34,30 +34,30 @@ let
       pkill emacs
     '';
 in
-{
+  {
 
-  imports = [
-    # make home-manager available https://nixos.wiki/wiki/Home_Manager
-    "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
-  ];
+    imports = [
+      # make home-manager available https://nixos.wiki/wiki/Home_Manager
+      "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
+    ];
 
-  # system-wide developer environment packages
-  environment.systemPackages = with pkgs; [
-    cloneRepos
-    cleanHome
-    gitAndTools.gitFull gitAndTools.gitflow
-    tmux
-  ];
+    # system-wide developer environment packages
+    environment.systemPackages = with pkgs; [
+      cloneRepos
+      cleanHome
+      gitAndTools.gitFull gitAndTools.gitflow
+      tmux
+    ];
 
-  # setup users
-  users.users.adam =
-    { isNormalUser = true;
-      home = "/home/adam";
-      createHome = true;
-      extraGroups = [ "wheel" "disk" "audio" "video" "systemd-journal"
-        "networkmanager" "libvirtd" ];
-    };
-  security.sudo.wheelNeedsPassword = false;
+    # setup users
+    users.users.adam =
+      { isNormalUser = true;
+        home = "/home/adam";
+        createHome = true;
+          extraGroups = [ "wheel" "disk" "audio" "video" "systemd-journal"
+            "networkmanager" "libvirtd" ];
+      };
+    security.sudo.wheelNeedsPassword = false;
 
   # home-manager for "adam" section
   home-manager.users.adam = {
@@ -75,6 +75,6 @@ in
     home.file."/.config/mpv/mpv.conf".source = "${adamDotfiles}/.config/mpv/mpv.conf";
   };
 
-  # TODO home-manager for root
+    # TODO home-manager for root
 
-}
+  }

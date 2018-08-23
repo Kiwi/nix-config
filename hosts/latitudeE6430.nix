@@ -5,6 +5,7 @@
      ../modules
    ];
 
+   mine.zfsCare.enable = true;
    mine.workstation.enable = true;
    mine.libvirtd.enable = true;
 
