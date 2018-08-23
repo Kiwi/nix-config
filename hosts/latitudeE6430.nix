@@ -2,7 +2,7 @@
 # all dell latitude e6430 laptop specific settings
  {
    imports = [
-     ./modules/libvirt.nix
+     ../modules/libvirt.nix
    ];
 
    boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];
@@ -21,7 +21,7 @@
      pkgs.acpilight
    ];
    nixpkgs.config.packageOverrides = super: {
-     acpilight = pkgs.callPackage ./modules/acpilight.nix {};
+     acpilight = pkgs.callPackage ../pkgs/acpilight.nix {};
    };
 
    # extra power savings

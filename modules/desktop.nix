@@ -70,7 +70,6 @@ in {
     xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
     numlockx
     xclip xsel
-    pkgs.acpilight
     libnotify dunst
 
     # desktop apps
