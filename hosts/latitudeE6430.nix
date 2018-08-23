@@ -9,6 +9,7 @@
    mine.home.enable = true;
    mine.workstation.enable = true;
    mine.libvirtd.enable = true;
+   mine.acpilight.enable = true;
 
    networking.hostName = "nix";
 
@@ -23,14 +24,6 @@
 
    # important!! for the specific ZFS pool of this computer!
    networking.hostId = "007f0100";
-
-   # use acpilight xbacklight drop-in replacement
-   environment.systemPackages = with pkgs; [
-     pkgs.acpilight
-   ];
-   nixpkgs.config.packageOverrides = super: {
-     acpilight = pkgs.callPackage ../pkgs/acpilight.nix {};
-   };
 
    # extra power savings
    services.tlp.enable = true;
