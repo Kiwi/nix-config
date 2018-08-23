@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-# all $HOME and user settngs
+# all $HOME and user configurations
 
 # TODO, consider installing and doing more things user-locally
 # and consider exploring home-manager features more beyond symlink management.

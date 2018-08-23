@@ -4,6 +4,7 @@
    imports = [  ];
 
    # TODO
+   boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
    boot.kernelParams = [ "elevator=noop intel_iommu=on iommu=pt boot.shell_on_fail" ];
 
    boot.loader.grub.devices = [

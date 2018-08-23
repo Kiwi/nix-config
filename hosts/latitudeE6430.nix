@@ -3,8 +3,11 @@
  {
    imports = [
      ../modules
+     ./developer-setup
+     ./opt/libvirt.nix
    ];
 
+   boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
    boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];
 
    # grub / hardware (using id's instead of /dev/sda /dev/sdb is better)

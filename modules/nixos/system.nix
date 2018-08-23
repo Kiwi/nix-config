@@ -1,9 +1,8 @@
 { config, pkgs, ... }:
- # all system-wide, machine independant general settings
+ # my system-wide, machine independant general configurations
  {
    imports = [];
 
-   boot.kernelModules = [ "coretemp" "kvm-intel" "microcode" ];
    boot.loader.grub.enable = true;
    boot.loader.grub.version = 2;
    boot.loader.grub.copyKernels = true;
