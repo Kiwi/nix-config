@@ -1,14 +1,19 @@
-{ config, pkgs, ... }:
- {
-   imports = [  ];
+{ config, pkgs, lib, ... }:
+with lib;
+  {
+    imports = [  ];
 
-   services.dnsmasq.enable = true;
-   virtualisation.libvirtd.enable = true;
-   environment.variables.LIBVIRT_DEFAULT_URI = "qemu:///system";
+    options.mine.libvirtd.enable = mkEnableOption "Libvirtd Profile";
 
-   environment.systemPackages = with pkgs; [
-     virtmanager
-     pkgs.gnome3.dconf # https://github.com/NixOS/nixpkgs/issues/42433
-   ];
+    config = mkIf config.mine.libvirtd.enable {
+      services.dnsmasq.enable = true;
+      virtualisation.libvirtd.enable = true;
+      environment.variables.LIBVIRT_DEFAULT_URI = "qemu:///system";
 
- }
+      environment.systemPackages = with pkgs; [
+        virtmanager
+        pkgs.gnome3.dconf # https://github.com/NixOS/nixpkgs/issues/42433
+      ];
+    };
+
+  }

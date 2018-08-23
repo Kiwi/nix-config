@@ -6,6 +6,7 @@
    ];
 
    mine.workstation.enable = true;
+   mine.libvirtd.enable = true;
 
    networking.hostName = "nix";
 
@@ -43,8 +44,8 @@
         Option "AccelMethod" "glamor"
    '';
 
-   # glx activates driver vsync automatically in this particular laptop,
-   # necessary because the modesetting xorg driver does not have a TearFree option
+   # compton's glx backend activates driver vsync automatically in this particular laptop,
+   # necessary because the modesetting xorg driver does not have a TearFree option.
    services.compton = {
      enable = true;
      backend = "glx";

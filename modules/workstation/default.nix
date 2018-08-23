@@ -17,6 +17,51 @@ with lib;
     # services.avahi.enable = true;
     # services.avahi.nssmdns = true;
 
+    # pulseaudio
+    sound.enable = true;
+    hardware.pulseaudio.enable = true;
+
+    # mesa
+    hardware.opengl = {
+      driSupport = true;
+      driSupport32Bit = true;
+    };
+
+    fonts.fonts = with pkgs; [
+      dejavu_fonts
+      source-code-pro ];
+
+    # Xorg, Slim, Emacs
+    services.xserver = {
+      enable = true;
+      layout = "us";
+      useGlamor = true;
+      displayManager.slim.enable = true;
+      displayManager.slim.autoLogin = true;
+      displayManager.slim.defaultUser = "adam";
+      displayManager.sessionCommands = ''
+        ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+        ${pkgs.xlibs.xset}/bin/xset r rate 250 50
+        ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
+        ${pkgs.numlockx}/bin/numlockx
+        ${pkgs.dunst}/bin/dunst &
+      '';
+      desktopManager = {
+        xterm.enable = false;
+        default = "emacs";
+        session = [ {
+          manage = "desktop";
+          name = "emacs";
+          start = ''
+            ${myEmacs}/bin/emacs &
+            waitPID=$!
+          '';}];};};
+
+    environment.sessionVariables = {
+      EDITOR = "emacsclient";
+      VISUAL = "emacsclient";
+    };
+
     environment.systemPackages = with pkgs; [
       myEmacs
 
@@ -39,18 +84,6 @@ with lib;
       openvpn
     ];
 
-
-    # pulseaudio
-      sound.enable = true;
-      hardware.pulseaudio.enable = true;
-
-      # mesa
-      hardware.opengl = {
-        driSupport = true;
-        driSupport32Bit = true;
-      };
-
-      # Xorg, Slim, Emacs
-    services.xserver.enable = true;
-  };
+    programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+    };
 }
