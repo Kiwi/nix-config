@@ -6,8 +6,6 @@ let
 in {
   imports = [];
 
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
   # misc services I don't really use
 
   # services.samba.enable = true;
@@ -64,11 +62,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    # dev / misc
     myEmacs
-    gitAndTools.gitFull gitAndTools.gitflow
-    tmux
-    openvpn
 
     # desktop support applications
     wmctrl
@@ -83,6 +77,13 @@ in {
     pandoc
     chromium qbittorrent mpv pavucontrol
     gimp kdenlive darktable krita inkscape
+
+    # crypto / security
+    (python36.withPackages(ps: with ps; [ certifi ]))
+    gnutls gnupg gnupg1compat pinentry
+    openvpn
   ];
+
+  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
 }

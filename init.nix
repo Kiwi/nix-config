@@ -6,6 +6,7 @@
      ./hosts/latitudeE6430.nix # my laptop specific settings
      # ./hosts/hpZ620.nix # my workstation specific settings
      ./hosts/modules/desktop.nix # all desktop specific settings
+     ./hosts/modules/develop.nix # system-wide developer specific settings
      ./hosts/modules/home.nix # all home / user settings and "home-manager"
    ];
 
@@ -50,11 +51,6 @@
      htop iotop powertop
      ltrace strace linuxPackages.perf
      smartmontools
-
-     # misc
-
-     (python36.withPackages(ps: with ps; [ certifi ]))
-     gnutls gnupg gnupg1compat pinentry
    ];
 
    programs.mtr.enable = true;
