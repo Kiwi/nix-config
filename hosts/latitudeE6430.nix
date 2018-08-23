@@ -5,7 +5,7 @@
      ./modules/libvirt.nix
    ];
 
-   boot.kernelParams = [ "elevator=noop iommu=pt intel_iommu=igfx_off boot.shell_on_fail i915.enable_fbc=1" ];
+   boot.kernelParams = [ "elevator=noop boot.shell_on_fail i915.enable_fbc=1" ];
 
    # grub / hardware (using id's instead of /dev/sda /dev/sdb is better)
    boot.loader.grub.devices = [
