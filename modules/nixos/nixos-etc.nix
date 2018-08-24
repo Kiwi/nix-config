@@ -4,6 +4,9 @@ with lib;
   {
     imports = [];
 
+    boot.loader.grub.enable = true;
+    boot.loader.grub.version = 2;
+
     i18n = {
       consoleFont = "Lat2-Terminus16";
       consoleKeyMap = "us";

@@ -1,15 +1,13 @@
 { config, lib, ... }:
- # shared configurations for all hosts
 with lib;
   {
     imports = [];
     options.mine.zfsCare.enable = mkEnableOption "ZFS maintenance Profile";
     config = {
-      boot.loader.grub.enable = true;
-      boot.loader.grub.version = 2;
-      boot.loader.grub.copyKernels = true;
-      boot.supportedFilesystems = [ "zfs" ];
+      boot.loader.grub.copyKernels = true; # recommended if /boot/grub resides on zfs.
+      boot.supportedFilesystems = [ "zfs" ]; # all hosts get zfs support
     } // mkIf config.mine.zfsCare.enable {
+      # set mine.zfsCare.enable = true; for the following options:
       boot.zfs.forceImportAll = false;
       boot.zfs.forceImportRoot = false;
       services.zfs.autoScrub.enable = true;
