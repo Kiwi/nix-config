@@ -79,7 +79,7 @@ with lib;
 
       # desktop apps
       pandoc
-      firefox chromium qbittorrent mpv pavucontrol
+      firefox qbittorrent mpv pavucontrol
       gimp kdenlive darktable krita inkscape
 
       # security
