@@ -58,6 +58,7 @@ with lib;
     environment.sessionVariables = {
       EDITOR = "emacsclient";
       VISUAL = "emacsclient";
+      _JAVA_AWT_WM_NONREPARENTING = "1";
     };
 
     # some basic xft fonts
@@ -78,7 +79,7 @@ with lib;
 
       # desktop apps
       pandoc
-      surf chromium qbittorrent mpv pavucontrol
+      firefox chromium qbittorrent mpv pavucontrol
       gimp kdenlive darktable krita inkscape
 
       # security
