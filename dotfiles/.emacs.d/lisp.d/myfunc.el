@@ -32,45 +32,6 @@
   (my-startup-screen-hook))
 (global-set-key (kbd "C-c K") 'my/kill-all-buffers)
 
-;; nougat boilerplate
-
-(defun global-kbd-or (&rest args)
-  (let* ((pairs (-partition 2 args)))
-    (cl-loop for pair in pairs
-             for target = (car pair)
-             for default = (cadr pair)
-             for target-name = (symbol-name target)
-             for override-name = (format "kbd-%s" target-name)
-             for override-symbol = (make-symbol override-name)
-             if (boundp override-symbol)
-             do (global-set-key (kbd (eval override-symbol)) target)
-             else
-             do (global-set-key (kbd default) target))))
-
-(defun define-kbd-or (&rest args)
-  (let* ((triplets (-partition 3 args)))
-    (cl-loop for triplet in triplets
-             for mode = (nth 0 triplet)
-             for target = (nth 1 triplet)
-             for default = (nth 2 triplet)
-             for target-name = (symbol-name target)
-             for override-name = (format "kbd-%s" target-name)
-             for override-symbol = (make-symbol override-name)
-             if (boundp override-symbol)
-             do (define-key mode (kbd (eval override-symbol)) target)
-             else
-             do (define-key mode (kbd default) target))))
-
-(defun kbd-or (target default)
-  (if (boundp target)
-      (kbd (eval target))
-    (kbd default)))
-
-(defun var-or (target default)
-  (if (boundp target)
-      (eval target)
-    default))
-
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t

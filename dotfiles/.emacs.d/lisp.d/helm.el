@@ -1,9 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
-
 (use-package helm :demand
-  :config
-  (require 'helm-config)
+  :config (require 'helm-config)
+
   (when (executable-find "wmctrl")
     (setq helm-raise-command "wmctrl -xa %s"))
 
@@ -29,7 +28,6 @@
   (use-package helm-ag :demand)
   (require 'helm-eshell)
 
-  (global-set-key (kbd "C-c ad") 'helm-run-external-command)
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-m") 'helm-M-x)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -57,25 +55,13 @@
   (helm-mode 1))
 
 (use-package helm-projectile :demand
-  :config
-  ;; enable Helm version of Projectile with replacment commands
-  (helm-projectile-on))
+  :config (helm-projectile-on))
 
 ;; add swoop
-(use-package helm-swoop
-  :bind
-  (("C-S-s" . helm-swoop)
-   ("M-i" . helm-swoop)
-   ("M-s s" . helm-swoop)
-   ("M-s M-s" . helm-swoop)
-   ("M-I" . helm-swoop-back-to-last-point)
-   ("C-c M-i" . helm-multi-swoop)
-   ("C-x M-i" . helm-multi-swoop-all)))
+(use-package helm-swoop)
 
 ;; add emms
-(use-package helm-emms
-  :bind
-  (("C-c aeh" . helm-emms)))
+(use-package helm-emms)
 
 ;; Local Variables:
 ;; coding: utf-8

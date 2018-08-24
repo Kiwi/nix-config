@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 (use-package gnus
-  :bind (("C-c ag" . gnus))
+  :bind (("<f2>" . gnus))
   :config
 
   ;; keep clutter out of $HOME

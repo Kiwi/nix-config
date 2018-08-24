@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
 ;; version control
 (use-package magit
@@ -43,22 +43,6 @@
   :config (dumb-jump-mode 1)
   (setq dumb-jump-selector 'helm))
 
-(use-package whitespace :init
-  (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'before-save-hook 'whitespace-cleanup)
-  :config
-  (setq whitespace-style '(face empty tabs lines-tail trailing)))
-
-;; per project specific code style settings
-(use-package editorconfig :init
-  (add-hook 'after-init-hook 'editorconfig-mode))
-
-;; automatically indent code
-(use-package aggressive-indent :init
-  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
-  :config
-  (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
-
 ;; one search to rule them all. C-s / C-r
 (use-package ace-isearch :demand
   :after avy
@@ -96,7 +80,10 @@
   :config
   (setq company-idle-delay 0))
 (use-package company-quickhelp :init
-  (add-hook 'after-init-hook 'company-quickhelp-mode))
+  (add-hook 'after-init-hook 'company-quickhelp-mode)
+  :config (setq company-quickhelp-delay nil)
+  (eval-after-load 'company
+    '(define-key company-active-map (kbd "<f1>") #'company-quickhelp-manual-begin)))
 
 ;; linting in the fringe
 (use-package flycheck :init
@@ -161,8 +148,6 @@
   (global-set-key (kbd "C-c I") 'crux-find-user-init-file)
   (global-set-key (kbd "C-c S") 'crux-find-shell-init-file))
 
-;; smartparens is excellent for making nuanced text edits and working with pairs
-;; adapted from ;; https://raw.githubusercontent.com/Fuco1/.emacs.d/master/files/smartparens.el
 (use-package smartparens :demand
   :config (require 'smartparens-config)
   (sp-use-paredit-bindings)
@@ -288,9 +273,8 @@
 (use-package hydra :demand
   :after smartparens
   :config
-  ;; ESC and <insert> activate a modal layer with precision edit features...
-  (define-key key-translation-map (kbd "ESC") (kbd "C-M-s"))
-  (define-key key-translation-map (kbd "<insert>") (kbd "C-M-s"))
+  ;; (f16 is bound to caps)
+  (define-key key-translation-map (kbd "<f16>") (kbd "C-M-s"))
   (bind-key "C-M-s"
             (defhydra smartparens-hydra ()
               "Smartparens"

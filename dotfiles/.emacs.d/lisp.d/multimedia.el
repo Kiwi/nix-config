@@ -1,9 +1,14 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emms
-  :bind (("C-c aee" . emms))
-  :bind (("C-c aef" . emms-play-file))
-  :bind (("C-c aed" . emms-play-directory))
+  :init
+  (defhydra emms-hydra ()
+    "Emacs Multimedia System"
+    ("e" emms "emms")
+    ("h" helm-emms "helm-emms")
+    ("f" emms-play-file "play file")
+    ("d" emms-play-directory "play directory"))
+  :bind (("<f4>" . emms-hydra/body))
   :config
   (setq emms-source-file-default-directory "~/Downloads")
   (emms-all)

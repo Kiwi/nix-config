@@ -5,13 +5,17 @@
 
 ;; use real bash-completion with shell-mode
 (use-package bash-completion
-  :bind (("C-c as" . shell))
-  :config
+  :init
   (autoload 'bash-completion-dynamic-complete
     "bash-completion"
     "BASH completion hook")
   (add-hook 'shell-dynamic-complete-functions
-            'bash-completion-dynamic-complete))
+            'bash-completion-dynamic-complete)
+  (defun my/shell ()
+    (interactive)
+    (shell)
+    (delete-other-windows))
+  :bind (("<f1>" . my/shell)))
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook

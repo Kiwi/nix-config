@@ -5,6 +5,7 @@ let
   adamDotfiles = "/nix-config/dotfiles";
 
   cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
+    #!${pkgs.stdenv.shell}
     # clone all of my favorite repos
     mkdir ~/repos/
     cd ~/repos/
@@ -18,10 +19,11 @@ let
   '';
 
   cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
+    #!${pkgs.stdenv.shell}
     # remove $HOME cruft with a list of exceptions to keep.
     cd ~/
     find -name "*" | egrep -v \
-    "bash_history|ssh|gnupg|gpg|chromium|qBittorrent|emacs|slime|repos|Documents|Downloads" \
+    "bash_history|ssh|gnupg|gpg|surf|chromium|qBittorrent|emacs|slime|repos|Documents|Downloads" \
     | xargs rm -f
     find . -type d -empty -delete
     systemctl restart home-manager-adam || exit

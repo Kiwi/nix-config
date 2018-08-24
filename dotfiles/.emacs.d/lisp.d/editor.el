@@ -67,7 +67,7 @@
 (with-region-or-buffer untabify)
 
 ;; Auto-indent current and new lines
-(electric-indent-mode -1) ; using aggressive-indent (in 40ide.el) instead
+(electric-indent-mode -1) ; using aggressive-indent instead
 
 ;; Auto-indent yanked (pasted) code (this is still nice to have with aggressive-indent)
 (dolist (command '(yank yank-pop))
@@ -83,11 +83,26 @@
                 (let ((mark-even-if-inactive transient-mark-mode))
                   (indent-region (region-beginning) (region-end) nil))))))
 
-;; abbrev config
+(use-package whitespace :init
+  (add-hook 'prog-mode-hook 'whitespace-mode)
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+  :config
+  (setq whitespace-style '(face empty tabs lines-tail trailing)))
+
+;; per project code style settings
+(use-package editorconfig :init
+  (add-hook 'after-init-hook 'editorconfig-mode))
+
+;; automatically indent code
+(use-package aggressive-indent :init
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
+  :config
+  (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
+
 (add-hook 'text-mode-hook 'abbrev-mode)
 
-;; default browsers
-(setq browse-url-browser-function 'browse-url-chromium)
+;; default browser
+(setq browse-url-browser-function 'browse-url-firefox)
 
 ;; ediff winner-undo hook afterwards to resume layout.
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)

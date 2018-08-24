@@ -28,21 +28,8 @@
           ;; buffer does not bother you).
           ([?\s-&] . (lambda (command)
 		       (interactive (list (read-shell-command "$ ")))
-		       (start-process-shell-command command nil command)))
-          ;; Bind "s-<f2>" to "slock", a simple X display locker.
-          ([s-f2] . (lambda ()
-		      (interactive)
-		      (start-process "" nil "/usr/bin/slock")))))
+		       (start-process-shell-command command nil command)))))
 
-  ;; To add a key binding only available in line-mode, simply define it in
-  ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
-  (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
-
-  ;; The following example demonstrates how to use simulation keys to mimic
-  ;; the behavior of Emacs.  The value of `exwm-input-simulation-keys` is a
-  ;; list of cons cells (SRC . DEST), where SRC is the key sequence you press
-  ;; and DEST is what EXWM actually sends to application.  Note that both SRC
-  ;; and DEST should be key sequences (vector or string).
   (setq exwm-input-simulation-keys
         '(
           ;; movement
@@ -77,28 +64,22 @@
                         (string= "gimp" exwm-instance-name))
                 (exwm-workspace-rename-buffer exwm-title))))
 
-  ;; disable simulation keys for e.g. Firefox
-  ;; (add-hook 'exwm-manage-finish-hook
-  ;;           (lambda ()
-  ;;             (when (and exwm-class-name
-  ;;                        (string= exwm-class-name "Firefox"))
-  ;;               (exwm-input-set-local-simulation-keys nil))))
+  ;; Window and Buffer management
+  (exwm-input-set-key (kbd "H-w") (lambda ()
+                                    (interactive)
+                                    (other-window -1)))
+  (exwm-input-set-key (kbd "H-<iso-lefttab>") 'spacemacs/alternate-window)
+  (exwm-input-set-key (kbd "H-<tab>") 'spacemacs/alternate-buffer)
+  (exwm-input-set-key (kbd "<f19>") 'helm-run-external-command)
+  (exwm-input-set-key (kbd "<f18>") 'helm-mini)
+  (exwm-input-set-key (kbd "<f17>") 'exwm-input-toggle-keyboard)
+  (exwm-input-set-key (kbd "H-k") 'kill-buffer-and-window)
+  (exwm-input-set-key (kbd "H-d") 'delete-window)
+  (exwm-input-set-key (kbd "H-o") 'delete-other-windows)
+  (exwm-input-set-key (kbd "H-u") 'winner-undo)
+  (exwm-input-set-key (kbd "H-r") 'winner-redo)
 
   (exwm-enable))
-
-;; Make use of the Function Row.
-(exwm-input-set-key (kbd "<f1>") 'helm-mini)
-(exwm-input-set-key (kbd "<f2>") 'helm-run-external-command)
-(exwm-input-set-key (kbd "<f3>") 'exwm-input-toggle-keyboard)
-;; (exwm-input-set-key (kbd "<f4>") ')
-;; (exwm-input-set-key (kbd "<f5>") ')
-;; (exwm-input-set-key (kbd "<f6>") ')
-;; (exwm-input-set-key (kbd "<f7>") ')
-;; (exwm-input-set-key (kbd "<f8>") ')
-(exwm-input-set-key (kbd "<f9>") 'kill-buffer-and-window)
-(exwm-input-set-key (kbd "<f10>") 'delete-other-windows)
-(exwm-input-set-key (kbd "<f11>") 'winner-undo)
-(exwm-input-set-key (kbd "<f12>") 'winner-redo)
 
 (use-package desktop-environment :demand
   :config
