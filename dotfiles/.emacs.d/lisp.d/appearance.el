@@ -1,46 +1,47 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package doom-themes :demand
-  :config
-  (load-theme 'doom-city-lights t))
+  :config (load-theme 'doom-city-lights t))
 
 (use-package smart-mode-line :demand
   :init (setq sml/theme 'respectful)
-  :after doom-themes
   :config (sml/setup))
 
 (use-package rich-minority
-  :init
-  ;; (add-hook 'after-init-hook 'rich-minority-mode)
-  :config
-  (setf rm-blacklist ""))
+  :config (setf rm-blacklist ""))
 
-;; font and size
-(set-face-attribute 'default nil :font "Source Code Pro 15")
+;; set font and size
+(set-face-attribute 'default nil :font "Source Code Pro 16")
 
-;; set smaller size for modeline and minibuffer / echo area
+;; set smaller font size for modeline
 (set-face-attribute 'mode-line nil  :height 0.75)
 (set-face-attribute 'mode-line-inactive nil  :height 0.75)
-;; smaller size in the minibuffer
+
+;; set smaller font size for minibuffer / echo area
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 0.75)))
-  ;; smaller font size in the echo area.
   (with-current-buffer (get-buffer " *Echo Area 0*")
     (setq-local face-remapping-alist '((default (:height 0.75) variable-pitch)))))
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
 
-;; ui
+;; show clock on modeline
+(setq display-time-default-load-average nil
+      display-time-24hr-format t)
+(display-time-mode 1)
+
+;; fringe used by flycheck and diff-hl
+(fringe-mode 9)
+
+;; highlight active line
+(global-hl-line-mode 1)
+
+;; cleanup the ui
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (setq visible-bell nil)
-(global-hl-line-mode 1)
-(fringe-mode 9)
-(setq display-time-default-load-average nil
-      display-time-24hr-format t)
-(display-time-mode 1)
 
 ;; Local Variables:
 ;; coding: utf-8
