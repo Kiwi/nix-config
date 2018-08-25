@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package doom-themes :demand
-  :config (load-theme 'doom-city-lights t))
+  :config (load-theme 'doom-one t))
 
 (use-package smart-mode-line :demand
   :init (setq sml/theme 'respectful)
