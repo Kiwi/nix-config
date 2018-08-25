@@ -79,6 +79,14 @@
   (exwm-input-set-key (kbd "H-u") 'winner-undo)
   (exwm-input-set-key (kbd "H-r") 'winner-redo)
 
+  (require 'exwm-randr)
+  (setq exwm-randr-workspace-output-plist '(0 "VGA-1"))
+  (add-hook 'exwm-randr-screen-change-hook
+            (lambda ()
+              (start-process-shell-command
+               "xrandr" nil "xrandr --output VGA-1 --right-of LVDS-1 --auto")))
+  (exwm-randr-enable)
+
   (exwm-enable))
 
 (use-package desktop-environment :demand
