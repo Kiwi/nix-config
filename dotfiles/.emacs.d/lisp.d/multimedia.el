@@ -7,7 +7,8 @@
     ("e" emms "emms")
     ("h" helm-emms "helm-emms")
     ("f" emms-play-file "play file")
-    ("d" emms-play-directory "play directory"))
+    ("d" emms-play-directory "play directory")
+    ("q" nil "Quit" :color blue))
   :bind (("<f4>" . emms-hydra/body))
   :config
   (setq emms-source-file-default-directory "~/Downloads")
