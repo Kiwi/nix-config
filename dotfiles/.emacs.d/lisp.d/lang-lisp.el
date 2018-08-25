@@ -8,9 +8,11 @@
 (define-key read-expression-map (kbd "TAB") 'completion-at-point)
 
 ;; wrap keybindings
-(define-key lisp-mode-shared-map (kbd "M-(") (prelude-wrap-with "("))
-(define-key lisp-mode-shared-map (kbd "M-[") (prelude-wrap-with "["))
-(define-key lisp-mode-shared-map (kbd "M-\"") (prelude-wrap-with "\""))
+(with-eval-after-load "smartparens"
+  '(lambda ()
+     (define-key lisp-mode-shared-map (kbd "M-(") (prelude-wrap-with "("))
+     (define-key lisp-mode-shared-map (kbd "M-[") (prelude-wrap-with "["))
+     (define-key lisp-mode-shared-map (kbd "M-\"") (prelude-wrap-with "\""))))
 
 ;; a great lisp coding hook
 (defun prelude-lisp-coding-defaults ()

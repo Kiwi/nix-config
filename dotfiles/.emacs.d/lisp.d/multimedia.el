@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emms
+  :after hydra
   :init
   (defhydra emms-hydra ()
     "Emacs Multimedia System"

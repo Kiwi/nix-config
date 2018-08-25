@@ -11,18 +11,20 @@
   (setq magit-repository-directories '(("~/repos" . 1)
                                        ("~/.emacs.d/straight/repos" . 1)
                                        ("/nix-config" . 0))))
-(with-eval-after-load 'magit
-  (use-package fullframe :demand
-    :config
-    (fullframe magit-status magit-mode-quit-window)
-    (fullframe projectile-vc magit-mode-quit-window)
-    (fullframe magit-diff-staged magit-quit-window)
-    (fullframe magit-diff-unstaged magit-mode-quit-window)
-    (fullframe magit-diff magit-mode-quit-window))
 
-  (use-package magit-gitflow :demand
-    :config
-    (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))
+(use-package fullframe :demand
+  :after magit
+  :config
+  (fullframe magit-status magit-mode-quit-window)
+  (fullframe projectile-vc magit-mode-quit-window)
+  (fullframe magit-diff-staged magit-quit-window)
+  (fullframe magit-diff-unstaged magit-mode-quit-window)
+  (fullframe magit-diff magit-mode-quit-window))
+
+(use-package magit-gitflow :demand
+  :after magit
+  :config
+  (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 
 ;; project awareness
 (use-package projectile
@@ -82,8 +84,7 @@
 (use-package company-quickhelp :init
   (add-hook 'after-init-hook 'company-quickhelp-mode)
   :config (setq company-quickhelp-delay nil)
-  (eval-after-load 'company
-    '(define-key company-active-map (kbd "<f1>") #'company-quickhelp-manual-begin)))
+  (define-key company-active-map (kbd "<f1>") #'company-quickhelp-manual-begin))
 
 ;; linting in the fringe
 (use-package flycheck :init
