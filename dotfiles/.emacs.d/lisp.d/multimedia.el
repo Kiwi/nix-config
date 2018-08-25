@@ -5,10 +5,10 @@
   :init
   (defhydra emms-hydra ()
     "Emacs Multimedia System"
-    ("e" emms "emms")
     ("h" helm-emms "helm-emms")
     ("f" emms-play-file "play file")
     ("d" emms-play-directory "play directory")
+    ("p" emms "playlist")
     ("q" nil "Quit" :color blue))
   :bind (("<f4>" . emms-hydra/body))
   :config
