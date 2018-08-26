@@ -70,6 +70,7 @@ with lib;
       myEmacs
 
       # desktop support applications
+      glxinfo
       wmctrl
       scrot
       xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot

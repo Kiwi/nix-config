@@ -1,13 +1,13 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 with lib;
   {
-    imports = [];
-    options.mine.zfsCare.enable = mkEnableOption "ZFS maintenance Profile";
-    config = {
+    imports = [  ];
+
+    options.mine.zfs.enable = mkEnableOption "ZFS Profile";
+    config = mkIf config.mine.zfs.enable {
+      boot.kernelParams = "elevator=noop boot.shell_on_fail";
+      boot.supportedFilesystems = [ "zfs" ];
       boot.loader.grub.copyKernels = true; # recommended if /boot/grub resides on zfs.
-      boot.supportedFilesystems = [ "zfs" ]; # all hosts get zfs support
-    } // mkIf config.mine.zfsCare.enable {
-      # set mine.zfsCare.enable = true; for the following options:
       boot.zfs.forceImportAll = false;
       boot.zfs.forceImportRoot = false;
       services.zfs.autoScrub.enable = true;
@@ -24,4 +24,5 @@ with lib;
       nix.gc.options = "--delete-older-than 7d";
       boot.cleanTmpDir = true;
     };
+
   }
