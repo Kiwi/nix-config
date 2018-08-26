@@ -13,18 +13,6 @@
 ;; set font and size
 (set-face-attribute 'default nil :font "Source Code Pro 16")
 
-;; set smaller font size for modeline
-(set-face-attribute 'mode-line nil  :height 0.75)
-(set-face-attribute 'mode-line-inactive nil  :height 0.75)
-
-;; set smaller font size for minibuffer / echo area
-(defun my-minibuffer-setup ()
-  (set (make-local-variable 'face-remapping-alist)
-       '((default :height 0.75)))
-  (with-current-buffer (get-buffer " *Echo Area 0*")
-    (setq-local face-remapping-alist '((default (:height 0.75) variable-pitch)))))
-(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
-
 ;; show clock on modeline
 (setq display-time-default-load-average nil
       display-time-24hr-format t)
