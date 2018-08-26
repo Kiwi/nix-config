@@ -83,6 +83,7 @@
   (exwm-input-set-key (kbd "H-u") 'winner-undo)
   (exwm-input-set-key (kbd "H-r") 'winner-redo)
 
+  ;; external displays
   (require 'exwm-randr)
   (setq exwm-randr-workspace-output-plist '(0 "VGA-1"))
   (add-hook 'exwm-randr-screen-change-hook

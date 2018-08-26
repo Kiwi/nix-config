@@ -70,22 +70,27 @@
 (with-region-or-buffer indent-region)
 (with-region-or-buffer untabify)
 
-;; Auto-indent current and new lines
-(electric-indent-mode -1) ; using aggressive-indent instead
+;; automatically indent code
+(use-package aggressive-indent :init
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
+  :config (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
 
-;; Auto-indent yanked (pasted) code (this is still nice to have with aggressive-indent)
-(dolist (command '(yank yank-pop))
-  (eval `(defadvice ,command (after indent-region activate)
-           (and (not current-prefix-arg)
-                (member major-mode '(emacs-lisp-mode lisp-mode
-                                                     clojure-mode    scheme-mode
-                                                     haskell-mode    ruby-mode
-                                                     rspec-mode      python-mode
-                                                     c-mode          c++-mode
-                                                     objc-mode       latex-mode
-                                                     plain-tex-mode))
-                (let ((mark-even-if-inactive transient-mark-mode))
-                  (indent-region (region-beginning) (region-end) nil))))))
+;; Auto-indent current and new lines
+;; (electric-indent-mode 1)
+
+;; Auto-indent yanked (pasted) code
+;; (dolist (command '(yank yank-pop))
+;;   (eval `(defadvice ,command (after indent-region activate)
+;;            (and (not current-prefix-arg)
+;;                 (member major-mode '(emacs-lisp-mode lisp-mode
+;;                                                      clojure-mode    scheme-mode
+;;                                                      haskell-mode    ruby-mode
+;;                                                      rspec-mode      python-mode
+;;                                                      c-mode          c++-mode
+;;                                                      objc-mode       latex-mode
+;;                                                      plain-tex-mode))
+;;                 (let ((mark-even-if-inactive transient-mark-mode))
+;;                   (indent-region (region-beginning) (region-end) nil))))))
 
 (use-package whitespace :init
   (add-hook 'prog-mode-hook 'whitespace-mode)
@@ -96,11 +101,6 @@
 ;; per project code style settings
 (use-package editorconfig :init
   (add-hook 'after-init-hook 'editorconfig-mode))
-
-;; automatically indent code
-(use-package aggressive-indent :init
-  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
-  :config (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
 
 (add-hook 'text-mode-hook 'abbrev-mode)
 
