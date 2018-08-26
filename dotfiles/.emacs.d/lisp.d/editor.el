@@ -1,23 +1,32 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; mostly misc. settings grabbed from technomancy's emacs-starter-kit,
-;; Prelude starter-kit, and emacswiki all mixed up with my own preferences.
-
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(prefer-coding-system 'utf-8)
+(require 'saveplace)
+(setq-default save-place t)
 
-(setq select-enable-clipboard t
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
+(setq
+ select-enable-clipboard t
  select-enable-primary nil
  save-interprogram-paste-before-kill t
  apropos-do-all t
  mouse-yank-at-point t
- require-final-newline t)
+ require-final-newline t
+ load-prefer-newer t
+ ediff-window-setup-function 'ediff-setup-windows-plain
+ save-place-file (concat user-emacs-directory "places")
+ backup-directory-alist `(("." . ,(concat user-emacs-directory
+                                          "backups"))))
 
 (delete-selection-mode 1)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(prefer-coding-system 'utf-8)
 
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -30,11 +39,6 @@
 
 (autoload 'zap-up-to-char "misc"
   "Kill up to, but not including ARGth occurrence of CHAR." t)
-
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-all-buffers
@@ -96,8 +100,7 @@
 ;; automatically indent code
 (use-package aggressive-indent :init
   (add-hook 'prog-mode-hook 'aggressive-indent-mode)
-  :config
-  (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
+  :config (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
 
 (add-hook 'text-mode-hook 'abbrev-mode)
 
@@ -105,7 +108,6 @@
 (setq browse-url-browser-function 'browse-url-firefox)
 
 ;; ediff winner-undo hook afterwards to resume layout.
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 
 ;; load all the dired features also use dired-async-mode for performance.
