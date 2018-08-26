@@ -24,10 +24,6 @@
   (define-key helm-command-map (kbd "C-c w") 'helm-wikipedia-suggest)
   (define-key helm-command-map (kbd "SPC")   'helm-all-mark-rings)
 
-  (use-package helm-descbinds :demand)
-  (use-package helm-ag :demand)
-  (require 'helm-eshell)
-
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-m") 'helm-M-x)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -42,23 +38,19 @@
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
 
-  ;; use helm to list eshell history
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                (substitute-key-definition 'eshell-list-history 'helm-eshell-history eshell-mode-map)))
-
   ;; shell history.
   (define-key shell-mode-map (kbd "C-c C-r") 'helm-comint-input-ring)
 
-  (setq projectile-completion-system 'helm)
-  (helm-descbinds-mode)
   (helm-mode 1))
 
-(use-package helm-projectile :demand
+(use-package helm-projectile :demand :after helm
   :config (helm-projectile-on))
 
+(use-package helm-descbinds :demand :after helm
+  :config (helm-descbinds-mode))
+
 ;; add swoop
-(use-package helm-swoop)
+(use-package helm-swoop :demand :after helm)
 
 ;; add emms
 (use-package helm-emms)

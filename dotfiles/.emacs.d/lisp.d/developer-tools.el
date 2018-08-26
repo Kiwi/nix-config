@@ -1,5 +1,12 @@
 ;; -*- lexical-binding: t; -*-
 
+;; project awareness
+(use-package projectile
+  :after helm
+  :bind (("C-c p" . projectile-command-map))
+  :config (projectile-mode t)
+  (setq projectile-completion-system 'helm))
+
 ;; version control
 (use-package magit
   :bind (("C-c gs" . magit-status)
@@ -24,11 +31,6 @@
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 
-;; project awareness
-(use-package projectile
-  :bind (("C-c p" . projectile-command-map))
-  :config (projectile-mode t))
-
 ;; snippets
 (use-package yasnippet-snippets)
 (use-package yasnippet
@@ -50,7 +52,7 @@
   (global-ace-isearch-mode +1)
   (custom-set-variables
    '(ace-isearch-input-length 7)
-   '(ace-isearch-jump-delay 0.25)
+   '(ace-isearch-jump-delay 0.50)
    '(ace-isearch-function 'avy-goto-char)
    '(ace-isearch-use-jump 'printing-char))
   (define-key isearch-mode-map (kbd "C-'") 'ace-isearch-jump-during-isearch))
