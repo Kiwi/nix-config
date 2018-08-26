@@ -80,8 +80,8 @@
   (exwm-input-set-key (kbd "H-k") 'kill-buffer-and-window)
   (exwm-input-set-key (kbd "H-d") 'delete-window)
   (exwm-input-set-key (kbd "H-o") 'delete-other-windows)
-  (exwm-input-set-key (kbd "H-u") 'winner-undo)
-  (exwm-input-set-key (kbd "H-r") 'winner-redo)
+  (exwm-input-set-key (kbd "H-/") 'winner-undo)
+  (exwm-input-set-key (kbd "H-?") 'winner-redo)
 
   ;; external displays
   (require 'exwm-randr)
