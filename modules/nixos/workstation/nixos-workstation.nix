@@ -17,6 +17,7 @@ with lib;
     # services.avahi.enable = true;
     # services.avahi.nssmdns = true;
 
+    services.acpid.enable = true;
     services.smartd.enable = true;
 
     # pulseaudio

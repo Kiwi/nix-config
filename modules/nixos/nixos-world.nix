@@ -10,6 +10,8 @@
      nix-prefetch-scripts
      gptfdisk
      pmutils
+     acpi
+     acpid
      psmisc
      which
      file
