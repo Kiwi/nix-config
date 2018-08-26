@@ -10,7 +10,6 @@
     ("d" emms-play-directory "play directory")
     ("p" emms "playlist")
     ("q" nil "Quit" :color blue))
-  :bind (("<f4>" . emms-hydra/body))
   :config
   (setq emms-source-file-default-directory "~/Downloads")
   (emms-all)
