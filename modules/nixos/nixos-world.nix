@@ -25,6 +25,7 @@
      pciutils
      lshw
      usbutils
+     lsof
      lm_sensors
      htop
      iotop
