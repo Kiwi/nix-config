@@ -1,11 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 with lib;
   {
-    imports = [  ];
+    imports = [];
 
     options.mine.zfs.enable = mkEnableOption "ZFS Profile";
     config = mkIf config.mine.zfs.enable {
-      boot.kernelParams = "elevator=noop boot.shell_on_fail";
+
+      # some basic zfs recommended settings
+      boot.kernelParams = [ "elevator=noop" "boot.shell_on_fail" ];
       boot.supportedFilesystems = [ "zfs" ];
       boot.loader.grub.copyKernels = true; # recommended if /boot/grub resides on zfs.
       boot.zfs.forceImportAll = false;
@@ -19,10 +21,17 @@ with lib;
         weekly = 0;
         monthly = 0;
       };
+
+      # Use gc.automatic with zfs-auto-snapshot to keep disk space under control.
       nix.gc.automatic = true;
       nix.gc.dates = "daily";
       nix.gc.options = "--delete-older-than 7d";
+
+      # clean /tmp automatically on boot
       boot.cleanTmpDir = true;
+
+      # TODO add script here for com...
+
     };
 
   }
