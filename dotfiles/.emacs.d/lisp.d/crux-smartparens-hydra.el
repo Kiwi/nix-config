@@ -30,6 +30,7 @@
   (global-set-key (kbd "C-c S") 'crux-find-shell-init-file))
 
 (use-package smartparens :demand
+  :after hydra
   :config (require 'smartparens-config)
   (sp-use-paredit-bindings)
   (show-smartparens-global-mode +1)
@@ -39,8 +40,8 @@
 
   (add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; keybinding management
+  ;;TODO work these into my system, remap and hydras !!!
+
   (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
   (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
 
