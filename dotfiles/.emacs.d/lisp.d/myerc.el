@@ -19,12 +19,16 @@
     ;; (erc-tls :server "chat.freenode.net" :port "6697")
     )
   :config
+  ;; hide join/part/quit messages
+  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+
+  ;; friends list
   (setq erc-pals '("bayprogrammer"
                    "asx"
                    "hotaronohanako"
                    "ldlework"))
 
-  ;; only mentions and pals on my modeline
+  ;; show only mentions and pals on my modeline
   (setq erc-format-query-as-channel-p t
         erc-track-priority-faces-only 'all
         erc-track-faces-priority-list '(erc-error-face
@@ -38,11 +42,10 @@
                                         erc-pal-face))
   (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
                                   "324" "329" "332" "333" "353" "477"))
-  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
   (setq erc-track-exclude '("140.82.47.107:6698"
                             "freenode.net"))
 
-  ;; background query buffers, but show queries on modeline every time.
+  ;; "bury" private message buffers, but notify also on the modeline.
   (setq erc-auto-query 'bury)
   (defadvice erc-track-find-face (around erc-track-find-face-promote-query activate)
     (if (erc-query-buffer-p)
