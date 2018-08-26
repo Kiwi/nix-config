@@ -144,6 +144,14 @@
 (require 'winner)
 (winner-mode 1)
 
+;; minibuffer, stop cursor going into it
+(customize-set-variable
+ 'minibuffer-prompt-properties
+ (quote (read-only t cursor-intangible t face minibuffer-prompt)))
+
+;; Tramp gives me problems opening large text files without this.
+(setq tramp-copy-size-limit nil)
+
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t
