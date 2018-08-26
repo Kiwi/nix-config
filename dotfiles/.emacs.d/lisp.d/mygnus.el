@@ -1,16 +1,18 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package gnus :config
+  ;; don't use ~/.gnus, use gnus file with my other lisp files instead.
+  (setq gnus-site-init-file "~/.emacs.d/lisp.d/gnus.el")
+
   ;; keep clutter out of $HOME
   (setq gnus-save-newsrc-file nil)
   (setq gnus-startup-file "~/.emacs.d/.newsrc")
-  (setq gnus-site-init-file "~/.emacs.d/lisp.d/gnus.el")
   (setq message-directory "~/.emacs.d/mail/")
   (setq gnus-directory "~/.emacs.d/news/")
   (setq nnfolder-directory "~/.emacs.d/mail/archive")
   (setq nndraft-directory "~/.emacs.d/mail/drafts")
 
-  ;; yes|dribble file on startup question
+  ;; yes read dribble file on startup question
   (setq gnus-always-read-dribble-file t)
 
   ;; imap
@@ -35,9 +37,10 @@
         )
 
   ;; html mail no thanks
-  (with-eval-after-load "mm-decode"
-    (add-to-list 'mm-discouraged-alternatives "text/html")
-    (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+  (with-eval-after-load 'mm-decode
+    (lambda ()
+      (add-to-list 'mm-discouraged-alternatives "text/html")
+      (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
   ;; misc settings from spacemacs that I am in the habit of using.
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)

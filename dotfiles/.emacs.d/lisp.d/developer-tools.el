@@ -57,6 +57,7 @@
 
 ;; precise char jumping (used by ace-isearch)
 (use-package avy :demand
+  :after helm-swoop
   :config
   (setq avy-background t)
   (setq avy-style 'at-full))
