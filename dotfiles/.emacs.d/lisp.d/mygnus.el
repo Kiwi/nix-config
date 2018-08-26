@@ -1,8 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
-(use-package gnus
-  :bind (("<f2>" . gnus))
-  :config
 
+(use-package gnus :config
   ;; keep clutter out of $HOME
   (setq gnus-save-newsrc-file nil)
   (setq gnus-startup-file "~/.emacs.d/.newsrc")

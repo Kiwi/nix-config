@@ -65,6 +65,9 @@
                 (exwm-workspace-rename-buffer exwm-title))))
 
   ;; Window and Buffer management
+  (exwm-input-set-key (kbd "<f1>") 'my-startup-screen-hook)
+  (exwm-input-set-key (kbd "<f2>") 'gnus)
+  (exwm-input-set-key (kbd "<f3>") 'my/erc-bounce)
   (exwm-input-set-key (kbd "H-w") (lambda ()
                                     (interactive)
                                     (other-window -1)))

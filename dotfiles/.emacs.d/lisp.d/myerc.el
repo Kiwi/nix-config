@@ -1,8 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package erc
-  :bind (("<f3>" . my/erc-bounce))
-  :init
+(use-package erc :init
   (defun my/erc-bounce ()
     "Connect to an irc server using creds in .authinfo or .authinfo.gpg."
     (interactive)

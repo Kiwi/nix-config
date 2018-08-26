@@ -10,12 +10,7 @@
     "bash-completion"
     "BASH completion hook")
   (add-hook 'shell-dynamic-complete-functions
-            'bash-completion-dynamic-complete)
-  (defun my/shell ()
-    (interactive)
-    (shell)
-    (delete-other-windows))
-  :bind (("<f1>" . my/shell)))
+            'bash-completion-dynamic-complete))
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook

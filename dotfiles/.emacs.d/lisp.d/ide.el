@@ -12,8 +12,7 @@
                                        ("~/.emacs.d/straight/repos" . 1)
                                        ("/nix-config" . 0))))
 
-(use-package fullframe :demand
-  :after magit
+(use-package fullframe :demand :after magit
   :config
   (fullframe magit-status magit-mode-quit-window)
   (fullframe projectile-vc magit-mode-quit-window)
@@ -21,8 +20,7 @@
   (fullframe magit-diff-unstaged magit-mode-quit-window)
   (fullframe magit-diff magit-mode-quit-window))
 
-(use-package magit-gitflow :demand
-  :after magit
+(use-package magit-gitflow :demand :after magit
   :config
   (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 
@@ -64,7 +62,8 @@
   (setq avy-style 'at-full))
 
 ;; highlight search words in the context also (used by ace-isearch)
-(use-package anzu :init
+(use-package anzu
+  :init
   (add-hook 'after-init-hook 'global-anzu-mode)
   :config
   (global-set-key (kbd "M-%") 'anzu-query-replace)
@@ -122,7 +121,7 @@
                               web-mode
                               org-mode))))
 
-;; a final place to put general programming things before lang-specific configs
+;; a final place to put general programming things
 (defun my-prog-mode-hook ()
   "Programming global stuff."
   (smartparens-mode +1) ;; ensures smartparens
