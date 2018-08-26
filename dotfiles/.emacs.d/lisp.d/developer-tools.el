@@ -111,16 +111,16 @@
 (use-package which-func :init
   (add-hook 'after-init-hook 'which-function-mode)
   :config
-  (with-eval-after-load "which-func"
-    '(setq which-func-modes '(emacs-lisp-mode
-                              common-lisp-mode
-                              clojure-mode
-                              cc-mode
-                              js2-mode
-                              css-mode
-                              scss-mode
-                              web-mode
-                              org-mode))))
+  (with-eval-after-load 'which-func
+    (setq which-func-modes '(emacs-lisp-mode
+                             common-lisp-mode
+                             clojure-mode
+                             cc-mode
+                             js2-mode
+                             css-mode
+                             scss-mode
+                             web-mode
+                             org-mode))))
 
 ;; a final place to put general programming things
 (defun my-prog-mode-hook ()

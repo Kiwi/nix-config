@@ -41,9 +41,10 @@ Start `ielm' if it's not already running."
 
 (add-hook 'ielm-mode-hook 'prelude-ielm-mode-defaults)
 
-(with-eval-after-load "ielm"
-  (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
-  (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\"")))
+(with-eval-after-load 'ielm
+  (lambda ()
+    (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
+    (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\""))))
 
 (defun conditionally-enable-smartparens-mode ()
   "Enable `smartparens-mode' in the minibuffer, during `eval-expression'."
