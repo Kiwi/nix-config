@@ -97,7 +97,7 @@ __diskprep() {
 }
 
 # intall zfs to the livedisk, but only if it needs it.
-#which zfs > /dev/null 2>&1 || __bootstrapzfs
+which zfs > /dev/null 2>&1 || __bootstrapzfs
 
 # begin disk prep interactive ()
 #__diskprep
