@@ -29,10 +29,14 @@ POOL_NAME="zroot"
 POOL_TYPE="mirror"
 
 # It is recommended to list disks using /dev/disk/by-id (instead of e.g. /dev/sda /dev/sdb ...
+# It is also recommended to give ZFS entire disks, they will be GPT partitioned automatically by ZFS.
 POOL_DISKS="
-/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544
-/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0
+/dev/sda
+/dev/sdb
 "
+
+# "legacy" or "uefi" !! legacy recommended if you can help it.
+BIOS_TYPE="legacy"
 
 ##############################################################################
 # script                                                                     #
@@ -46,12 +50,8 @@ then
 fi
 
 __bootstrapzfs() {
-    echo '{ ... }:
-{ imports = [
-      /etc/nixos/hardware-configuration.nix
-          ];
-boot.supportedFilesystems = [ "zfs" ];
-}' > /etc/nixos/configuration.nix
+    sed -i '/imports/a \
+boot.supportedFilesystems = [ \"zfs\" ];' /etc/nixos/configuration.nix
     nixos-rebuild switch
 }
 
@@ -63,9 +63,10 @@ __poolcreate() {
     read ATIME
     if [[ ${ATIME} != "on" && ${ATIME} != "off" ]]
     then
+        echo "invalid response, try again."
         __poolcreate
     else
-        # create the pool
+        echo "creating ZPOOL..."
         zpool create -f -o \
               ashift=12 -o \
               -O compression=lz4 \
@@ -76,7 +77,7 @@ __poolcreate() {
               -m none \
               -R /mnt \
               ${POOL_NAME:?"Please define pool name."} \
-              ${POOL_TYPE:?"Please define pool type."} \
+              ${POOL_TYPE} \
               ${POOL_DISKS:?"Please define pool disks."}
     fi
 }
@@ -96,14 +97,14 @@ __diskprep() {
     fi
 }
 
-
 # intall zfs to the livedisk, but only if it needs it.
 which zfs > /dev/null 2>&1 || __bootstrapzfs
 
 # begin disk prep interactive ()
 __diskprep
 
-
+# begin pool create interactive ()
+__poolcreate
 
 # now that we have zfs installed to the live disk, we need to setup a zpool on
 # our disk(s) where we will subsequently boot strap our own configuration.nix
