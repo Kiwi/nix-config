@@ -75,10 +75,10 @@ __poolcreate() {
               -O normalization=formD \
               -O xattr=sa \
               -m none \
-              -R} /mnt \
-            ${POOL_NAME:?"Please define pool name."} \
-            ${POOL_TYPE} \
-            ${POOL_DISKS:?"Please define pool disks."}
+              -R /mnt \
+              ${POOL_NAME:?"Please define pool name."} \
+              ${POOL_TYPE} \
+              ${POOL_DISKS:?"Please define pool disks."}
 fi
 }
 
@@ -111,4 +111,4 @@ fi
  # via github.
  #git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
 
- #ready
+ #ready2
