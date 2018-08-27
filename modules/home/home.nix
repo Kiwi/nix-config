@@ -77,6 +77,7 @@ in
         home.file.".bash_profile".source = "${adamDotfiles}/.bash_profile";
         home.file.".bashrc".source = "${adamDotfiles}/.bashrc";
         home.file.".inputrc".source = "${adamDotfiles}/.inputrc";
+        home.file."/bin".source = "${adamDotfiles}/root-scripts";
       };
 
     };
