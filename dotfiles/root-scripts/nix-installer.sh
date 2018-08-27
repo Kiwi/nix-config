@@ -43,17 +43,10 @@ BIOS_TYPE="legacy"
 ##############################################################################
 
 echo "WARNING: The following script is an operating system installer, previous data will be unrecoverable."
-# read -p "Continue? (Y or N) " -n 1 -r
-# if [[ ! $REPLY =~ ^[Yy]$ ]]
-# then
-#     echo "aborted" ; exit
-# fi
-
-echo "type \"yes\" to continue..."
-read CONTINUE
-if [[ ${CONTINUE} != "yes" ]]
+read -p "Continue? (Y or N) " -n 1 -r
+if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
-    exit
+    echo "aborted" ; exit
 fi
 
 __bootstrapzfs() {
@@ -67,7 +60,7 @@ __poolcreate() {
     echo "Type \"on\" or \"off\" and press [ENTER]:"
 
     # sanity check response
-    read ATIME
+    read -r ATIME
     if [[ ${ATIME} != "on" && ${ATIME} != "off" ]]
     then
         echo "invalid response, try again."
@@ -82,12 +75,11 @@ __poolcreate() {
               -O normalization=formD \
               -O xattr=sa \
               -m none \
-              -R /mnt \
-              ${POOL_NAME:?"Please define pool name."} \
-              ${POOL_TYPE} \
-              ${POOL_DISKS:?"Please define pool disks."}
-    fi
-}
+              -R} /mnt \
+            ${POOL_NAME:?"Please define pool name."} \
+            ${POOL_TYPE} \
+            ${POOL_DISKS:?"Please define pool disks."}
+fi
 
 __diskprep() {
     echo "If giving entire disks to ZFS, it is a good idea first to remove various remnants from previous operating system installations."
