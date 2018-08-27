@@ -43,7 +43,9 @@ BIOS_TYPE="legacy"
 ##############################################################################
 
 echo "WARNING: The following script is an operating system installer, previous data will be unrecoverable."
+
 read -p "Continue? (Y or N) " -n 1 -r
+
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
     echo "aborted" ; exit
@@ -98,13 +100,13 @@ __diskprep() {
 }
 
 # intall zfs to the livedisk, but only if it needs it.
-which zfs > /dev/null 2>&1 || __bootstrapzfs
+#which zfs > /dev/null 2>&1 || __bootstrapzfs
 
 # begin disk prep interactive ()
-__diskprep
+#__diskprep
 
 # begin pool create interactive ()
-__poolcreate
+#__poolcreate
 
 # now that we have zfs installed to the live disk, we need to setup a zpool on
 # our disk(s) where we will subsequently boot strap our own configuration.nix
