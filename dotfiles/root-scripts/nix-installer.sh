@@ -110,3 +110,5 @@ fi
  # our disk(s) where we will subsequently boot strap our own configuration.nix
  # via github.
  #git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+
+ #ready
