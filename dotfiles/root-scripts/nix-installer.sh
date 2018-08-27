@@ -123,7 +123,6 @@ __datasets_create() {
     echo "It is only useful if you do not garbage collect regularly or if you"
     echo "intend to keep long-term nix-store snapshots and have disk space concerns."
     echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     read -p "Mount /nix store outside of ROOT dataset? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
@@ -134,8 +133,7 @@ __datasets_create() {
 
     # /BOOT/grub option
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "While this may be recommended for good reasons on non-nixos systems, with nixos grub it is currently a bad option."
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "While this may be recommended for good reasons on some non-nixos systems, with nixos grub it is currently a bad option."
     echo ""
     read -p "Mount /boot/grub/ outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
