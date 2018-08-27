@@ -67,8 +67,8 @@ __poolcreate() {
         __poolcreate
     else
         echo "creating ZPOOL..."
-        zpool create -f -o \
-              ashift=12 -o \
+        zpool create -f \
+              -o ashift=12 \
               -O compression=lz4 \
               -O atime=${ATIME} \
               -O relatime=on \
