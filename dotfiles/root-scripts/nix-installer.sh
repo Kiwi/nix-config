@@ -25,22 +25,14 @@ NIXCFG_LOCATION="/nix-config/"
 # Pool name preference, e.g. rpool or zroot
 POOL_NAME="zroot"
 
-# leave empty for a single disk, mirror for two disks, raidz1 for 3 disks, etc...
-POOL_TYPE=""
+# leave empty "" for single disk or use "mirror", "raidz1", "raidz2", or "raidz3"
+POOL_TYPE="mirror"
 
 # It is recommended to list disks using /dev/disk/by-id (instead of e.g. /dev/sda /dev/sdb ...
 POOL_DISKS="
 /dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544
 /dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0
 "
-
-# Define a variable with the pool device layout in the form of ONE of the following:
-#ZVDEVS_zroot="mirror /dev/disk/by-id/... /dev/disk/by-id/..."
-#ZVDEVS_zroot="mirror /dev/disk/by-id/... /dev/disk/by-id/... mirror /dev/disk/by-id/... /dev/disk/by-id/..."
-#ZVDEVS_zroot="raidz1 /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/..."
-#ZVDEVS_zroot="raidz2 /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/..."
-#ZVDEVS_zroot="raidz3 /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/..."
-#ZVDEVS_zroot="raidz1 /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/... raidz1 /dev/disk/by-id/... /dev/disk/by-id/... /dev/disk/by-id/..."
 
 ##############################################################################
 # script                                                                     #
@@ -64,19 +56,29 @@ boot.supportedFilesystems = [ "zfs" ];
 }
 
 __poolcreate() {
-    zpool create -f -o \
-          ashift=12 -o \
-          cachefile=/tmp/zpool.cache \
-          -O compression=lz4 \
-          -O atime=on \
-          -O relatime=on \
-          -O normalization=formD \
-          -O xattr=sa \
-          -m none \
-          -R /mnt \
-          ${POOL_NAME:?"Please define pool name."} \
-          ${POOL_TYPE:?"Please define pool type."} \
-          ${POOL_DISKS:?"Please define pool disks."}
+    echo "Should atime be \"on\" or \"off\"? (atime=off is better for SSD life.)"
+    echo "Type \"on\" or \"off\" and press [ENTER]:"
+
+    # sanity check response
+    read ATIME
+    if [[ ${ATIME} != "on" && ${ATIME} != "off" ]]
+    then
+        __poolcreate
+    else
+        # create the pool
+        zpool create -f -o \
+              ashift=12 -o \
+              -O compression=lz4 \
+              -O atime=${ATIME} \
+              -O relatime=on \
+              -O normalization=formD \
+              -O xattr=sa \
+              -m none \
+              -R /mnt \
+              ${POOL_NAME:?"Please define pool name."} \
+              ${POOL_TYPE:?"Please define pool type."} \
+              ${POOL_DISKS:?"Please define pool disks."}
+    fi
 }
 
 __diskprep() {
@@ -92,24 +94,13 @@ __diskprep() {
             wipefs --all ${DISK_ID}
         done
     fi
-
-    echo "Would you like to write zeros to all disks? (Warning: slow operation.)"
-    read -p "Continue to writing zeros? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        IFS=$'\n'
-        for DISK_ID in ${POOL_DISKS}
-        do
-            dd if=/dev/zero of=${DISK_ID} bs=4096 status=progress
-        done
-    fi
 }
 
 
 # intall zfs to the livedisk, but only if it needs it.
 which zfs > /dev/null 2>&1 || __bootstrapzfs
 
-# begin disk prep ()
+# begin disk prep interactive ()
 __diskprep
 
 
