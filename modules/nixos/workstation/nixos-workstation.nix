@@ -36,7 +36,7 @@ with lib;
       layout = "us";
       useGlamor = true;
       displayManager.slim.enable = true;
-      displayManager.slim.autoLogin = true;
+      displayManager.slim.autoLogin = false;
       displayManager.slim.defaultUser = "adam";
       displayManager.sessionCommands = ''
         ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
