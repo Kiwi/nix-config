@@ -80,32 +80,33 @@ __poolcreate() {
             ${POOL_TYPE} \
             ${POOL_DISKS:?"Please define pool disks."}
 fi
-
-__diskprep() {
-    echo "If giving entire disks to ZFS, it is a good idea first to remove various remnants from previous operating system installations."
-    echo "If using new disks for the first time, this is not necessary."
-    read -p "Continue to remove disk signatures and remnants? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        IFS=$'\n'
-        for DISK_ID in ${POOL_DISKS}
-        do
-            sgdisk --clear ${DISK_ID}
-            wipefs --all ${DISK_ID}
-        done
-    fi
 }
 
-# intall zfs to the livedisk, but only if it needs it.
-which zfs > /dev/null 2>&1 || __bootstrapzfs
+ __diskprep() {
+     echo "If giving entire disks to ZFS, it is a good idea first to remove various remnants from previous operating system installations."
+     echo "If using new disks for the first time, this is not necessary."
+     read -p "Continue to remove disk signatures and remnants? (Y or N) " -n 1 -r
+     if [[ $REPLY =~ ^[Yy]$ ]]
+     then
+         IFS=$'\n'
+         for DISK_ID in ${POOL_DISKS}
+         do
+             sgdisk --clear ${DISK_ID}
+             wipefs --all ${DISK_ID}
+         done
+     fi
+ }
 
-# begin disk prep interactive ()
-#__diskprep
+ # intall zfs to the livedisk, but only if it needs it.
+ which zfs > /dev/null 2>&1 || __bootstrapzfs
 
-# begin pool create interactive ()
-#__poolcreate
+ # begin disk prep interactive ()
+ __diskprep
 
-# now that we have zfs installed to the live disk, we need to setup a zpool on
-# our disk(s) where we will subsequently boot strap our own configuration.nix
-# via github.
-#git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+ # begin pool create interactive ()
+ __poolcreate
+
+ # now that we have zfs installed to the live disk, we need to setup a zpool on
+ # our disk(s) where we will subsequently boot strap our own configuration.nix
+ # via github.
+ #git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
