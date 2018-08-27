@@ -43,12 +43,17 @@ BIOS_TYPE="legacy"
 ##############################################################################
 
 echo "WARNING: The following script is an operating system installer, previous data will be unrecoverable."
+# read -p "Continue? (Y or N) " -n 1 -r
+# if [[ ! $REPLY =~ ^[Yy]$ ]]
+# then
+#     echo "aborted" ; exit
+# fi
 
-read -p "Continue? (Y or N) " -n 1 -r
-
-if [[ ! $REPLY =~ ^[Yy]$ ]]
+echo "type \"yes\" to continue..."
+read CONTINUE
+if [[ ${CONTINUE} != "yes" ]]
 then
-    echo "aborted" ; exit
+    exit
 fi
 
 __bootstrapzfs() {
