@@ -8,7 +8,7 @@
 # A simple nix-on-zroot installer.
 
 # instructions:
-# Set variables below and then execute the script from a nixos live disk
+# Set variables below and then execute the script from a nixos live disk.
 
 #################
 # set variables #
@@ -30,21 +30,22 @@ POOL_DISKS="
 /dev/sdb
 "
 
-# Preferred location where we will clone the nix-config repo
-NIXCFG_LOCATION="/nix-config/"
-
 # Your personal nix-config repo
 NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
+
+# Preferred location where we will clone the nix-config repo
+NIXCFG_LOCATION="/nix-config/"
 
 ##############################################################################
 # script                                                                     #
 ##############################################################################
 
-echo "WARNING: The following script is an operating system installer, previous data will be unrecoverable."
+echo "WARNING: The following script intends to replace all of your disk(s) contents with a fresh zfs-on-root NixOS installation."
+echo ""
 read -p "Continue? (Y or N) " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
-    echo "aborted" ; exit
+    echo "Aborted." ; exit
 fi
 
 __bootstrapzfs() {
@@ -81,7 +82,6 @@ __zpool_create() {
     echo "Should atime be \"on\" or \"off\"? (atime=off is better for SSD life.)"
     echo "Type \"on\" or \"off\" and press [ENTER]:"
 
-    # sanity check response
     read -r ATIME
     if [[ ${ATIME} != "on" && ${ATIME} != "off" ]]
     then
@@ -101,7 +101,7 @@ __zpool_create() {
               ${POOL_NAME:?"Please define pool name."} \
               ${POOL_TYPE} \
               ${POOL_DISKS:?"Please define pool disks."}
-fi
+    fi
 }
 
 __datasets_create() {
@@ -111,19 +111,36 @@ __datasets_create() {
     mount -t zfs ${POOL_NAME}/ROOT/nixos /mnt
 
     # HOME
-    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME
     mkdir /mnt/home
-    mount -t zfs ${POOL_NAME}/home /mnt/home
+    mkdir /mnt/root
+    __primary_user() {
+        echo ""
+        echo "Type your primary non-root user name (will be used for the home dataset name) and press [ENTER]:"
+        read -r PRIMARY_USER
+        echo is ${PRIMAR_USER} okay?
+        read -p "(Y or N) " -n 1 -r
+        if [[ ! $REPLY =~ ^[Yy]$ ]]
+        then
+            __primary_user
+        fi
+    }
+    __primary_user
+
+    zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/HOME
+    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/root
+    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/${PRIMARY_USER}
+    mount -t zfs ${POOL_NAME}/HOME/root /mnt/root
+    mount -t zfs ${POOL_NAME}/HOME/${PRIMARY_USER} /mnt/${PRIMARY_USER}
 
     # /NIX option
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo "The following option is a tradeoff that is NOT RECOMMENDED."
-    echo "If you say yes, you are trading zfs robustness for extra disk space savings."
+    echo "Answering yes, trades some zfs robustness for extra disk space savings."
     echo ""
-    echo "It is only useful if you do not garbage collect regularly or if you"
-    echo "intend to keep long-term nix-store snapshots and have disk space concerns."
+    echo "Answering yes is only useful if you do not garbage collect your NixOS install regularly or if you"
+    echo "intend to keep long-term nix-store snapshots and have storage capacity concerns."
     echo ""
-    read -p "Mount /nix store outside of ROOT dataset? (Y or N) " -n 1 -r
+    read -p "Mount /nix store outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/NIX
@@ -133,7 +150,7 @@ __datasets_create() {
 
     # /BOOT/grub option
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "While this may be recommended for good reasons on some non-nixos systems, with nixos grub it is currently a bad option."
+    echo "While this may be recommended for good reasons on some non-NixOS systems, with NixOS and GRUB it is currently a bad option."
     echo ""
     read -p "Mount /boot/grub/ outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
@@ -143,6 +160,8 @@ __datasets_create() {
         mkdir -p /mnt/boot/grub
         mount -t zfs ${POOL_NAME}/BOOT/grub /mnt/boot/grub
     fi
+
+    # zfs-auto-snapshot
 
     echo ""
     echo "com.sun:auto-snapshot is used by the nixos built-in services.zfs.autoSnapshot"
@@ -167,6 +186,7 @@ __datasets_create() {
     fi
 }
 
+# Run the script !
 # intall zfs to the livedisk, but only if it needs it.
 which zfs > /dev/null 2>&1 || __bootstrapzfs
 
@@ -183,5 +203,3 @@ __datasets_create
 # our disk(s) where we will subsequently boot strap our own configuration.nix
 # via github.
 #git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
-
-#ready2
