@@ -36,6 +36,12 @@ NIXCFG_LOCATION="/nix-config/"
 # name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
 NIXCFG_HOST="vm.nix"
 
+# When giving entire disks to ZFS, it is a good idea first to remove various
+REMOVE_REMNANTS="1"
+
+# Set atime to "off" or "on". Not using atime can increase SSD disk life.
+ATIME="off"
+
 ##############################################################################
 # script                                                                     #
 ##############################################################################
@@ -55,6 +61,7 @@ then
     echo "Aborted." ; exit
 fi
 
+# DONE
 __bootstrap_zfs() {
     sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
@@ -62,6 +69,7 @@ boot.supportedFilesystems = [ \"zfs\" ];' \
     NEEDS_SWITCH="1"
 }
 
+# DONE
 __bootstrap_git() {
     sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
@@ -70,18 +78,7 @@ __bootstrap_git() {
 }
 
 __disk_prep() {
-    echo ""
-    echo "If giving entire disks to ZFS, it is a good idea first to remove various \
- remnants from previous operating system installations."
-    echo "If using new disks for the first time, this is not necessary."
-    echo ""
-    echo "WARNING: This step will make any existing data on the specified drive \
-inaccesable, but will not securely delete it! If you would like to securely erase \
- data, use a secure erase tool, such as nwipe."
-    echo ""
-
-    read -p "Remove disk signatures and other old operating system installation  remnants? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
+    if [[ ${REMOVE_REMNANTS} == "1" ]]
     then
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
@@ -93,32 +90,20 @@ inaccesable, but will not securely delete it! If you would like to securely eras
 }
 
 __zpool_create() {
-    echo ""
-    echo "Should atime be \"on\" or \"off\"? (atime=off is better for SSD life.)"
-    echo "Type \"on\" or \"off\" and press [ENTER]:"
+    zpool create -f \
+          -o ashift=12 \
+          -O compression=lz4 \
+          -O atime=${ATIME} \
+          -O relatime=on \
+          -O normalization=formD \
+          -O xattr=sa \
+          -m none \
+          -R /mnt \
+          ${POOL_NAME:?"Please define pool name."} \
+          ${POOL_TYPE} \
+          ${POOL_DISKS:?"Please define pool disks."}
 
-    read -r ATIME
-    if [[ ${ATIME} != "on" && ${ATIME} != "off" ]]
-    then
-        echo "invalid response."
-        __poolcreate
-    else
-        echo "creating ZPOOL..."
-        zpool create -f \
-              -o ashift=12 \
-              -O compression=lz4 \
-              -O atime=${ATIME} \
-              -O relatime=on \
-              -O normalization=formD \
-              -O xattr=sa \
-              -m none \
-              -R /mnt \
-              ${POOL_NAME:?"Please define pool name."} \
-              ${POOL_TYPE} \
-              ${POOL_DISKS:?"Please define pool disks."}
-
-        zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
-    fi
+    zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
 
     # create gpt bios boot partition which will contain grub stage 1 legacy bios
     IFS=$'\n'
@@ -138,39 +123,13 @@ __datasets_create() {
 
     # HOME directory
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/HOME
-    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/homedirs
-    mount -t zfs ${POOL_NAME}/HOME/homedirs /mnt/home
+    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/home
+    mount -t zfs ${POOL_NAME}/HOME/home /mnt/home
 
     # /tmp directory
     zfs create -o mountpoint=none -o canmount=off rpool/TMP
     zfs create -o mountpoint=legacy canmount=on -o sync=disabled rpool/TMP/tmp
     mount -t zfs ${POOL_NAME}/TMP/tmp /mnt/tmp
-
-    # /NIX option
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "Answering yes is only useful if you do not garbage collect your NixOS install \
- regularly or if you intend to keep long-term nix-store snapshots and have storage capacity concerns."
-    echo ""
-    read -p "Mount /nix store outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/NIX
-        mkdir /mnt/nix
-        mount -t zfs ${POOL_NAME}/nix /mnt/nix
-    fi
-
-    # /BOOT/grub option
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "While this may be recommended for good reasons on some non-NixOS systems, with NixOS and GRUB it is currently a bad option."
-    echo ""
-    read -p "Mount /boot/grub/ outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/BOOT
-        zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/BOOT/grub
-        mkdir -p /mnt/boot/grub
-        mount -t zfs ${POOL_NAME}/BOOT/grub /mnt/boot/grub
-    fi
 }
 
 __zfs_auto_snapshot() {
@@ -243,5 +202,4 @@ EOF
 
 nixos-install
 
-echo ""
-echo "Now reboot."
+#123
