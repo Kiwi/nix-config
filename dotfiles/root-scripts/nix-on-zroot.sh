@@ -119,6 +119,13 @@ __zpool_create() {
 
         zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
     fi
+
+    # create gpt bios boot partition which will contain grub stage 1 legacy bios
+    IFS=$'\n'
+    for DISK_ID in ${POOL_DISKS}
+    do
+        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID}
+    done
 }
 
 __datasets_create() {
