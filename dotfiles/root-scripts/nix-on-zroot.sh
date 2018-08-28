@@ -28,7 +28,7 @@ POOL_DISKS="
 "
 
 # Your personal nix-config repo to be bootstrapped
-NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
+NIXCFG_REPO="https://github.com/a-schaefers/nix-config.git"
 
 # Preferred location where we will clone the nix-config repo
 # (use full path with trailing slash.)
@@ -78,14 +78,14 @@ __bootstrap_zfs() {
     sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
         /etc/nixos/configuration.nix
-    NEEDS_INITIAL_SWITCH="true"
+    NEEDS_SWITCH="true"
 }
 
 __bootstrap_git() {
     sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
         /etc/nixos/configuration.nix
-    NEEDS_INITIAL_SWITCH="true"
+    NEEDS_SWITCH="true"
 }
 
 __disk_prep() {
@@ -148,7 +148,7 @@ __datasets_create() {
 
     # /tmp datasets
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/TMP
-    zfs create -o mountpoint=legacy canmount=on -o sync=disabled ${POOL_NAME}/TMP/tmp
+    zfs create -o mountpoint=legacy -o canmount=on -o sync=disabled ${POOL_NAME}/TMP/tmp
     mount -t zfs ${POOL_NAME}/TMP/tmp /mnt/tmp
 }
 
@@ -163,15 +163,16 @@ __zfs_auto_snapshot() {
 }
 
 __switch_if_needed() {
-    if [[ ${NEEDS_INITIAL_SWITCH} == "true" ]]
+    if [[ ${NEEDS_SWITCH} == "true" ]]
     then
         nixos-rebuild switch
+        NEEDS_SWITCH="false"
     fi
 }
 
 __get_custom_nixcfg() {
     # SECURITY people can remove "yes|"
-    yes | git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
+    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
     mkdir /mnt/${NIXCFG_LOCATION}
     cp -pr /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
 
@@ -222,5 +223,4 @@ __zfs_auto_snapshot
 nixos-generate-config --root /mnt
 __get_custom_nixcfg
 nixos-install
-
 __thank_you # May you have a Happy Hacking. :)
