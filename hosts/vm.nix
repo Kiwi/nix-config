@@ -9,8 +9,8 @@
    # put devices all on one line if using nix-on-zroot.sh (for now...)
    boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
 
-   networking.hostName = "nixvm";
-   networking.hostId = "007f0100";
+   #networking.hostName = "nixvm";
+   #networking.hostId = "007f0100";
 
    mine.zfs.enable = true;
  }

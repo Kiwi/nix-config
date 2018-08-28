@@ -173,8 +173,10 @@ __zfs_auto_snapshot() {
 __zfs_hostid() {
     if [[ ${POOL_HOSTID} == "random" ]]
     then
-        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4)"
-        echo ${POOL_HOSTID}
+        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
+        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /etc/nixos/configuration.nix
+    else
+        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /etc/nixos/configuration.nix
     fi
 }
 
@@ -190,10 +192,9 @@ __install_nix () {
     devs=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST})
     sed -i "/imports/a ${devs}" /etc/nixos/configuration.nix
 
-    nixos-install
+    # nixos-install
 }
 
-# TODO finish this or see about integrating into __install_nix
 __bootstrap_mynix() {
     nixos-generate-config --root /mnt
     cat <<EOF > /etc/nixos/configuration.nix
@@ -242,13 +243,12 @@ __disk_prep
 __zpool_create
 __datasets_create
 __zfs_auto_snapshot
-#__zfs_hostid
-
+__zfs_hostid
 __get_custom_nixcfg
-#__install_nix
+__install_nix
 
-# TODO
-__bootstrap_mynix
+# TODO finish this
+#__bootstrap_mynix
 
 __thank_you # May you have a Happy Hacking. :)
 
