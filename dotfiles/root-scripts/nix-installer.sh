@@ -222,6 +222,7 @@ nixos-generate-config --root /mnt
 # bootstrap our custom configuration
 # NOTE: make sure you have a zfs nix module LOL!
 git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+
 cat <<EOF > /etc/nixos/configuration.nix
  { ... }:
 # this can be a symlink in /etc/nixos/ or the actual file.
@@ -234,4 +235,4 @@ EOF
 nixos-install
 
 echo ""
-echo "I think it's done now , needs testing in a VM."
+echo "I think it's done now"
