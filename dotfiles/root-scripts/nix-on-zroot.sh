@@ -34,7 +34,7 @@ NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
 NIXCFG_LOCATION="/nix-config/"
 
 # name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
-NIXCFG_HOST="latitudeE6430.nix"
+NIXCFG_HOST="vm.nix"
 
 ##############################################################################
 # script                                                                     #
