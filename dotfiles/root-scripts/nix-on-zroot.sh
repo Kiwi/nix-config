@@ -30,7 +30,8 @@ POOL_DISKS="
 # Your personal nix-config repo to be bootstrapped
 NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
 
-# Preferred location where we will clone the nix-config repo (use full path with trailing slash.)
+# Preferred location where we will clone the nix-config repo
+# (use full path with trailing slash.)
 NIXCFG_LOCATION="/nix-config/"
 
 # name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
@@ -42,26 +43,33 @@ REMOVE_REMNANTS="1"
 # Set atime to "off" or "on". Not using atime can increase SSD disk life.
 ATIME="off"
 
+# Apply com.sun:auto-snapshot=true attributes to ROOT or HOME datasets?
+SNAPSHOT_ROOT="1"
+SNAPSHOT_HOME="1"
+
 ##############################################################################
 # script                                                                     #
 ##############################################################################
 
-# TODO add uefi support.
-if [ -d "/sys/firmware/efi/efivars" ]; then
-    exit ; echo "uefi sucks"
-    echo "legacy bios recommended if you can help it."
-fi
+__uefi_or_legacy() {
+    # TODO add uefi support.
+    if [ -d "/sys/firmware/efi/efivars" ]; then
+        exit ; echo "uefi sucks"
+        echo "legacy bios recommended if you can help it."
+    fi
+}
 
-echo "WARNING: The following script intends to replace all of your disk(s) \
+__initial_warning() {
+    echo "WARNING: The following script intends to replace all of your disk(s) \
 contents with a fresh zfs-on-root NixOS installation."
-echo ""
-read -p "Continue? (Y or N) " -n 1 -r
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    echo "Aborted." ; exit
-fi
+    echo ""
+    read -p "Continue? (Y or N) " -n 1 -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "Aborted." ; exit
+    fi
+}
 
-# DONE
 __bootstrap_zfs() {
     sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
@@ -69,7 +77,6 @@ boot.supportedFilesystems = [ \"zfs\" ];' \
     NEEDS_SWITCH="1"
 }
 
-# DONE
 __bootstrap_git() {
     sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
@@ -93,7 +100,7 @@ __zpool_create() {
     zpool create -f \
           -o ashift=12 \
           -O compression=lz4 \
-          -O atime=${ATIME} \
+          -O atime=${ATIME:?"Please define atime."} \
           -O relatime=on \
           -O normalization=formD \
           -O xattr=sa \
@@ -103,103 +110,88 @@ __zpool_create() {
           ${POOL_TYPE} \
           ${POOL_DISKS:?"Please define pool disks."}
 
-    zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
-
-    # create gpt bios boot partition which will contain grub stage 1 legacy bios
     IFS=$'\n'
     for DISK_ID in ${POOL_DISKS}
     do
         sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID}
+        partx -u ${DISK_ID}
     done
 }
 
 __datasets_create() {
-    mkdir /mnt/{root,home,tmp}
-
-    # ROOT filesystem
+    # / (root) datasets
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/ROOT
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/ROOT/nixos
+    zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
     mount -t zfs ${POOL_NAME}/ROOT/nixos /mnt
 
-    # HOME directory
+    mkdir /mnt/{home,tmp}
+
+    # /home datasets
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/HOME
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/home
     mount -t zfs ${POOL_NAME}/HOME/home /mnt/home
 
-    # /tmp directory
-    zfs create -o mountpoint=none -o canmount=off rpool/TMP
-    zfs create -o mountpoint=legacy canmount=on -o sync=disabled rpool/TMP/tmp
+    # /tmp datasets
+    zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/TMP
+    zfs create -o mountpoint=legacy canmount=on -o sync=disabled ${POOL_NAME}/TMP/tmp
     mount -t zfs ${POOL_NAME}/TMP/tmp /mnt/tmp
 }
 
 __zfs_auto_snapshot() {
-    echo ""
-    echo "com.sun:auto-snapshot is used by the nixos built-in services.zfs.autoSnapshot"
-    echo "so if you want your nixos zfs.autoSnapshot settings to apply to ROOT datasets,"
-    echo "then you should set com.sun:auto-snapshot=true for ROOT datasets."
-    echo ""
-    read" -p Set com.sun:auto-snapshot=true for ROOT datasets? Recommended. (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        zfs set com.sun:auto-snapshot=true $(POOL_NAME)/ROOT
-    fi
-
-    echo ""
-    echo "com.sun:auto-snapshot is used by the nixos built-in services.zfs.autoSnapshot."
-    echo "So if you want your nixos zfs.autoSnapshot settings to apply to your HOME dataset,"
-    echo "then you should set com.sun:auto-snapshot=true for HOME dataset."
-    echo ""
-    read -p "Set com.sun:auto-snapshot=true for your HOME dataset? Recommended. (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
+    if [[ ${SNAPSHOT_HOME} == "1" ]]
     then
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
+    elif [[ ${SNAPSHOT_ROOT} == "1" ]]
+    then
+        zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
     fi
 }
 
-# Run the script !
+__switch_if_needed() {
+    if [[ ${NEEDS_SWITCH} == "1" ]]
+    then
+        nixos-rebuild switch
+    fi
+}
 
-# intall zfs to the livedisk, but only if it needs it.
-which zfs > /dev/null 2>&1 || __bootstrap_zfs
+__get_custom_nixcfg() {
+    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
+    mkdir /mnt/${NIXCFG_LOCATION}
+    cp -r /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
 
-# intall git to the livedisk, but only if it needs it.
-which git > /dev/null 2>&1 || __bootstrap_git
-
-# switch if needed
-if [[ ${NEEDS_SWITCH} == "1" ]]
-then
-    nixos-rebuild switch
-fi
-
-# begin disk prep interactive ()
-__disk_prep
-
-# begin pool create interactive ()
-__zpool_create
-
-# create a basic dataset scheme
-__datasets_create
-
-# set zfs-auto-snapshot properties interactive ()
-__zfs_auto_snapshot
-
-# generate /mnt/etc/nixos/hardware-configuration.nix
-nixos-generate-config --root /mnt
-
-# bootstrap our custom configuration
-# NOTE: make sure you have a zfs nix module LOL!
-git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
-mkdir /mnt/${NIXCFG_LOCATION}
-cp -r /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
-
-cat <<EOF > /etc/nixos/configuration.nix
- { ... }:
-# this can be a symlink in /etc/nixos/ or the actual file.
+    cat <<EOF > /etc/nixos/configuration.nix
+{ ... }:
 { imports = [
-  /etc/nixos/hardware-configuration.nix
-  ${NIXCFG_LOCATION}${NIXCFG_HOST}
-  ]; }
+/etc/nixos/hardware-configuration.nix
+${NIXCFG_LOCATION}${NIXCFG_HOST}
+]; }
 EOF
+}
 
+__thank_you() {
+    echo ""
+    read -p "Installation finished. Reboot? (Y or N) " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        reboot
+    fi
+
+    echo "May you have a Happy Hacking." ; exit
+}
+
+# Run the script and come back later !
+
+__uefi_or_legacy
+__initial_warning
+which zfs > /dev/null 2>&1 || __bootstrap_zfs
+which git > /dev/null 2>&1 || __bootstrap_git
+__switch_if_needed
+__disk_prep
+__zpool_create
+__datasets_create
+__zfs_auto_snapshot
+nixos-generate-config --root /mnt
+__get_custom_nixcfg
 nixos-install
-
-#123
+__thank_you
