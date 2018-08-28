@@ -8,14 +8,11 @@
 # A simple nix-on-zroot installer.
 
 # instructions:
-# Set variables below and then execute the script from a nixos live disk.
+# Set variables below and then execute the script on a nixos live disk.
 
 #################
 # set variables #
 #################
-
-# "legacy" or "uefi" !! legacy recommended if you can help it.
-BIOS_TYPE="legacy"
 
 # Pool name preference, e.g. rpool or zroot
 POOL_NAME="zroot"
@@ -30,17 +27,27 @@ POOL_DISKS="
 /dev/sdb
 "
 
-# Your personal nix-config repo
+# Your personal nix-config repo to be bootstrapped
 NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
 
 # Preferred location where we will clone the nix-config repo
 NIXCFG_LOCATION="/nix-config/"
 
+# host file to be imported from $NIXCFG_LOCATION/hosts
+NIXCFG_HOST="latitudeE6430.nix"
+
 ##############################################################################
 # script                                                                     #
 ##############################################################################
 
-echo "WARNING: The following script intends to replace all of your disk(s) contents with a fresh zfs-on-root NixOS installation."
+# TODO add uefi support.
+if [ -d "/sys/firmware/efi/efivars" ]; then
+    exit ; echo "uefi sucks"
+    echo "legacy bios recommended if you can help it."
+fi
+
+echo "WARNING: The following script intends to replace all of your disk(s) \
+contents with a fresh zfs-on-root NixOS installation."
 echo ""
 read -p "Continue? (Y or N) " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
@@ -48,10 +55,18 @@ then
     echo "Aborted." ; exit
 fi
 
-__bootstrapzfs() {
+__bootstrap_zfs() {
     sed -i '/imports/a \
-boot.supportedFilesystems = [ \"zfs\" ];' /etc/nixos/configuration.nix
-    nixos-rebuild switch
+boot.supportedFilesystems = [ \"zfs\" ];' \
+        /etc/nixos/configuration.nix
+    NEEDS_SWITCH="1"
+}
+
+__bootstrap_git() {
+    sed -i '/imports/a \
+ environment.systemPackages = with pkgs; [ git-minimal ];' \
+        /etc/nixos/configuration.nix
+    NEEDS_SWITCH="1"
 }
 
 __disk_prep() {
@@ -65,7 +80,7 @@ inaccesable, but will not securely delete it! If you would like to securely eras
  data, use a secure erase tool, such as nwipe."
     echo ""
 
-    read -p "Continue to remove disk signatures and remnants? (Y or N) " -n 1 -r
+    read -p "Remove disk signatures and other old operating system installation  remnants? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         IFS=$'\n'
@@ -101,44 +116,33 @@ __zpool_create() {
               ${POOL_NAME:?"Please define pool name."} \
               ${POOL_TYPE} \
               ${POOL_DISKS:?"Please define pool disks."}
+
+        zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
     fi
 }
 
 __datasets_create() {
-    # ROOT
+    mkdir /mnt/{root,home,tmp}
+
+    # ROOT filesystem
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/ROOT
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/ROOT/nixos
     mount -t zfs ${POOL_NAME}/ROOT/nixos /mnt
 
-    # HOME
-    mkdir /mnt/home
-    mkdir /mnt/root
-    __primary_user() {
-        echo ""
-        echo "Type your primary non-root user name (will be used for the home dataset name) and press [ENTER]:"
-        read -r PRIMARY_USER
-        echo is ${PRIMAR_USER} okay?
-        read -p "(Y or N) " -n 1 -r
-        if [[ ! $REPLY =~ ^[Yy]$ ]]
-        then
-            __primary_user
-        fi
-    }
-    __primary_user
-
+    # HOME directory
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/HOME
-    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/root
-    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/${PRIMARY_USER}
-    mount -t zfs ${POOL_NAME}/HOME/root /mnt/root
-    mount -t zfs ${POOL_NAME}/HOME/${PRIMARY_USER} /mnt/${PRIMARY_USER}
+    zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/HOME/homedirs
+    mount -t zfs ${POOL_NAME}/HOME/homedirs /mnt/home
+
+    # /tmp directory
+    zfs create -o mountpoint=none -o canmount=off rpool/TMP
+    zfs create -o mountpoint=legacy canmount=on -o sync=disabled rpool/TMP/tmp
+    mount -t zfs ${POOL_NAME}/TMP/tmp /mnt/tmp
 
     # /NIX option
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "The following option is a tradeoff that is NOT RECOMMENDED."
-    echo "Answering yes, trades some zfs robustness for extra disk space savings."
-    echo ""
-    echo "Answering yes is only useful if you do not garbage collect your NixOS install regularly or if you"
-    echo "intend to keep long-term nix-store snapshots and have storage capacity concerns."
+    echo "Answering yes is only useful if you do not garbage collect your NixOS install \
+ regularly or if you intend to keep long-term nix-store snapshots and have storage capacity concerns."
     echo ""
     read -p "Mount /nix store outside of ROOT dataset? Not recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
@@ -160,15 +164,15 @@ __datasets_create() {
         mkdir -p /mnt/boot/grub
         mount -t zfs ${POOL_NAME}/BOOT/grub /mnt/boot/grub
     fi
+}
 
-    # zfs-auto-snapshot
-
+__zfs_auto_snapshot() {
     echo ""
     echo "com.sun:auto-snapshot is used by the nixos built-in services.zfs.autoSnapshot"
     echo "so if you want your nixos zfs.autoSnapshot settings to apply to ROOT datasets,"
     echo "then you should set com.sun:auto-snapshot=true for ROOT datasets."
     echo ""
-    read" -p Set com.sun:auto-snapshot=true for ROOT datasets? (Y or N) " -n 1 -r
+    read" -p Set com.sun:auto-snapshot=true for ROOT datasets? Recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         zfs set com.sun:auto-snapshot=true $(POOL_NAME)/ROOT
@@ -179,7 +183,7 @@ __datasets_create() {
     echo "So if you want your nixos zfs.autoSnapshot settings to apply to your HOME dataset,"
     echo "then you should set com.sun:auto-snapshot=true for HOME dataset."
     echo ""
-    read -p "Set com.sun:auto-snapshot=true for your HOME dataset? (Y or N) " -n 1 -r
+    read -p "Set com.sun:auto-snapshot=true for your HOME dataset? Recommended. (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
@@ -187,8 +191,18 @@ __datasets_create() {
 }
 
 # Run the script !
+
 # intall zfs to the livedisk, but only if it needs it.
-which zfs > /dev/null 2>&1 || __bootstrapzfs
+which zfs > /dev/null 2>&1 || __bootstrap_zfs
+
+# intall git to the livedisk, but only if it needs it.
+which git > /dev/null 2>&1 || __bootstrap_git
+
+# switch if needed
+if [[ ${NEEDS_SWITCH} == "1" ]]
+then
+    nixos-rebuild switch
+fi
 
 # begin disk prep interactive ()
 __disk_prep
@@ -196,10 +210,28 @@ __disk_prep
 # begin pool create interactive ()
 __zpool_create
 
-# create root datasets
+# create a basic dataset scheme
 __datasets_create
 
-# now that we have zfs installed to the live disk, we need to setup a zpool on
-# our disk(s) where we will subsequently boot strap our own configuration.nix
-# via github.
-#git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+# set zfs-auto-snapshot properties interactive ()
+__zfs_auto_snapshot
+
+# generate /mnt/etc/nixos/hardware-configuration.nix
+nixos-generate-config --root /mnt
+
+# bootstrap our custom configuration
+# NOTE: make sure you have a zfs nix module LOL!
+git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+cat <<EOF > /etc/nixos/configuration.nix
+ { ... }:
+# this can be a symlink in /etc/nixos/ or the actual file.
+{ imports = [
+  /etc/nixos/hardware-configuration.nix
+  ${NIXCFG_LOCATION}${NIXCFG_HOST}
+]; }
+EOF
+
+nixos-install
+
+echo ""
+echo "I think it's done now , needs testing in a VM."
