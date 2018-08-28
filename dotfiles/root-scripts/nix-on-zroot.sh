@@ -174,9 +174,9 @@ __zfs_hostid() {
     if [[ ${POOL_HOSTID} == "random" ]]
     then
         POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
-        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /etc/nixos/configuration.nix
+        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /mnt/etc/nixos/configuration.nix
     else
-        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /etc/nixos/configuration.nix
+        sed -i "/imports/a networking.hostId = \"${POOL_HOSTID}\";" /mnt/etc/nixos/configuration.nix
     fi
 }
 
@@ -188,22 +188,20 @@ __get_custom_nixcfg() {
 
 # FIXME insert grub devices and hostid properly
 __install_nix () {
-    nixos-generate-config --root /mnt
-    devs=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST})
-    sed -i "/imports/a ${devs}" /etc/nixos/configuration.nix
+    ZDEVS=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST} "device")
+    sed -i "/imports/a ${ZDEVS}" /mnt/etc/nixos/configuration.nix
 
     # nixos-install
 }
 
 __bootstrap_mynix() {
     nixos-generate-config --root /mnt
-    cat <<EOF > /etc/nixos/configuration.nix
+    cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
-{ imports = [
-/etc/nixos/hardware-configuration.nix
-${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}
-]; }
+{ imports = [ /etc/nixos/hardware-configuration.nix];
+}
 EOF
+    #${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}
 }
 
 __thank_you() {
@@ -243,9 +241,12 @@ __disk_prep
 __zpool_create
 __datasets_create
 __zfs_auto_snapshot
-__zfs_hostid
 __get_custom_nixcfg
-__install_nix
+
+nixos-generate-config --root /mnt
+__zfs_hostid
+__grub_devs
+nixos-install
 
 # TODO finish this
 #__bootstrap_mynix
