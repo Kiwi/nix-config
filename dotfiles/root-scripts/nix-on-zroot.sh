@@ -46,10 +46,6 @@ SNAPSHOT_HOME="true"
 
 # name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
 NIXCFG_HOST=$1
-if [[ NIXCFG_HOST == "" ]]
-then
-    echo "usage: nix-on-zroot.sh HOST" ; exit
-fi
 
 #################
 # defun ()      #                                                               #
@@ -180,7 +176,7 @@ __get_custom_nixcfg() {
 { ... }:
 { imports = [
 /etc/nixos/hardware-configuration.nix
-${NIXCFG_LOCATION}${NIXCFG_HOST}
+${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}
 ]; }
 EOF
 }
