@@ -183,6 +183,7 @@ __get_custom_nixcfg() {
     cp -pr /${NIXCFG_LOCATION} /mnt${NIXCFG_LOCATION}
 }
 
+# FIXME insert grub devices and hostid properly
 __install_nix () {
     nixos-generate-config --root /mnt
     devs=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST})
@@ -191,6 +192,7 @@ __install_nix () {
     nixos-install
 }
 
+# TODO finish this or see about integrating into __install_nix
 __bootstrap_mynix() {
     cat <<EOF > /etc/nixos/configuration.nix
 { ... }:
