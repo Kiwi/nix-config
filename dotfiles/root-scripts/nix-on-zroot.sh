@@ -51,6 +51,14 @@ NIXCFG_HOST=$1
 # defun ()      #                                                               #
 #################
 
+__switch_if_needed() {
+    if [[ ${NEEDS_SWITCH} == "true" ]]
+    then
+        nixos-rebuild switch
+        NEEDS_SWITCH="false"
+    fi
+}
+
 __uefi_or_legacy() {
     # TODO add uefi support.
     if [ -d "/sys/firmware/efi/efivars" ]; then
@@ -97,7 +105,7 @@ __disk_prep() {
 }
 
 __translate_config() {
-    # translate configure options from true/falsae to zfs style "on/off"
+    # translate configure options from true/false to zfs style "on/off"
     if [[ ${ATIME} == "true" ]]
     then
         ATIME="on"
@@ -158,20 +166,21 @@ __zfs_auto_snapshot() {
     fi
 }
 
-__switch_if_needed() {
-    if [[ ${NEEDS_SWITCH} == "true" ]]
-    then
-        nixos-rebuild switch
-        NEEDS_SWITCH="false"
-    fi
+__get_custom_nixcfg() {
+    #TODO git preserve permissions and restore from https to git remotes
+    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
+    cp -pr /${NIXCFG_LOCATION} /mnt/${NIXCFG_LOCATION}
 }
 
-__get_custom_nixcfg() {
-    # SECURITY people can remove "yes|"
-    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
-    mkdir /mnt/${NIXCFG_LOCATION}
-    cp -pr /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
+__install__nix () {
+    nixos-generate-config --root /mnt
+    devs=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST})
+    sed -i "/imports/a ${devs}" /etc/nixos/configuration.nix
 
+    nixos-install
+}
+
+__bootstrap_mynix() {
     cat <<EOF > /etc/nixos/configuration.nix
 { ... }:
 { imports = [
@@ -216,7 +225,11 @@ __disk_prep
 __zpool_create
 __datasets_create
 __zfs_auto_snapshot
-nixos-generate-config --root /mnt
+
 __get_custom_nixcfg
-nixos-install
+__install_nix
+
+# TODO
+# __bootstrap_mynix
+
 __thank_you # May you have a Happy Hacking. :)
