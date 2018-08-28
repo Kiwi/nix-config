@@ -27,6 +27,10 @@ POOL_DISKS="
 /dev/sdb
 "
 
+# The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
+# You should try to make this ID unique among your machines.
+POOL_HOSTID="random"
+
 # Your personal nix-config repo to be bootstrapped
 NIXCFG_REPO="https://github.com/a-schaefers/nix-config.git"
 
@@ -166,6 +170,13 @@ __zfs_auto_snapshot() {
     fi
 }
 
+__zfs_hostid() {
+    if [[ ${POOL_HOSTID} == "random" ]]
+    then
+        POOL_HOSTID=$(cksum /etc/machine-id | while read c rest; do printf "%x" $c; done)
+    fi
+}
+
 __get_custom_nixcfg() {
     #TODO git preserve permissions and restore from https to git remotes
     git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
@@ -218,13 +229,16 @@ EOF
 __uefi_or_legacy
 __initial_warning
 __translate_config
+
 which zfs > /dev/null 2>&1 || __bootstrap_zfs
 which git > /dev/null 2>&1 || __bootstrap_git
 __switch_if_needed
+
 __disk_prep
 __zpool_create
 __datasets_create
 __zfs_auto_snapshot
+__zfs_hostid
 
 __get_custom_nixcfg
 __install_nix
