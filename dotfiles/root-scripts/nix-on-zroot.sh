@@ -192,13 +192,19 @@ __grub_devs () {
     sed -i "/imports/a ${ZDEVS}" /mnt/etc/nixos/configuration.nix
 }
 
-__bootstrap_mynix() {
-    nixos-generate-config --root /mnt
+__zfs_configuration() {
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [ /etc/nixos/hardware-configuration.nix];
+boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
+
 }
 EOF
+
+    sed -i '/imports/a \
+boot.supportedFilesystems = [ \"zfs\" ];' \
+        /mnt/etc/nixos/configuration.nix
+
     #${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}
 }
 
@@ -240,11 +246,11 @@ __zpool_create
 __datasets_create
 __zfs_auto_snapshot
 __get_custom_nixcfg
-
 nixos-generate-config --root /mnt
-__bootstrap_mynix
+__zfs_configuration
 __zfs_hostid
-__grub_devs
+
+# __grub_devs
 # nixos-install
 
 # TODO finish this
