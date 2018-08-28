@@ -34,18 +34,22 @@ NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
 # (use full path with trailing slash.)
 NIXCFG_LOCATION="/nix-config/"
 
-# name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
-NIXCFG_HOST="vm.nix"
+# Set to 1 if the disk(s) are not brand new.
+REMOVE_REMNANTS="true"
 
-# When giving entire disks to ZFS, it is a good idea first to remove various
-REMOVE_REMNANTS="1"
-
-# Set atime to "off" or "on". Not using atime can increase SSD disk life.
-ATIME="off"
+# Use atime? Not using atime can increase SSD disk life.
+ATIME="false"
 
 # Apply com.sun:auto-snapshot=true attributes to ROOT or HOME datasets?
-SNAPSHOT_ROOT="1"
-SNAPSHOT_HOME="1"
+SNAPSHOT_ROOT="true"
+SNAPSHOT_HOME="true"
+
+# name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
+NIXCFG_HOST=$1
+if [[ NIXCFG_HOST == "" ]]
+then
+    echo "usage: nix-on-zroot.sh HOST" ; exit
+fi
 
 #################
 # defun ()      #                                                               #
@@ -74,18 +78,18 @@ __bootstrap_zfs() {
     sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
         /etc/nixos/configuration.nix
-    NEEDS_SWITCH="1"
+    NEEDS_INITIAL_SWITCH="true"
 }
 
 __bootstrap_git() {
     sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
         /etc/nixos/configuration.nix
-    NEEDS_SWITCH="1"
+    NEEDS_INITIAL_SWITCH="true"
 }
 
 __disk_prep() {
-    if [[ ${REMOVE_REMNANTS} == "1" ]]
+    if [[ ${REMOVE_REMNANTS} == "true" ]]
     then
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
@@ -93,6 +97,16 @@ __disk_prep() {
             sgdisk --clear ${DISK_ID}
             wipefs --all ${DISK_ID}
         done
+    fi
+}
+
+__translate_config() {
+    # translate configure options from true/falsae to zfs style "on/off"
+    if [[ ${ATIME} == "true" ]]
+    then
+        ATIME="on"
+    else
+        ATIME="off"
     fi
 }
 
@@ -139,26 +153,27 @@ __datasets_create() {
 }
 
 __zfs_auto_snapshot() {
-    if [[ ${SNAPSHOT_HOME} == "1" ]]
+    if [[ ${SNAPSHOT_HOME} == "true" ]]
     then
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
-    elif [[ ${SNAPSHOT_ROOT} == "1" ]]
+    elif [[ ${SNAPSHOT_ROOT} == "true" ]]
     then
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
     fi
 }
 
 __switch_if_needed() {
-    if [[ ${NEEDS_SWITCH} == "1" ]]
+    if [[ ${NEEDS_INITIAL_SWITCH} == "true" ]]
     then
         nixos-rebuild switch
     fi
 }
 
 __get_custom_nixcfg() {
-    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
+    # SECURITY people can remove "yes|"
+    yes | git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
     mkdir /mnt/${NIXCFG_LOCATION}
-    cp -r /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
+    cp -pr /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
 
     cat <<EOF > /etc/nixos/configuration.nix
 { ... }:
@@ -170,12 +185,24 @@ EOF
 }
 
 __thank_you() {
-    echo ""
-    read -p "Installation finished. Reboot? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        reboot
-    fi
+    cat <<EOF
+NNNNNNNN        NNNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
+N:::::::N       N::::::NI::::::::IX:::::X       X:::::X
+N::::::::N      N::::::NI::::::::IX:::::X       X:::::X
+N:::::::::N     N::::::NII::::::IIX::::::X     X::::::X
+N::::::::::N    N::::::N  I::::I  XXX:::::X   X:::::XXX
+N:::::::::::N   N::::::N  I::::I     X:::::X X:::::X
+N:::::::N::::N  N::::::N  I::::I      X:::::X:::::X
+N::::::N N::::N N::::::N  I::::I       X:::::::::X
+N::::::N  N::::N:::::::N  I::::I       X:::::::::X
+N::::::N   N:::::::::::N  I::::I      X:::::X:::::X
+N::::::N    N::::::::::N  I::::I     X:::::X X:::::X
+N::::::N     N:::::::::N  I::::I  XXX:::::X   X:::::XXX
+N::::::N      N::::::::NII::::::IIX::::::X     X::::::X
+N::::::N       N:::::::NI::::::::IX:::::X       X:::::X
+N::::::N        N::::::NI::::::::IX:::::X       X:::::X
+NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
+EOF
 }
 
 #################
@@ -184,6 +211,7 @@ __thank_you() {
 
 __uefi_or_legacy
 __initial_warning
+__translate_config
 which zfs > /dev/null 2>&1 || __bootstrap_zfs
 which git > /dev/null 2>&1 || __bootstrap_git
 __switch_if_needed
