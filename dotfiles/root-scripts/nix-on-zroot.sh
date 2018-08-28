@@ -64,7 +64,7 @@ boot.supportedFilesystems = [ \"zfs\" ];' \
 
 __bootstrap_git() {
     sed -i '/imports/a \
- environment.systemPackages = with pkgs; [ git-minimal ];' \
+ environment.systemPackages = with pkgs; [ git ];' \
         /etc/nixos/configuration.nix
     NEEDS_SWITCH="1"
 }
