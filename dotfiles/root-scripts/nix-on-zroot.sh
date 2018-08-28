@@ -179,11 +179,11 @@ __zfs_hostid() {
 
 __get_custom_nixcfg() {
     #TODO git preserve permissions and restore from https to git remotes
-    git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
-    cp -pr /${NIXCFG_LOCATION} /mnt/${NIXCFG_LOCATION}
+    git clone ${NIXCFG_REPO} ${NIXCFG_LOCATION}
+    cp -pr /${NIXCFG_LOCATION} /mnt${NIXCFG_LOCATION}
 }
 
-__install__nix () {
+__install_nix () {
     nixos-generate-config --root /mnt
     devs=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST})
     sed -i "/imports/a ${devs}" /etc/nixos/configuration.nix
