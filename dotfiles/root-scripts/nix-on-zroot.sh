@@ -188,7 +188,7 @@ __get_custom_nixcfg() {
 
 # FIXME insert grub devices and hostid properly
 __grub_devs () {
-    ZDEVS=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST} "device")
+    ZDEVS=$(grep ${NIXCFG_LOCATION}hosts/vm.nix "device")
     sed -i "/imports/a ${ZDEVS}" /mnt/etc/nixos/configuration.nix
 }
 
