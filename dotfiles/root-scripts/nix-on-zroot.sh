@@ -8,7 +8,7 @@
 # A simple nix-on-zroot installer.
 
 # instructions:
-# Set variables below and then execute the script on a nixos live disk.
+# Set variables below and then execute the script from any nixos live disk.
 
 #################
 # set variables #
@@ -47,9 +47,9 @@ ATIME="off"
 SNAPSHOT_ROOT="1"
 SNAPSHOT_HOME="1"
 
-##############################################################################
-# script                                                                     #
-##############################################################################
+#################
+# defun ()      #                                                               #
+#################
 
 __uefi_or_legacy() {
     # TODO add uefi support.
@@ -176,11 +176,11 @@ __thank_you() {
     then
         reboot
     fi
-
-    echo "May you have a Happy Hacking." ; exit
 }
 
-# Run the script and come back later !
+#################
+# Action !      #
+#################
 
 __uefi_or_legacy
 __initial_warning
@@ -194,4 +194,5 @@ __zfs_auto_snapshot
 nixos-generate-config --root /mnt
 __get_custom_nixcfg
 nixos-install
-__thank_you
+
+__thank_you # May you have a Happy Hacking. :)
