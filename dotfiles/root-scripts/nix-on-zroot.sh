@@ -30,10 +30,10 @@ POOL_DISKS="
 # Your personal nix-config repo to be bootstrapped
 NIXCFG_REPO="git@github.com:a-schaefers/nix-config.git"
 
-# Preferred location where we will clone the nix-config repo
+# Preferred location where we will clone the nix-config repo (use full path with trailing slash.)
 NIXCFG_LOCATION="/nix-config/"
 
-# host file to be imported from $NIXCFG_LOCATION/hosts
+# name of host file to be imported from $NIXCFG_LOCATION/hosts directory.
 NIXCFG_HOST="latitudeE6430.nix"
 
 ##############################################################################
@@ -221,7 +221,9 @@ nixos-generate-config --root /mnt
 
 # bootstrap our custom configuration
 # NOTE: make sure you have a zfs nix module LOL!
-git clone ${NIXCFG_REPO} /mnt/${NIXCFG_LOCATION}
+git clone ${NIXCFG_REPO} /${NIXCFG_LOCATION}
+mkdir /mnt/${NIXCFG_LOCATION}
+cp -r /${NIXCFG_LOCATION}/* /mnt/${NIXCFG_LOCATION}
 
 cat <<EOF > /etc/nixos/configuration.nix
  { ... }:
@@ -229,10 +231,10 @@ cat <<EOF > /etc/nixos/configuration.nix
 { imports = [
   /etc/nixos/hardware-configuration.nix
   ${NIXCFG_LOCATION}${NIXCFG_HOST}
-]; }
+  ]; }
 EOF
 
 nixos-install
 
 echo ""
-echo "I think it's done now"
+echo "Now reboot."
