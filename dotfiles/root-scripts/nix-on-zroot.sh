@@ -194,7 +194,7 @@ __install_nix () {
     # nixos-install
 }
 
-__bootstrap_mynix() {
+__grub_devs() {
     nixos-generate-config --root /mnt
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
