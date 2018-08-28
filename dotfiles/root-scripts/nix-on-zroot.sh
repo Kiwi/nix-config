@@ -244,12 +244,12 @@ __zfs_auto_snapshot
 __get_custom_nixcfg
 
 nixos-generate-config --root /mnt
+__bootstrap_mynix
 __zfs_hostid
 __grub_devs
-nixos-install
+# nixos-install
 
 # TODO finish this
-#__bootstrap_mynix
 
 __thank_you # May you have a Happy Hacking. :)
 
