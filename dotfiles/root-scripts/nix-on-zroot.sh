@@ -187,14 +187,12 @@ __get_custom_nixcfg() {
 }
 
 # FIXME insert grub devices and hostid properly
-__install_nix () {
+__grub_devs () {
     ZDEVS=$(grep ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST} "device")
     sed -i "/imports/a ${ZDEVS}" /mnt/etc/nixos/configuration.nix
-
-    # nixos-install
 }
 
-__grub_devs() {
+__bootstrap_mynix() {
     nixos-generate-config --root /mnt
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
@@ -253,4 +251,4 @@ __grub_devs
 
 __thank_you # May you have a Happy Hacking. :)
 
-#test1
+#test24
