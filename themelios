@@ -79,6 +79,7 @@ __get_custom_nixcfg() {
     do
         export ${CFG_VAR}
     done
+    POOL_DISKS=$(echo $POOL_DISKS | sed 's/ /\n/g')
 
     # translate configure options from true/false to zfs style "on/off"
     if [[ ${ATIME} == "true" ]]
@@ -235,10 +236,6 @@ __stage_2() {
     __bootstrap_git        # install git if needed to the livedisk
     __switch_if_needed     # reconfigure nix livedisk if needed
     __get_custom_nixcfg    # download the host machine configuration
-    POOL_DISKS="
-/dev/sda
-/dev/sdb
-"
     __disk_prep            # use sgdisk and wipefs to cleanup old disks
     __zpool_create         # create the zpool, make gpt bios boot partition
     __datasets_create      # create a zfs dataset layout
