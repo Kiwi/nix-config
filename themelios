@@ -259,7 +259,7 @@ __bootstrap_nixcfg() {
     echo "Moving repo from /tmp to /mnt${NIXCFG_LOCATION}..."
     cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
 
-    "Executing nixos-generate-config --root /mnt"
+    echo "Executing nixos-generate-config --root /mnt"
     nixos-generate-config --root /mnt || exit
 
     if [[ ${POOL_HOSTID} == "random" ]]
