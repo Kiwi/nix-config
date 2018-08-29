@@ -12,8 +12,6 @@
    # put devices all on one line if using nix-on-zroot.sh (for now...)
    boot.loader.grub.devices = [ "/dev/sda" ];
 
-   networkmanager.enable = false;
-
    mine.zfs.enable = true;
 
    systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
@@ -22,6 +20,7 @@
   ];
 
    networking = {
+     networkmanager.enable = false;
      hostName = "nixvm";
     usePredictableInterfaceNames = false;
     interfaces.eth0.ip4 = [{

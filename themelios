@@ -218,7 +218,7 @@ EOF
     sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
-    nixos-install --root /mnt
+    nixos-install --root /mnt || exit
 }
 
 __thank_you() {
