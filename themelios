@@ -44,13 +44,6 @@ NIXCFG_HOST=$2
 __initial_warning() {
     echo "WARNING: The following script intends to replace all of your disk(s) \
 contents with a zfs-on-root NixOS installation and bootstrap your configuration.nix."
-    echo ""
-    echo "IMPORTANT: Ensure the input format resembles the following example:"
-    echo "themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
-    echo "where hpZ620.nix is in the project_root/hosts/ directory and contains a \"bootstrap block.\""
-    echo ""
-    echo "Internet connection required."
-    echo ""
     read -p "Ready? (Y or N) " -n 1 -r
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
@@ -260,33 +253,15 @@ NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
 EOF
 }
 
-# SCRIPT OUTLINE
-
-__stage_1() {
-    __uefi_or_legacy       # check for legacy or uefi bios
-    __initial_warning      # warn user of potential doom
-}
-
-__stage_2() {
-    __bootstrap_zfs        # install zfs if needed to the livedisk
-    __bootstrap_git        # install git if needed to the livedisk
-    __switch_if_needed     # reconfigure nix livedisk if needed
-    __get_custom_nixcfg    # download the host machine configuration
-    __disk_prep            # use sgdisk and wipefs to cleanup old disks
-    __zpool_create         # create the zpool, make gpt bios boot partition
-    __datasets_create      # create a zfs dataset layout
-    __zfs_auto_snapshot    # set com.sun:auto-snapshot properties
-}
-
-__stage_3() {
-    __bootstrap_nixcfg     # bootstrap the users custom nix configurations
-    __thank_you            # May you have a Happy Hacking. :)
-}
-
-#################
-# Action !      #
-#################
-
-__stage_1
-__stage_2
-__stage_3
+__uefi_or_legacy       # check for legacy or uefi bios
+__initial_warning      # warn user of potential doom
+__bootstrap_zfs        # install zfs if needed to the livedisk
+__bootstrap_git        # install git if needed to the livedisk
+__switch_if_needed     # reconfigure nix livedisk if needed
+__get_custom_nixcfg    # download the host machine configuration
+__disk_prep            # use sgdisk and wipefs to cleanup old disks
+__zpool_create         # create the zpool, make gpt bios boot partition
+__datasets_create      # create a zfs dataset layout
+__zfs_auto_snapshot    # set com.sun:auto-snapshot properties
+__bootstrap_nixcfg     # bootstrap the users custom nix configurations
+__thank_you            # May you have a Happy Hacking. :)
