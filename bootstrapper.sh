@@ -7,60 +7,6 @@
 # The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# TODO GET from $1
-# Your personal nix-config repo to be bootstrapped
-# NIXCFG_REPO="https://github.com/a-schaefers/nix-config.git"
-
-# Pool name preference, e.g. rpool or zroot
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-POOL_NAME="zroot"
-
-# leave empty "" for single disk or use "mirror", "raidz1", "raidz2", or "raidz3"
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-POOL_TYPE="mirror"
-
-# It is recommended to list disks using /dev/disk/by-id (instead of e.g. /dev/sda /dev/sdb ...
-# It is also recommended to give ZFS entire disks, they will be GPT partitioned automatically by ZFS.
-
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-POOL_DISKS="
-/dev/sda
-/dev/sdb
-"
-
-# The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
-# You should try to make this ID unique among your machines.
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-POOL_HOSTID="random"
-
-# Preferred location where we will clone the nix-config repo
-# (use full path with trailing slash.)
-# TODO GET THIS FROM GIT URL $1 !!!!!!!!!!!!!
-NIXCFG_LOCATION="/nix-config/"
-
-# Set to 1 if the disk(s) are not brand new.
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-REMOVE_REMNANTS="true"
-
-# Use atime? Not using atime can increase SSD disk life.
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-ATIME="false"
-
-# Apply com.sun:auto-snapshot=true attributes to ROOT or HOME datasets?
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-SNAPSHOT_ROOT="true"
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-SNAPSHOT_HOME="true"
-
-# Use a swap zvol? Note: Swapping with ZFS isn't always great.
-# TODO GET THIS FROM THE HOST FILE !!!!!!!!!!!!!
-USE_ZSWAP="false"
-ZSWAP_SIZE="4G"
-
-#################
-# defun ()      #
-#################
-
 __usage_check() {
     usage ()
     {
@@ -107,8 +53,7 @@ __switch_if_needed() {
 __uefi_or_legacy() {
     # TODO add uefi support.
     if [ -d "/sys/firmware/efi/efivars" ]; then
-        exit ; echo "uefi sucks"
-        echo "legacy bios recommended if you can help it."
+        exit ; echo "Only legacy bios is supported with this script for now."
     fi
 }
 
@@ -124,38 +69,33 @@ contents with a fresh zfs-on-root NixOS installation."
 }
 
 __bootstrap_zfs() {
-    sed -i '/imports/a \
+    __install_zfs() {
+            sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
         /etc/nixos/configuration.nix
     NEEDS_SWITCH="true"
+    }
+    which zfs > /dev/null 2>&1 || __install_zfs
 }
 
 __bootstrap_git() {
-    sed -i '/imports/a \
+    __install_git() {
+     sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
         /etc/nixos/configuration.nix
     NEEDS_SWITCH="true"
+    }
+    which git > /dev/null 2>&1 || __install_git
 }
 
 __disk_prep() {
     if [[ ${REMOVE_REMNANTS} == "true" ]]
     then
-        IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
         do
             sgdisk --clear ${DISK_ID}
             wipefs --all ${DISK_ID}
         done
-    fi
-}
-
-__translate_config() {
-    # translate configure options from true/false to zfs style "on/off"
-    if [[ ${ATIME} == "true" ]]
-    then
-        ATIME="on"
-    else
-        ATIME="off"
     fi
 }
 
@@ -232,25 +172,36 @@ __zfs_auto_snapshot() {
     fi
 }
 
-__zfs_hostid() {
-    if [[ ${POOL_HOSTID} == "random" ]]
-    then
-        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
-    fi
-}
-
 __get_custom_nixcfg() {
     # TODO git preserve permissions and restore from https to git remotes
-    git clone ${NIXCFG_REPO} ${NIXCFG_LOCATION}
-    cp -rp ${NIXCFG_LOCATION} /mnt
+    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO
+
+    BOOTSTRAP_BLOCK=$(grep "#|" ${NIXCFG_DIR}${NIXCFG_HOST} | cut -d '|' -f 2)
+    IFS=$'\n'
+    for CFG_VAR in ${BOOTSTRAP_BLOCK}
+    do
+        export ${CFG_VAR}
+    done
+
+    # put the repo in its proper location now
+    cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
+
+    # translate configure options from true/false to zfs style "on/off"
+    if [[ ${ATIME} == "true" ]]
+    then
+        ATIME="on"
+    else
+        ATIME="off"
+    fi
 }
 
 __bootstrap_nixcfg() {
     nixos-generate-config --root /mnt
 
-    __get_custom_nixcfg
-
-    __zfs_hostid
+    if [[ ${POOL_HOSTID} == "random" ]]
+    then
+        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
+    fi
 
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
@@ -263,6 +214,7 @@ EOF
     sed -i '/imports/a ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}' \
         /mnt/etc/nixos/configuration.nix
 
+    # TODO
     # nixos-install
     # zpool export ${POOL_NAME}
     # ask user if would like to make any further changes before reboot
@@ -292,25 +244,25 @@ EOF
 # SCRIPT OUTLINE
 
 __stage_1() {
-    __usage_check # check for proper script input from user
-    __uefi_or_legacy # check for legacy or uefi bios
-    __initial_warning # warn user of potential doom
+    __usage_check          # check for proper script input from user
+    __uefi_or_legacy       # check for legacy or uefi bios
+    __initial_warning      # warn user of potential doom
 }
 
 __stage_2() {
-    which zfs > /dev/null 2>&1 || __bootstrap_zfs # install zfs if needed to livedisk
-    which git > /dev/null 2>&1 || __bootstrap_git # install git if needed to livedisk
-    __switch_if_needed # reconfigure nix livedisk if needed
-    __translate_config # convert variables from true / false to various formats
-    __get_custom_nixcfg # download user's nix configuration
-                        __disk_prep # use sgdisk and wipefs to cleanup old disks
-                        __zpool_create # create zpool, gpt partition disk, make bios boot partition
-                        __datasets_create # create a zfs dataset layout
-                        __zfs_auto_snapshot # set com.sun:auto-snapshot properties
+    __bootstrap_zfs        # install zfs if needed to the livedisk
+    __bootstrap_git        # install git if needed to the livedisk
+    __switch_if_needed     # reconfigure nix livedisk if needed
+    __get_custom_nixcfg    # download the host machine configuration
+    __disk_prep            # use sgdisk and wipefs to cleanup old disks
+    __zpool_create         # create the zpool, make gpt bios boot partition
+    __datasets_create      # create a zfs dataset layout
+    __zfs_auto_snapshot    # set com.sun:auto-snapshot properties
 }
 
 __stage_3() {
-    __bootstrap_nixcfg # bootstrap the users custom nix configurations
+    __bootstrap_nixcfg     # bootstrap the users custom nix configurations
+    __thank_you            # May you have a Happy Hacking. :)
 }
 
 #################
@@ -320,4 +272,3 @@ __stage_3() {
 __stage_1
 __stage_2
 __stage_3
-__thank_you # May you have a Happy Hacking. :)
