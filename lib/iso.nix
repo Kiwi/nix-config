@@ -27,7 +27,6 @@
     }];
     defaultGateway = "192.168.122.1";
     nameservers = [ "8.8.8.8" "8.8.4.4" ];
-    # networkmanager.enable = true;
     firewall.allowPing = true;
     firewall.allowedTCPPorts = [ 22 ];
     firewall.allowedUDPPorts = [ 22 ];
