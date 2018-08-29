@@ -11,8 +11,7 @@
 # Example command: "themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
 # Where hpZ620.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
-# A "bootstrap block" is just bash variables prefixed with #| in a .nix file.
-# Note: Use POOL_TYPE=single for single disk setups or POOL_TYPE=mirror for mirrored setups.
+# A "bootstrap block" is just bash variables prefixed with #| as follows:
 #|POOL_NAME=zroot
 #|POOL_TYPE=raidz1
 #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
@@ -24,11 +23,12 @@
 #|SNAPSHOT_HOME=true
 #|USE_ZSWAP=false
 #|ZSWAP_SIZE=4G
+# Note: Use POOL_TYPE=single for single disk setups or POOL_TYPE=mirror for mirrored setups.
 
 # Here is an example of a .nix file with a "bootstrap block",
 # https://github.com/a-schaefers/nix-config/blob/master/hosts/latitudeE6430.nix
 
-# Here is a sample nixos-zfs.nix file for reference also, which contains good ZFS settings,
+# Here is a sample nixos-zfs.nix file for reference, which contains good ZFS settings,
 # https://github.com/a-schaefers/nix-config/blob/master/modules/nixos/nixos-zfs.nix
 
 usage() {
