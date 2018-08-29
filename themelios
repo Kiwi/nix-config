@@ -118,13 +118,13 @@ __get_custom_nixcfg() {
     if [[ $GITHUB_USER != "" ]]
     then
         echo "Fetching github repository to /tmp location via https remote..."
-        git clone $GITHUBHTTPSREMOTE /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
+        git clone $GITHUBHTTPSREMOTE /tmp/NIXCFG_REPO || exit
         echo "Switching remote to ssh for user convenience..."
-        cd /tmp/NIX_REPO
+        cd /tmp/NIXCFG_REPO
         git remote set-url origin $GITHUBSSHREMOTE
     else
         echo "Fetching git repository to /tmp location..."
-        git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
+        git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit
     fi
 
     echo "Extracting configuration variables from bootstrap block..."
@@ -159,9 +159,9 @@ __disk_prep() {
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Clearing disk with sgdisk..."
-            sgdisk --clear ${DISK_ID} || echo "sgdisk --clear failed" ; exit
+            sgdisk --clear ${DISK_ID} ||  exit
             echo "Wiping disk signatures with wipefs..."
-            wipefs --all ${DISK_ID} || echo "wipefs --all failed" ; exit
+            wipefs --all ${DISK_ID} || exit
         done
     fi
 }
@@ -179,19 +179,19 @@ __zpool_create() {
           -R /mnt \
           ${POOL_NAME:?"Please define pool name."} \
           ${POOL_TYPE} \
-          ${POOL_DISKS:?"Please define pool disks."} || echo "pool creation failed." ; exit
+          ${POOL_DISKS:?"Please define pool disks."} || exit
 
     IFS=$'\n'
     for DISK_ID in ${POOL_DISKS}
     do
         echo "Creating BIOS boot partition..."
-        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || echo "bios boot partition creation failed" ; exit
+        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || exit
         partx -u ${DISK_ID}
     done
 }
 
 __datasets_create() {
-    Echo "Creating and mounting datasets in /mnt..."
+    echo "Creating and mounting datasets in /mnt..."
     # / (root) datasets
     zfs create -o mountpoint=none -o canmount=off -o sync=always ${POOL_NAME}/ROOT
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/ROOT/nixos
@@ -260,7 +260,7 @@ __bootstrap_nixcfg() {
     cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
 
     "Executing nixos-generate-config --root /mnt"
-    nixos-generate-config --root /mnt || echo "nixos-generate-config --root /mnt failed" ; exit
+    nixos-generate-config --root /mnt || exit
 
     if [[ ${POOL_HOSTID} == "random" ]]
     then
@@ -282,7 +282,8 @@ EOF
 
     if [[ ${DBG_MODE} == "" ]]
     then
-        nixos-install --root /mnt ||  echo "nixos-install --root /mnt failed" ; exit
+        echo "executing nixos-install --root /mnt"
+        nixos-install --root /mnt ||  exit
     fi
 }
 
@@ -309,7 +310,10 @@ EOF
     umount /mnt/home
     umount /mnt/tmp
     umount /mnt
-    zpool export ${POOL_NAME}
+    if [[ ${USE_ZSWAP} == "true" ]]
+       then
+           swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
+    fi
 
     read -p "Finished. Reboot now? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
