@@ -210,7 +210,7 @@ __bootstrap_nixcfg() {
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [
-./nixos/hardware-configuration.nix
+./hardware-configuration.nix
 ];
 networking.hostId = "${POOL_HOSTID}";
 }
