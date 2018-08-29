@@ -7,22 +7,27 @@
 # The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-__usage_check() {
-    usage() {
+usage() {
         cat << EOF
 Usage : themelios <git-url> <host.nix>
 EOF
-    }
-    [ $# -eq 2 ] || usage
-    NIXCFG_REPO=$1
-    NIXCFG_HOST=$2
+        exit
 }
+[ $# -eq 2 ] || usage
+NIXCFG_REPO=$1
+NIXCFG_HOST=$2
 
 __initial_warning() {
     echo "WARNING: The following script intends to replace all of your disk(s) \
-contents with a fresh zfs-on-root NixOS installation."
+contents with a zfs-on-root NixOS installation and bootstrap your configuration.nix."
     echo ""
-    read -p "Continue? (Y or N) " -n 1 -r
+    echo "IMPORTANT: Ensure the input format resembles the following example:"
+    echo "themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
+    echo "where hpZ620.nix is in the project_root/hosts/ directory and contains a \"bootstrap block.\""
+    echo ""
+    echo "Internet connection required."
+    echo ""
+    read -p "Ready? (Y or N) " -n 1 -r
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
         echo "Aborted." ; exit
@@ -68,7 +73,7 @@ __get_custom_nixcfg() {
     # TODO git preserve permissions and restore from https to git remotes
     git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO
 
-    BOOTSTRAP_BLOCK=$(grep "#|" ${NIXCFG_DIR}${NIXCFG_HOST} | cut -d '|' -f 2)
+    BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)
     IFS=$'\n'
     for CFG_VAR in ${BOOTSTRAP_BLOCK}
     do
