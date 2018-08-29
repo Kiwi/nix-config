@@ -6,11 +6,10 @@
 
 # Usage: themelios <git-url> <host.nix>
 
-# Example: themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
+# Example command: "themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
 # Where hpZ620.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
-# A "bootstrap block" must be in the following format:
-
+# A "bootstrap block" is just bash variables prefixed with #| in a .nix file.
 #|POOL_NAME=zroot
 #|POOL_TYPE=mirror
 #|POOL_DISKS=/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C554 /dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0
@@ -220,9 +219,17 @@ EOF
         /mnt/etc/nixos/configuration.nix
 
     nixos-install --root /mnt
+    set -e
+    umount /mnt
+    zpool export ${POOL_NAME}
 
-    # zpool export ${POOL_NAME}
-    # ask user if would like to make any further changes before reboot
+        read -p "Finished. Reboot now? (Y or N) " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        reboot
+    fi
+
+    exit
 }
 
 __thank_you() {
