@@ -30,8 +30,6 @@ with lib;
       # clean /tmp automatically on boot
       boot.cleanTmpDir = true;
 
-      # TODO add script here for com...
-
     };
 
   }

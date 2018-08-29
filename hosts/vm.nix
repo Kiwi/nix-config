@@ -20,10 +20,9 @@
   ];
 
    networking = {
-     networkmanager.enable = false;
      hostName = "nixvm";
-    usePredictableInterfaceNames = false;
-    interfaces.eth0.ip4 = [{
+     usePredictableInterfaceNames = false;
+     interfaces.eth0.ip4 = [{
       address = "192.168.122.99";
       prefixLength = 24;
     }];
@@ -33,10 +32,6 @@
     firewall.allowedTCPPorts = [ 22 ];
     firewall.allowedUDPPorts = [ 22 ];
   };
-
-  boot.supportedFilesystems = [ "zfs" ];
-
-  environment.systemPackages = with pkgs; [ git ];
 
    # Bootstrap Block - Set one variable per line beginning with #|
      #|POOL_NAME=zroot
