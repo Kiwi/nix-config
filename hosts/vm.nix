@@ -16,15 +16,15 @@
    mine.zfs.enable = true;
 
    # Bootstrap Block - Set one variable per line beginning with #|
-     #|POOL_NAME="zroot"
-     #|POOL_TYPE="mirror"
-     #|POOL_DISKS="/dev/sda /dev/sdb"
-     #|POOL_HOSTID="random"
-     #|NIXCFG_LOCATION="/nix-config/"
-     #|REMOVE_REMNANTS="true"
-     #|ATIME="false"
-     #|SNAPSHOT_ROOT="true"
-     #|SNAPSHOT_HOME="true"
-     #|USE_ZSWAP="false"
-     #|ZSWAP_SIZE="4G"
+     #|POOL_NAME=zroot
+     #|POOL_TYPE=mirror
+     #|POOL_DISKS=/dev/sda /dev/sdb
+     #|POOL_HOSTID=random
+     #|NIXCFG_LOCATION=/nix-config/
+     #|REMOVE_REMNANTS=true
+     #|ATIME=false
+     #|SNAPSHOT_ROOT=true
+     #|SNAPSHOT_HOME=true
+     #|USE_ZSWAP=false
+     #|ZSWAP_SIZE=4G
  }
