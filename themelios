@@ -12,15 +12,37 @@
 # Where hpZ620.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 # A "bootstrap block" is just bash variables prefixed with #| as follows:
-#|POOL_NAME=zroot
-#|POOL_TYPE=raidz1
-#|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
-#|POOL_HOSTID=random
+
+# Where we clone the git repo.
+# Beginning and Trailing slashes required + must be a root level directory
 #|NIXCFG_LOCATION=/nix-config/
+
+# The pool disks must be on one line separated by spaces:
+# Using /dev/disk/by-id is preferable.
+#|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
+
+# May be "single" "mirror" "raidz1" etc...
+#|POOL_TYPE=raidz1
+
+# The name of the zpool. Typically zroot or rpool. It may be anything.
+#|POOL_NAME=zroot
+
+# The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
+# You should try to make this ID unique among your machines.
+#|POOL_HOSTID=random
+
+# Whether or not to use sgdisk and wipefs to remove disk partition tables and signatures
+# Useful if the disk is not brand new, and you don't want to wait to zero the disks entirely.
 #|REMOVE_REMNANTS=true
+
+# Whether or not to use "atime", leave to false if using SSD to reduce disk writes.
 #|ATIME=false
+
+# Set com.sun:auto-snapshot property on various datasets.
 #|SNAPSHOT_ROOT=true
 #|SNAPSHOT_HOME=true
+
+
 #|USE_ZSWAP=false
 #|ZSWAP_SIZE=4G
 # Note: Use POOL_TYPE=single for single disk setups or POOL_TYPE=mirror for mirrored setups.
@@ -61,7 +83,7 @@ __uefi_or_legacy() {
 __switch_if_needed() {
     if [[ ${NEEDS_SWITCH} == "true" ]]
     then
-        nixos-rebuild switch
+        nixos-rebuild switch || exit ; echo "nixos-rebuild switch from switch_if_needed failed"
         NEEDS_SWITCH="false"
     fi
 }
@@ -87,23 +109,31 @@ __bootstrap_git() {
 }
 
 __get_custom_nixcfg() {
-    # TODO git preserve permissions and restore from https to git remotes
-    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO
+    echo "Fetching git repository to /tmp location..."
+    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit ; echo "git clone failed"
 
+    echo "Extracting configuration variables from bootstrap block..."
     BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)
     IFS=$'\n'
     for CFG_VAR in ${BOOTSTRAP_BLOCK}
     do
         export ${CFG_VAR}
+        echo "${CFG_VAR}"
     done
     POOL_DISKS=$(echo $POOL_DISKS | sed 's/ /\n/g')
+    echo "POOL_DISKS parsed as: ${POOL_DISKS}"
 
-    # translate configure options from true/false to zfs style "on/off"
+    # translate configuration options if needed.
+    echo "Translating configuration options..."
     if [[ ${ATIME} == "true" ]]
     then
         ATIME="on"
     else
         ATIME="off"
+    fi
+    if [[ ${POOL_TYPE} == "single" ]]
+    then
+        POOL_TYPE=""
     fi
 }
 
@@ -113,17 +143,16 @@ __disk_prep() {
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
         do
-            sgdisk --clear ${DISK_ID}
-            wipefs --all ${DISK_ID}
+            echo "Clearing disk with sgdisk..."
+            sgdisk --clear ${DISK_ID} || exit ; echo "sgdisk --clear failed"
+            echo "Wiping disk signatures with wipefs..."
+            wipefs --all ${DISK_ID} || exit ; echo "wipefs --all failed"
         done
     fi
 }
 
 __zpool_create() {
-    if [[ ${POOL_TYPE} == "single" ]]
-    then
-        POOL_TYPE=""
-    fi
+    echo "Creating zpool..."
     zpool create -f \
           -o ashift=12 \
           -O compression=lz4 \
@@ -135,17 +164,19 @@ __zpool_create() {
           -R /mnt \
           ${POOL_NAME:?"Please define pool name."} \
           ${POOL_TYPE} \
-          ${POOL_DISKS:?"Please define pool disks."}
+          ${POOL_DISKS:?"Please define pool disks."} || exit ; echo "pool creation failed."
 
     IFS=$'\n'
     for DISK_ID in ${POOL_DISKS}
     do
-        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID}
+        echo "Creating BIOS boot partition..."
+        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || exit ; echo "bios boot partition creation failed"
         partx -u ${DISK_ID}
     done
 }
 
 __datasets_create() {
+    Echo "Creating and mounting datasets in /mnt..."
     # / (root) datasets
     zfs create -o mountpoint=none -o canmount=off -o sync=always ${POOL_NAME}/ROOT
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/ROOT/nixos
@@ -167,6 +198,7 @@ __datasets_create() {
     # zswap option
     if [[ ${USE_ZSWAP} == "true" ]]
     then
+        echo "Creation ZSWAP volume and turning on swap..."
         zfs create \
             -o primarycache=metadata \
             -o secondarycache=metadata \
@@ -189,22 +221,37 @@ __datasets_create() {
 __zfs_auto_snapshot() {
     if [[ ${SNAPSHOT_HOME} == "true" ]]
     then
+        echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
-    elif [[ ${SNAPSHOT_ROOT} == "true" ]]
+    elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+         then
+        echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
+        zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
+    fi
+
+    if [[ ${SNAPSHOT_ROOT} == "true" ]]
     then
+        echo "Setting com.sun:auto-snapshot=true for ROOT datasets..."
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
+    elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+    then
+        echo "Setting com.sun:auto-snapshot=false for ROOT datasets..."
+        zfs set com.sun:auto-snapshot=false ${POOL_NAME}/ROOT
     fi
 }
 
 __bootstrap_nixcfg() {
-    # put the repo in its proper location now
+    echo "Moving repo from /tmp to /mnt${NIXCFG_LOCATION}..."
     cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
 
+    "Executing nixos-generate-config --root /mnt"
     nixos-generate-config --root /mnt
 
     if [[ ${POOL_HOSTID} == "random" ]]
     then
+        echo "Generating random hostid..."
         POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
+        echo "${POOL_HOSTID}"
     fi
 
     cat <<EOF > /mnt/etc/nixos/configuration.nix
@@ -218,7 +265,10 @@ EOF
     sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
-    nixos-install --root /mnt || exit
+    if [[ ${DBG_MODE} == "" ]]
+    then
+        nixos-install --root /mnt || exit
+    fi
 }
 
 __thank_you() {
