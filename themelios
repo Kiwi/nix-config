@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Copyright 2018 sch@efers.org
+# Copyright 2018 Adam Schaefers sch@efers.org
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 # The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+# Bootstrap a custom zfs-on-root NixOS install with custom settings in one command.
 
 # Usage: themelios <git-url> <host.nix>
 
@@ -10,9 +12,10 @@
 # Where hpZ620.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 # A "bootstrap block" is just bash variables prefixed with #| in a .nix file.
+# Note: Use POOL_TYPE=single for single disk setups or POOL_TYPE=mirror for mirrored setups.
 #|POOL_NAME=zroot
-#|POOL_TYPE=mirror
-#|POOL_DISKS=/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C554 /dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0
+#|POOL_TYPE=raidz1
+#|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
 #|POOL_HOSTID=random
 #|NIXCFG_LOCATION=/nix-config/
 #|REMOVE_REMNANTS=true
@@ -124,6 +127,10 @@ __disk_prep() {
 }
 
 __zpool_create() {
+    if [[ ${POOL_TYPE} == "single" ]]
+    then
+        POOL_TYPE=""
+    fi
     zpool create -f \
           -o ashift=12 \
           -O compression=lz4 \
