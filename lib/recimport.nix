@@ -1,5 +1,7 @@
 { lib, dir, ...}:
-
+#(./. + "/kexec") does not fail, but "${./.}/kexec" does
+#<clever> just stop quoting the dir and the problem will go away
+#<clever> then getDir dir + "/${file}"
 with lib;
 
 let
@@ -7,7 +9,8 @@ let
   # value of attrs is the filetype
   getDir =  (dir: mapAttrs (file: type:
     if type == "directory"
-    then getDir "${dir}/${file}"
+    # then getDir "${dir}/${file}"
+    then getDir dir + "/${file}"
     else type)
     (builtins.readDir dir));
 

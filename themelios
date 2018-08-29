@@ -189,16 +189,16 @@ __bootstrap_nixcfg() {
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [
-/etc/nixos/hardware-configuration.nix
+./nixos/hardware-configuration.nix
 ];
 networking.hostId = "${POOL_HOSTID}";
 }
 EOF
-    sed -i "/imports/a ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
+    sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
-    # TODO
-    # nixos-install
+    nixos-install --root /mnt
+
     # zpool export ${POOL_NAME}
     # ask user if would like to make any further changes before reboot
 }
