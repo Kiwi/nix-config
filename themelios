@@ -219,18 +219,6 @@ EOF
         /mnt/etc/nixos/configuration.nix
 
     nixos-install --root /mnt
-    umount /mnt/home
-    umount /mnt/tmp
-    umount /mnt
-    zpool export ${POOL_NAME}
-
-        read -p "Finished. Reboot now? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        reboot
-    fi
-
-    exit
 }
 
 __thank_you() {
@@ -252,6 +240,19 @@ N::::::N       N:::::::NI::::::::IX:::::X       X:::::X
 N::::::N        N::::::NI::::::::IX:::::X       X:::::X
 NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
 EOF
+
+    umount /mnt/home
+    umount /mnt/tmp
+    umount /mnt
+    zpool export ${POOL_NAME}
+
+    read -p "Finished. Reboot now? (Y or N) " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        reboot
+    fi
+
+    exit
 }
 
 __uefi_or_legacy       # check for legacy or uefi bios
