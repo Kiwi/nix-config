@@ -110,7 +110,7 @@ __bootstrap_git() {
 
 __get_custom_nixcfg() {
     echo "Fetching git repository to /tmp location..."
-    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit ; echo "git clone failed"
+    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
 
     echo "Extracting configuration variables from bootstrap block..."
     BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)
@@ -144,9 +144,9 @@ __disk_prep() {
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Clearing disk with sgdisk..."
-            sgdisk --clear ${DISK_ID} || exit ; echo "sgdisk --clear failed"
+            sgdisk --clear ${DISK_ID} || echo "sgdisk --clear failed" ; exit
             echo "Wiping disk signatures with wipefs..."
-            wipefs --all ${DISK_ID} || exit ; echo "wipefs --all failed"
+            wipefs --all ${DISK_ID} || echo "wipefs --all failed" ; exit
         done
     fi
 }
@@ -164,13 +164,13 @@ __zpool_create() {
           -R /mnt \
           ${POOL_NAME:?"Please define pool name."} \
           ${POOL_TYPE} \
-          ${POOL_DISKS:?"Please define pool disks."} || exit ; echo "pool creation failed."
+          ${POOL_DISKS:?"Please define pool disks."} || echo "pool creation failed." ; exit
 
     IFS=$'\n'
     for DISK_ID in ${POOL_DISKS}
     do
         echo "Creating BIOS boot partition..."
-        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || exit ; echo "bios boot partition creation failed"
+        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || echo "bios boot partition creation failed" ; exit
         partx -u ${DISK_ID}
     done
 }
@@ -245,7 +245,7 @@ __bootstrap_nixcfg() {
     cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
 
     "Executing nixos-generate-config --root /mnt"
-    nixos-generate-config --root /mnt
+    nixos-generate-config --root /mnt || echo "nixos-generate-config --root /mnt failed" ; exit
 
     if [[ ${POOL_HOSTID} == "random" ]]
     then
@@ -267,7 +267,7 @@ EOF
 
     if [[ ${DBG_MODE} == "" ]]
     then
-        nixos-install --root /mnt || exit
+        nixos-install --root /mnt ||  echo "nixos-install --root /mnt failed" ; exit
     fi
 }
 
