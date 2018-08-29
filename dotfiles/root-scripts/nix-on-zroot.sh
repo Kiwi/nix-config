@@ -271,6 +271,7 @@ EOF
 
     # nixos-install
     # zpool export ${POOL_NAME}
+    # ask user if would like to make any further changes before reboot
 }
 
 __thank_you() {
@@ -294,10 +295,6 @@ NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
 EOF
 }
 
-#################
-# Action !      #
-#################
-
 # SCRIPT OUTLINE
 
 __stage_0() {
@@ -310,7 +307,7 @@ __stage_1() {
     which zfs > /dev/null 2>&1 || __bootstrap_zfs # install zfs if needed to livedisk
     which git > /dev/null 2>&1 || __bootstrap_git # install git if needed to livedisk
     __switch_if_needed # reconfigure nix livedisk if needed
-    __translate_config # convert configuration variables from true / false to various formats
+    __translate_config # convert variables from true / false to various formats
     __disk_prep # use sgdisk and wipefs to cleanup old disks
     __zpool_create # create zpool, gpt partition disk, make bios boot partition
     __datasets_create # create a zfs dataset layout
@@ -320,6 +317,10 @@ __stage_1() {
 __stage_3() {
     __bootstrap_nixcfg # bootstrap the users custom nix configurations
 }
+
+#################
+# Action !      #
+#################
 
 __stage_0
 __stage_1
