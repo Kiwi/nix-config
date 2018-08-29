@@ -68,29 +68,6 @@ ZSWAP_SIZE="4G"
 # defun ()      #
 #################
 
-# SCRIPT OUTLINE
-
-__stage_0() {
-    __usage_check # check for proper script input from user
-    __uefi_or_legacy # check for legacy or uefi bios
-    __initial_warning # warn user of potential doom
-}
-
-__stage_1() {
-    which zfs > /dev/null 2>&1 || __bootstrap_zfs # install zfs if needed to livedisk
-    which git > /dev/null 2>&1 || __bootstrap_git # install git if needed to livedisk
-    __switch_if_needed # reconfigure nix livedisk if needed
-    __translate_config # convert configuration variables from true / false to various formats
-    __disk_prep # use sgdisk and wipefs to cleanup old disks
-    __zpool_create # create zpool, gpt partition disk, make bios boot partition
-    __datasets_create # create a zfs dataset layout
-    __zfs_auto_snapshot # set com.sun:auto-snapshot properties
-}
-
-__stage_3() {
-    __bootstrap_nixcfg # bootstrap the users custom nix configurations
-}
-
 __usage_check() {
     usage ()
     {
@@ -320,6 +297,29 @@ EOF
 #################
 # Action !      #
 #################
+
+# SCRIPT OUTLINE
+
+__stage_0() {
+    __usage_check # check for proper script input from user
+    __uefi_or_legacy # check for legacy or uefi bios
+    __initial_warning # warn user of potential doom
+}
+
+__stage_1() {
+    which zfs > /dev/null 2>&1 || __bootstrap_zfs # install zfs if needed to livedisk
+    which git > /dev/null 2>&1 || __bootstrap_git # install git if needed to livedisk
+    __switch_if_needed # reconfigure nix livedisk if needed
+    __translate_config # convert configuration variables from true / false to various formats
+    __disk_prep # use sgdisk and wipefs to cleanup old disks
+    __zpool_create # create zpool, gpt partition disk, make bios boot partition
+    __datasets_create # create a zfs dataset layout
+    __zfs_auto_snapshot # set com.sun:auto-snapshot properties
+}
+
+__stage_3() {
+    __bootstrap_nixcfg # bootstrap the users custom nix configurations
+}
 
 __stage_0
 __stage_1
