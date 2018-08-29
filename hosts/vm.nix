@@ -3,6 +3,7 @@
  {
    imports = [
      ../modules/nixos/nixos-etc.nix
+     ../modules/nixos/nixos-zfs.nix
    ];
 
    boot.kernelModules = [ "microcode" ];
