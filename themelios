@@ -109,8 +109,23 @@ __bootstrap_git() {
 }
 
 __get_custom_nixcfg() {
-    echo "Fetching git repository to /tmp location..."
-    git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
+
+    # for github users we clone https but we switch to ssh remote for interactive convenience.
+    GITHUB_USER=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 4)
+    GITHUB_REPO=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 5)
+    GITHUBHTTPSREMOTE=https://github.com/$GITHUB_USER/$GITHUB_REPO
+    GITHUBSSHREMOTE=git@github.com:$GITHUB_USER/$GITHUB_REPO
+    if [[ $GITHUB_USER != "" ]]
+    then
+        echo "Fetching github repository to /tmp location via https remote..."
+        git clone $GITHUBHTTPSREMOTE /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
+        echo "Switching remote to ssh for user convenience..."
+        cd /tmp/NIX_REPO
+        git remote set-url origin $GITHUBSSHREMOTE
+    else
+        echo "Fetching git repository to /tmp location..."
+        git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || echo "git clone failed" ; exit
+    fi
 
     echo "Extracting configuration variables from bootstrap block..."
     BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)

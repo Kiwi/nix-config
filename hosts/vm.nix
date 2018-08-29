@@ -35,14 +35,14 @@
 
    # Bootstrap Block - Set one variable per line beginning with #|
      #|POOL_NAME=zroot
-     #|POOL_TYPE=single
-     #|POOL_DISKS=/dev/sda
+     #|POOL_TYPE=raidz1
+     #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
      #|POOL_HOSTID=random
      #|NIXCFG_LOCATION=/nix-config/
      #|REMOVE_REMNANTS=true
      #|ATIME=false
      #|SNAPSHOT_ROOT=true
      #|SNAPSHOT_HOME=true
-     #|USE_ZSWAP=false
+     #|USE_ZSWAP=true
      #|ZSWAP_SIZE=4G
  }
