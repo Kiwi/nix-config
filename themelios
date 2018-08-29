@@ -193,7 +193,7 @@ __bootstrap_nixcfg() {
 networking.hostId = "${POOL_HOSTID}";
 }
 EOF
-    sed -i '/imports/a ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}' \
+    sed -i "/imports/a ${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
     # TODO
