@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Usage : themelios -g <git-url> -h <host.nix>
+# Usage : themelios <git-url> <host.nix>
 
 # Copyright 2018 sch@efers.org
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -10,11 +10,11 @@
 __usage_check() {
     usage() {
         cat << EOF
-Usage : themelios -g <git-url> -h <host.nix>
+Usage : themelios <git-url> <host.nix>
 EOF
     }
 
-    [ $# -eq 2 ] && usage
+    [ $# -eq 2 ] || usage
     NIXCFG_REPO=$1
     NIXCFG_HOST=$2
 }
