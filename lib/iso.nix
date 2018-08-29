@@ -1,0 +1,40 @@
+# build via
+# nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
+# The resulting image can be found in result:
+# ls result/iso/
+
+{config, pkgs, ...}:
+{
+  imports = [
+    <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
+
+    # Provide an initial copy of the NixOS channel so that the user
+    # doesn't need to run "nix-channel --update" first.
+    <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
+  ];
+
+
+  systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVukS7izRS8xtTgAGcqi0UceqWV2EU/Fj9Z7cvfOwqrxMY0ffuyvvqE3Xez/CVuM+1QY/QECBUZjuurG7G2SubkHsH9j+n5b9fdSx5mzZ/jvzplSluJn/jrv88EmnMGwGv4/ylKi6FVFHhOUGWLu8cfISEe/6ZhZFWANFUSpSfXssvLVjDritazdIf8KEvZoFDw7AX+xf1YJ87WJA8ZENbsWhmI5U6nPat4rVIp4bgBcoMtukaktDdGWWxhbJLIaTJ+xHXHZ0yG+qzqg9kEF4KL1X3/sJdjKA7IvrRStK/aSiN3bXFfIA9WX5tFgJETDC4GEE9KdoMVEi3Fw9v3XbF adam@zbox"
+  ];
+
+  networking = {
+    usePredictableInterfaceNames = false;
+    interfaces.eth0.ip4 = [{
+      address = "192.168.122.99";
+      prefixLength = 24;
+    }];
+    defaultGateway = "192.168.122.255";
+    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    # networkmanager.enable = true;
+    firewall.allowPing = true;
+    firewall.allowedTCPPorts = [ 22 ];
+    firewall.allowedUDPPorts = [ 22 ];
+  };
+
+  boot.supportedFilesystems = [ "zfs" ];
+
+  environment.systemPackages = with pkgs; [ git ];
+
+}

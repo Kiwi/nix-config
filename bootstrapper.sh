@@ -241,7 +241,8 @@ __zfs_hostid() {
 
 __get_custom_nixcfg() {
     # TODO git preserve permissions and restore from https to git remotes
-    git clone ${NIXCFG_REPO} /mnt{NIXCFG_LOCATION}
+    git clone ${NIXCFG_REPO} ${NIXCFG_LOCATION}
+    cp -rp ${NIXCFG_LOCATION} /mnt
 }
 
 __bootstrap_nixcfg() {
@@ -290,21 +291,22 @@ EOF
 
 # SCRIPT OUTLINE
 
-__stage_0() {
+__stage_1() {
     __usage_check # check for proper script input from user
     __uefi_or_legacy # check for legacy or uefi bios
     __initial_warning # warn user of potential doom
 }
 
-__stage_1() {
+__stage_2() {
     which zfs > /dev/null 2>&1 || __bootstrap_zfs # install zfs if needed to livedisk
     which git > /dev/null 2>&1 || __bootstrap_git # install git if needed to livedisk
     __switch_if_needed # reconfigure nix livedisk if needed
     __translate_config # convert variables from true / false to various formats
-    __disk_prep # use sgdisk and wipefs to cleanup old disks
-    __zpool_create # create zpool, gpt partition disk, make bios boot partition
-    __datasets_create # create a zfs dataset layout
-    __zfs_auto_snapshot # set com.sun:auto-snapshot properties
+    __get_custom_nixcfg # download user's nix configuration
+                        __disk_prep # use sgdisk and wipefs to cleanup old disks
+                        __zpool_create # create zpool, gpt partition disk, make bios boot partition
+                        __datasets_create # create a zfs dataset layout
+                        __zfs_auto_snapshot # set com.sun:auto-snapshot properties
 }
 
 __stage_3() {
@@ -315,7 +317,7 @@ __stage_3() {
 # Action !      #
 #################
 
-__stage_0
 __stage_1
 __stage_2
+__stage_3
 __thank_you # May you have a Happy Hacking. :)
