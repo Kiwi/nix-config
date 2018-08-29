@@ -78,21 +78,7 @@ __get_custom_nixcfg() {
     for CFG_VAR in ${BOOTSTRAP_BLOCK}
     do
         export ${CFG_VAR}
-        echo ${CFG_VAR} #DBG
     done
-
-    #DBG
-    echo $POOL_NAME
-    echo $POOL_TYPE
-    echo $POOL_DISKS
-    echo $POOL_HOSTID
-    echo $NIXCFG_LOCATION
-    echo $REMOVE_REMNANTS
-    echo $ATIME
-    echo $SNAPSHOT_ROOT
-    echo $SNAPSHOT_HOME
-    echo $USE_ZSWAP
-    echo $ZSWAP_SIZE
 
     # translate configure options from true/false to zfs style "on/off"
     if [[ ${ATIME} == "true" ]]
@@ -239,7 +225,6 @@ EOF
 # SCRIPT OUTLINE
 
 __stage_1() {
-    __usage_check          # check for proper script input from user
     __uefi_or_legacy       # check for legacy or uefi bios
     __initial_warning      # warn user of potential doom
 }
@@ -249,7 +234,6 @@ __stage_2() {
     __bootstrap_git        # install git if needed to the livedisk
     __switch_if_needed     # reconfigure nix livedisk if needed
     __get_custom_nixcfg    # download the host machine configuration
-     exit
     __disk_prep            # use sgdisk and wipefs to cleanup old disks
     __zpool_create         # create the zpool, make gpt bios boot partition
     __datasets_create      # create a zfs dataset layout
