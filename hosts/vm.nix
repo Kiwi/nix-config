@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 # zfs test vm settings
  {
-   imports = [ ../modules ];
+   imports = [
+     ../modules/nixos/nixos-zfs.nix
+     ../modules/nixos/nixos-etc.nix
+   ];
 
    boot.kernelModules = [ "microcode" ];
    boot.kernelParams = [ "" ];
@@ -11,14 +14,12 @@
 
    networking.hostName = "nixvm";
 
-   #networking.hostId = "007f0100";
-
    mine.zfs.enable = true;
 
    # Bootstrap Block - Set one variable per line beginning with #|
      #|POOL_NAME=zroot
-     #|POOL_TYPE=mirror
-     #|POOL_DISKS=/dev/sda /dev/sdb
+     #|POOL_TYPE=single
+     #|POOL_DISKS=/dev/sda
      #|POOL_HOSTID=random
      #|NIXCFG_LOCATION=/nix-config/
      #|REMOVE_REMNANTS=true

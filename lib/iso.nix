@@ -25,7 +25,7 @@
       address = "192.168.122.99";
       prefixLength = 24;
     }];
-    defaultGateway = "192.168.122.255";
+    defaultGateway = "192.168.122.1";
     nameservers = [ "8.8.8.8" "8.8.4.4" ];
     # networkmanager.enable = true;
     firewall.allowPing = true;
