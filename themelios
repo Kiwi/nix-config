@@ -219,7 +219,8 @@ EOF
         /mnt/etc/nixos/configuration.nix
 
     nixos-install --root /mnt
-    set -e
+    umount /mnt/home
+    umount /mnt/tmp
     umount /mnt
     zpool export ${POOL_NAME}
 
