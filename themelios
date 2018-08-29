@@ -13,7 +13,6 @@ __usage_check() {
 Usage : themelios <git-url> <host.nix>
 EOF
     }
-
     [ $# -eq 2 ] || usage
     NIXCFG_REPO=$1
     NIXCFG_HOST=$2
