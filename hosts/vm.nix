@@ -9,7 +9,7 @@
    boot.kernelParams = [ "" ];
 
    # put devices all on one line if using nix-on-zroot.sh (for now...)
-   boot.loader.grub.devices = [ "/dev/sda" "/dev/sdb" ];
+   boot.loader.grub.devices = [ "/dev/sda" ];
 
    networkmanager.enable = false;
 
