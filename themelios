@@ -335,13 +335,14 @@ N::::::N        N::::::NI::::::::IX:::::X       X:::::X
 NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
 EOF
 
-    umount /mnt/home
-    umount /mnt/tmp
-    umount /mnt
+
     if [[ ${USE_ZSWAP} == "true" ]]
        then
            swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
     fi
+    umount /mnt/home
+    umount /mnt/tmp
+    umount /mnt
 
     read -p "Finished. Reboot now? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
