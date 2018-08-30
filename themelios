@@ -18,7 +18,7 @@ EOF
 
 help() {
     cat <<EOF
-Themelios - Bootstrap zfs-on-root NixOS in one-shot.
+Themelios - Bootstrap a zfs-on-root NixOS in one-shot.
 
 Usage : themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
@@ -31,11 +31,16 @@ Github users may also use a shorthand:
 
        themelios a-schaefers/nix-config hpZ620.nix
 
-The idea of project_root/hosts/ is that it contains all machine-specific NixOS configurations, including any and all imports-- (just use relative path imports!)
+The idea of project_root/hosts/ is that it contains all machine-specific NixOS
+configurations, including any and all imports--
+(just use relative path imports!)
 
-The /etc/nixos/configuration.nix file created by themelios will simply import your host.nix file. You may place all of your per-machine configurations in this file and themelios will bootstrap your machine.
+The /etc/nixos/configuration.nix file created by themelios will simply import
+your host.nix file. You may place all of your per-machine configurations in this
+ file and themelios will bootstrap your machine.
 
-A Bootstrap block in a project_root/hosts/host.nix file needs to be formatted as follows:
+A Bootstrap block in a project_root/hosts/host.nix file needs to be formatted
+as follows:
 
   #|POOL_NAME=zroot
   #|POOL_TYPE=raidz1
@@ -54,8 +59,10 @@ A Bootstrap block in a project_root/hosts/host.nix file needs to be formatted as
 Notes:
 -Set one variable per line beginning with #| (NO LINE BREAKS / NO QUOTES)
 -POOL_TYPE needs to be single,mirror,raidz1,raidz2,raidz3
--POOL_DISKS should be separated by spaces and using /dev/disk/by-id is recommended but not required.
--Using both Wipefs And Sgdisk is recommended for used disks unless you are zeroing disks.
+-POOL_DISKS should be separated by spaces and using /dev/disk/by-id is
+recommended but not required.
+-Using both Wipefs And Sgdisk is recommended for used disks unless you are
+zeroing disks.
 -Atime is not recommended for use with SSD.
 -Swapping is not a great idea with ZFS, but it is an option.
 EOF
