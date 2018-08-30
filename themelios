@@ -6,7 +6,7 @@
 
 usage() {
     cat << EOF
-Usage: themelios <git remote> <host.nix>
+Usage: themelios <host.nix> <git remote> <branch (optional)>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 Use -h or --help for more instructions.
@@ -69,14 +69,24 @@ EOF
 
 [[ $1 == "-h" ]] && help
 [[ $1 == "--help" ]] && help
-[[ $# -eq 2 ]] || usage
-NIXCFG_REPO=$1
-NIXCFG_HOST=$2
+[[ $# -lt 2 ]] || usage
+[[ $# -gt 3 ]] || usage
+NIXCFG_HOST=$1
+NIXCFG_REPO=$2
+NIXCFG_BRANCH=$3
 
 __initial_warning() {
     echo "WARNING: The following script intends to replace all of your disk(s) \
 contents with a zfs-on-root NixOS installation and bootstrap your configuration.nix."
     read -p "Ready? (Y or N) " -n 1 -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "Aborted." ; exit
+    fi
+}
+
+__fail_warning() {
+    read -p "The previous command failed. Continue running script or abort? (Y or N) " -n 1 -r
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
         echo "Aborted." ; exit
@@ -93,7 +103,7 @@ __uefi_or_legacy() {
 __switch_if_needed() {
     if [[ ${NEEDS_SWITCH} == "true" ]]
     then
-        nixos-rebuild switch || exit ; echo "nixos-rebuild switch from switch_if_needed failed"
+        nixos-rebuild switch || echo "nixos-rebuild switch from switch_if_needed failed" ; __fail_warning
         NEEDS_SWITCH="false"
     fi
 }
@@ -120,33 +130,46 @@ __bootstrap_git() {
 
 __get_custom_nixcfg() {
 
-    # for github users we clone https but we switch to ssh remote for interactive convenience.
-    GH_SHORTHAND=$(echo ${NIXCFG_REPO} | grep -v ".git")
-    GITHUB_URL=$(echo ${NIXCFG_REPO} | grep "github.com")
-
-    __github_clone_and_switch() {
-        GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
-        GITHUBSSHREMOTE=git@github.com:${GITHUB_USER}/${GITHUB_REPO}
-        git clone ${GITHUBHTTPSREMOTE} /tmp/NIXCFG_REPO || exit
-        echo "Switching remote to ssh for user convenience..."
+    __checkout_branch() {
+        echo "Checking out ${GITHUBSSHREMOTE}"
+        cd /tmp/NIXCFG_REPO
+        git checkout ${NIXCFG_BRANCH}
+    }
+    __switch_github_remotes() {
+        echo "Switching remote from https to ${GITHUBSSHREMOTE} for user convenience..."
         cd /tmp/NIXCFG_REPO
         git remote set-url origin ${GITHUBSSHREMOTE}
     }
+
+    GH_SHORTHAND=$(echo ${NIXCFG_REPO} | grep -v ".git")
+    GITHUB_URL=$(echo ${NIXCFG_REPO} | grep "github.com")
+
+    # for github users we clone https but we switch to ssh remote for interactive convenience.
+    __github_clone_and_switch() {
+        echo "Cloning repo via ${GITHUBHTTPSREMOTE}"
+        GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
+        GITHUBSSHREMOTE=git@github.com:${GITHUB_USER}/${GITHUB_REPO}
+        git clone ${GITHUBHTTPSREMOTE} /tmp/NIXCFG_REPO || __fail_warning
+        __switch_github_remotes
+        [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
+    }
+
     if [[ ${GITHUB_URL} ]]
     then
-        echo "Fetching github repository to /tmp location via https remote..."
          GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
-         GITHUB_REPO=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 5)
-        __github_clone_and_switch
+         GITHUB_REPO=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 5)
+         __github_clone_and_switch
+
     elif [[ ${GH_SHORTHAND} ]]
     then
-        echo "Fetching github repository to /tmp location via https remote..."
         GITHUB_USER=$(echo ${NIXCFG_REPO} | cut -d '/' -f 1)
         GITHUB_REPO=$(echo ${NIXCFG_REPO} | cut -d '/' -f 2)
         __github_clone_and_switch
+
     else
-        echo "Fetching git repository to /tmp location..."
-        git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit
+        echo "Cloning repo via ${NIXCFG_REPO}"
+        git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || __fail_warning
+        [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
     fi
 
     echo "Extracting configuration variables from bootstrap block..."
@@ -181,7 +204,7 @@ __disk_prep() {
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Clearing disk with sgdisk..."
-            sgdisk --clear ${DISK_ID} ||  exit
+            sgdisk --clear ${DISK_ID} || __fail_warning
         done
     fi
 
@@ -191,7 +214,7 @@ __disk_prep() {
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Wiping disk signatures with wipefs..."
-            wipefs --all ${DISK_ID} || exit
+            wipefs --all ${DISK_ID} || __fail_warning
         done
     fi
 
@@ -201,7 +224,7 @@ __disk_prep() {
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Writing Zeros to each disk, this may take a while..."
-            dd if=/dev/zero of=${DISK_ID} bs=4096 status=progress || exit
+            dd if=/dev/zero of=${DISK_ID} bs=4096 status=progress
         done
     fi
 }
@@ -219,13 +242,13 @@ __zpool_create() {
           -R /mnt \
           ${POOL_NAME:?"Please define pool name."} \
           ${POOL_TYPE} \
-          ${POOL_DISKS:?"Please define pool disks."} || exit
+          ${POOL_DISKS:?"Please define pool disks."} || __fail_warning
 
     IFS=$'\n'
     for DISK_ID in ${POOL_DISKS}
     do
         echo "Creating BIOS boot partition..."
-        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || exit
+        sgdisk -a1 -n2:48:2047 -t2:EF02 -c2:"BIOS boot partition" ${DISK_ID} || __fail_warning
         partx -u ${DISK_ID}
     done
 }
@@ -300,7 +323,7 @@ __bootstrap_nixcfg() {
     cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
 
     echo "Executing nixos-generate-config --root /mnt"
-    nixos-generate-config --root /mnt || exit
+    nixos-generate-config --root /mnt || __fail_warning
 
     if [[ ${POOL_HOSTID} == "random" ]]
     then
@@ -320,11 +343,20 @@ EOF
     sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
-    if [[ ${DBG} == "" ]]
-    then
+    __nixos-install() {
         echo "executing nixos-install --root /mnt"
-        nixos-install --root /mnt ||  exit
+        nixos-install --root /mnt
+    }
+
+    __fail_retry() {
+    read -p "nixos-install --root /mnt failed, retry? (Y or N) " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        __nixos-install
     fi
+    }
+
+    __nixos-install || __fail_retry
 }
 
 __thank_you() {
