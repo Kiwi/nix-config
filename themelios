@@ -68,8 +68,7 @@ EOF
 
 [[ $1 == "-h" ]] && help
 [[ $1 == "--help" ]] && help
-[ $# -eq 2 ] || usage
-
+[[ $# -eq 2 ]] || usage
 NIXCFG_REPO=$1
 NIXCFG_HOST=$2
 
@@ -121,17 +120,17 @@ __bootstrap_git() {
 __get_custom_nixcfg() {
 
     # for github users we clone https but we switch to ssh remote for interactive convenience.
-    GITHUB_USER=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 4)
+    GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
     GITHUB_REPO=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 5)
-    GITHUBHTTPSREMOTE=https://github.com/$GITHUB_USER/$GITHUB_REPO
-    GITHUBSSHREMOTE=git@github.com:$GITHUB_USER/$GITHUB_REPO
-    if [[ $GITHUB_USER != "" ]]
+    GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
+    GITHUBSSHREMOTE=git@github.com:${GITHUB_USER}/${GITHUB_REPO}
+    if [[ ${GITHUB_USER} != "" ]]
     then
         echo "Fetching github repository to /tmp location via https remote..."
-        git clone $GITHUBHTTPSREMOTE /tmp/NIXCFG_REPO || exit
+        git clone ${GITHUBHTTPSREMOTE} /tmp/NIXCFG_REPO || exit
         echo "Switching remote to ssh for user convenience..."
         cd /tmp/NIXCFG_REPO
-        git remote set-url origin $GITHUBSSHREMOTE
+        git remote set-url origin ${GITHUBSSHREMOTE}
     else
         echo "Fetching git repository to /tmp location..."
         git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit
@@ -308,7 +307,7 @@ EOF
     sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
-    if [[ ${DBG_MODE} == "" ]]
+    if [[ ${DBG} == "" ]]
     then
         echo "executing nixos-install --root /mnt"
         nixos-install --root /mnt ||  exit
@@ -340,9 +339,11 @@ EOF
        then
            swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
     fi
+    echo "Unmounting /mnt"
     umount /mnt/home
     umount /mnt/tmp
     umount /mnt
+    zpool export ${POOL_NAME}
 
     read -p "Finished. Reboot now? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]

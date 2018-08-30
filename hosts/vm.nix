@@ -39,7 +39,9 @@
      #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
      #|POOL_HOSTID=random
      #|NIXCFG_LOCATION=/nix-config/
-     #|REMOVE_REMNANTS=true
+     #|SGDISK_CLEAR=true
+     #|WIPEFS_ALL=true
+     #|ZERO_DISKS=false
      #|ATIME=false
      #|SNAPSHOT_ROOT=true
      #|SNAPSHOT_HOME=true
