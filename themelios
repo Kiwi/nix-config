@@ -64,6 +64,7 @@ zeroing them.
 -ATIME is not recommended for use with SSD.
 -Swapping is not a great idea with ZFS, but it is an option.
 EOF
+    exit
 }
 
 [[ $1 == "-h" ]] && help
