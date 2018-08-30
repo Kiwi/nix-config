@@ -5,13 +5,13 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 usage() {
-        cat << EOF
+    cat << EOF
 Usage : themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 Use -h or --help for more instructions.
 EOF
-        exit
+    exit
 }
 
 help() {
@@ -99,20 +99,20 @@ __switch_if_needed() {
 
 __bootstrap_zfs() {
     __install_zfs() {
-            sed -i '/imports/a \
+        sed -i '/imports/a \
 boot.supportedFilesystems = [ \"zfs\" ];' \
-        /etc/nixos/configuration.nix
-    NEEDS_SWITCH="true"
+            /etc/nixos/configuration.nix
+        NEEDS_SWITCH="true"
     }
     which zfs > /dev/null 2>&1 || __install_zfs
 }
 
 __bootstrap_git() {
     __install_git() {
-     sed -i '/imports/a \
+        sed -i '/imports/a \
  environment.systemPackages = with pkgs; [ git ];' \
-        /etc/nixos/configuration.nix
-    NEEDS_SWITCH="true"
+            /etc/nixos/configuration.nix
+        NEEDS_SWITCH="true"
     }
     which git > /dev/null 2>&1 || __install_git
 }
@@ -120,17 +120,29 @@ __bootstrap_git() {
 __get_custom_nixcfg() {
 
     # for github users we clone https but we switch to ssh remote for interactive convenience.
-    GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
-    GITHUB_REPO=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 5)
-    GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
-    GITHUBSSHREMOTE=git@github.com:${GITHUB_USER}/${GITHUB_REPO}
-    if [[ ${GITHUB_USER} != "" ]]
-    then
-        echo "Fetching github repository to /tmp location via https remote..."
+    GH_SHORTHAND=$(echo ${NIXCFG_REPO} | grep -v ".git")
+    GITHUB_URL=$(echo ${NIXCFG_REPO} | grep "github.com")
+
+    __github_clone_and_switch() {
+        GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
+        GITHUBSSHREMOTE=git@github.com:${GITHUB_USER}/${GITHUB_REPO}
         git clone ${GITHUBHTTPSREMOTE} /tmp/NIXCFG_REPO || exit
         echo "Switching remote to ssh for user convenience..."
         cd /tmp/NIXCFG_REPO
         git remote set-url origin ${GITHUBSSHREMOTE}
+    }
+    if [[ ${GITHUB_URL} ]]
+    then
+        echo "Fetching github repository to /tmp location via https remote..."
+         GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
+         GITHUB_REPO=$(echo $NIXCFG_REPO | grep github | cut -d '/' -f 5)
+        __github_clone_and_switch
+    elif [[ ${GH_SHORTHAND} ]]
+    then
+        echo "Fetching github repository to /tmp location via https remote..."
+        GITHUB_USER=$(echo ${NIXCFG_REPO} | cut -d '/' -f 1)
+        GITHUB_REPO=$(echo ${NIXCFG_REPO} | cut -d '/' -f 2)
+        __github_clone_and_switch
     else
         echo "Fetching git repository to /tmp location..."
         git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || exit
@@ -172,7 +184,7 @@ __disk_prep() {
         done
     fi
 
-        if [[ ${WIPEFS_ALL} == "true" ]]
+    if [[ ${WIPEFS_ALL} == "true" ]]
     then
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
@@ -180,9 +192,9 @@ __disk_prep() {
             echo "Wiping disk signatures with wipefs..."
             wipefs --all ${DISK_ID} || exit
         done
-        fi
+    fi
 
-        if [[ ${ZERO_DISKS} == "true" ]]
+    if [[ ${ZERO_DISKS} == "true" ]]
     then
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
@@ -266,7 +278,7 @@ __zfs_auto_snapshot() {
         echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
     elif [[ ${SNAPSHOT_ROOT} == "false" ]]
-         then
+    then
         echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
         zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
     fi
@@ -336,8 +348,8 @@ EOF
 
 
     if [[ ${USE_ZSWAP} == "true" ]]
-       then
-           swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
+    then
+        swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
     fi
     echo "Unmounting /mnt"
     umount /mnt/home
