@@ -23,7 +23,7 @@ Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap
 
 For Example:
 
-        themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix
+       themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix
 
 Github users may also use a shorthand:
 
