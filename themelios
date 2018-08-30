@@ -6,7 +6,7 @@
 
 usage() {
     cat << EOF
-Usage : themelios <git remote> <host.nix>
+Usage: themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 Use -h or --help for more instructions.
@@ -18,7 +18,7 @@ help() {
     cat <<EOF
 Themelios - Bootstrap a zfs-on-root NixOS in one-shot.
 
-Usage : themelios <git remote> <host.nix>
+Usage: themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
 For Example:
@@ -372,6 +372,7 @@ __bootstrap_zfs        # install zfs if needed to the livedisk
 __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
 __get_custom_nixcfg    # download the host machine configuration
+exit
 __disk_prep            # use sgdisk and wipefs to cleanup old disks
 __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
