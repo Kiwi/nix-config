@@ -6,8 +6,6 @@
 
 usage() {
         cat << EOF
-Themelios - Bootstrap zfs-on-root NixOS in one-shot.
-
 Usage : themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
@@ -61,9 +59,9 @@ Notes:
 -POOL_TYPE needs to be single,mirror,raidz1,raidz2,raidz3
 -POOL_DISKS should be separated by spaces and using /dev/disk/by-id is
 recommended but not required.
--Using both Wipefs And Sgdisk is recommended for used disks unless you are
-zeroing disks.
--Atime is not recommended for use with SSD.
+-Using both WIPEFS_ALL And SGDISK_CLEAR is recommended for used disks unless you are
+zeroing them.
+-ATIME is not recommended for use with SSD.
 -Swapping is not a great idea with ZFS, but it is an option.
 EOF
 }
