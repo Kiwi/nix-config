@@ -1,1 +1,2 @@
-## nix-config
+# Bootstrap a custom zfs-on-root NixOS install with custom settings in one command.
+#### See themelios usage() for details...

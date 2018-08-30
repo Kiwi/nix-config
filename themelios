@@ -4,58 +4,40 @@
 # The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Bootstrap a custom zfs-on-root NixOS install with custom settings in one command.
-
-# Usage: themelios <git-url> <host.nix>
-
-# Example command: "themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix"
-# Where hpZ620.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
-
-# A "bootstrap block" is just bash variables prefixed with #| as follows:
-
-# Where we clone the git repo.
-# Beginning and Trailing slashes required + must be a root level directory
-#|NIXCFG_LOCATION=/nix-config/
-
-# The pool disks must be on one line separated by spaces:
-# Using /dev/disk/by-id is preferable.
-#|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
-
-# May be "single" "mirror" "raidz1" etc...
-#|POOL_TYPE=raidz1
-
-# The name of the zpool. Typically zroot or rpool. It may be anything.
-#|POOL_NAME=zroot
-
-# The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
-# You should try to make this ID unique among your machines.
-#|POOL_HOSTID=random
-
-# Whether or not to use sgdisk and wipefs to remove disk partition tables and signatures
-# Useful if the disk is not brand new, and you don't want to wait to zero the disks entirely.
-#|REMOVE_REMNANTS=true
-
-# Whether or not to use "atime", leave to false if using SSD to reduce disk writes.
-#|ATIME=false
-
-# Set com.sun:auto-snapshot property on various datasets.
-#|SNAPSHOT_ROOT=true
-#|SNAPSHOT_HOME=true
-
-
-#|USE_ZSWAP=false
-#|ZSWAP_SIZE=4G
-# Note: Use POOL_TYPE=single for single disk setups or POOL_TYPE=mirror for mirrored setups.
-
-# Here is an example of a .nix file with a "bootstrap block",
-# https://github.com/a-schaefers/nix-config/blob/master/hosts/latitudeE6430.nix
-
-# Here is a sample nixos-zfs.nix file for reference, which contains good ZFS settings,
-# https://github.com/a-schaefers/nix-config/blob/master/modules/nixos/nixos-zfs.nix
-
 usage() {
         cat << EOF
-Usage : themelios <git-url> <host.nix>
+Themelios - Bootstrap zfs-on-root NixOS in one-shot.
+
+Usage : themelios <git remote> <host.nix>
+Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
+
+For Example:
+
+        themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix
+
+Github users may also use the shorthand,
+
+       themelios a-schaefers/nix-config hpZ620.nix
+
+The idea of project_root/hosts/ is that it is a directory which contains all machine-specific
+configuration.nix files. You may place all of your per-machine configuration files in this
+location and themelios will bootstrap your setup in one-shot.
+
+A Bootstrap block in a project_root/hosts/host.nix file needs to be formatted as follows:
+Set one variable per line beginning with #|, POOL_TYPE needs to be single,mirror,raidz1,raidz2,raidz3
+  #|POOL_NAME=zroot
+  #|POOL_TYPE=raidz1
+  #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
+  #|POOL_HOSTID=random
+  #|NIXCFG_LOCATION=/nix-config/
+  #|WIPEFS_ALL=true
+  #|SGDISK_CLEAR=true
+  #|ZERO_DISKS=false
+  #|ATIME=false
+  #|SNAPSHOT_ROOT=true
+  #|SNAPSHOT_HOME=true
+  #|USE_ZSWAP=false
+  #|ZSWAP_SIZE=4G
 EOF
         exit
 }
@@ -153,15 +135,33 @@ __get_custom_nixcfg() {
 }
 
 __disk_prep() {
-    if [[ ${REMOVE_REMNANTS} == "true" ]]
+    if [[ ${SGDISK_CLEAR} == "true" ]]
     then
         IFS=$'\n'
         for DISK_ID in ${POOL_DISKS}
         do
             echo "Clearing disk with sgdisk..."
             sgdisk --clear ${DISK_ID} ||  exit
+        done
+    fi
+
+        if [[ ${WIPEFS_ALL} == "true" ]]
+    then
+        IFS=$'\n'
+        for DISK_ID in ${POOL_DISKS}
+        do
             echo "Wiping disk signatures with wipefs..."
             wipefs --all ${DISK_ID} || exit
+        done
+        fi
+
+        if [[ ${ZERO_DISKS} == "true" ]]
+    then
+        IFS=$'\n'
+        for DISK_ID in ${POOL_DISKS}
+        do
+            echo "Writing Zeros to each disk, this may take a while..."
+            dd if=/dev/zero of=${DISK_ID} bs=4096 status=progress || exit
         done
     fi
 }
