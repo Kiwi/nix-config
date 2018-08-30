@@ -29,7 +29,6 @@ Set one variable per line beginning with #|, POOL_TYPE needs to be single,mirror
   #|POOL_TYPE=raidz1
   #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
   #|POOL_HOSTID=random
-  #|NIXCFG_LOCATION=/nix-config/
   #|WIPEFS_ALL=true
   #|SGDISK_CLEAR=true
   #|ZERO_DISKS=false
@@ -38,6 +37,7 @@ Set one variable per line beginning with #|, POOL_TYPE needs to be single,mirror
   #|SNAPSHOT_HOME=true
   #|USE_ZSWAP=false
   #|ZSWAP_SIZE=4G
+  #|NIXCFG_LOCATION=/nix-config/
 EOF
         exit
 }
