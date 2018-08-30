@@ -373,7 +373,6 @@ __bootstrap_zfs        # install zfs if needed to the livedisk
 __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
 __get_custom_nixcfg    # download the host machine configuration
-exit
 __disk_prep            # use sgdisk and wipefs to cleanup old disks
 __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
