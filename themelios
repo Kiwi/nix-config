@@ -6,6 +6,8 @@
 
 usage() {
     cat << EOF
+Themelios - Bootstrap a zfs-on-root NixOS by typing one command:
+
 Usage: themelios <configuration.sh> <git remote> <branch (optional)>
 
 One example:
@@ -23,9 +25,9 @@ EOF
 
 help() {
     cat <<EOF
-Themelios - Bootstrap a zfs-on-root NixOS in one-shot:
+Themelios - Bootstrap a zfs-on-root NixOS by typing one command:
 
-Store all machine-specific settings as bash variables in a separate <configuration.sh> script in your <git repo>.
+Store all machine-specific settings in bash variables in a separate <configuration.sh> script in your <git repo>.
 Themelios will clone the repo, source the script, configure a zfs-on-root system to your specifications,
 and finally bootstrap your system by importing your NixOS configuration.nix setup-- (just use relative path imports!)
 
@@ -35,19 +37,22 @@ The "configuration.sh" file may be named anything and located anywhere in the pr
 Available variables to be set:
 
           TOP_LEVEL_NIXFILE
-          POOL_NAME
-          POOL_TYPE
-          POOL_DISKS
-          POOL_HOSTID
-          WIPEFS_ALL
-          SGDISK_CLEAR
-          ZERO_DISKS
-          ATIME
-          SNAPSHOT_ROOT
-          SNAPSHOT_HOME
-          USE_ZSWAP
-          ZSWAP_SIZE
-          NIXCFG_LOCATION
+          POOL_NAME          => e.g. POOL_NAME="zroot" or POOL_NAME="rpool"
+          POOL_TYPE          => may be "" for single disk, or mirror/raidz1/raidz2/raidz3
+          POOL_DISKS         => Separate each disk with line breaks, and I recommend using /dev/disk/by-id,
+                             e.g. POOL_DISKS="/dev/sda
+                             /dev/sdb
+                             /dev/sdc"
+          POOL_HOSTID        => Use 8-digit hexadecimal or simply POOL_HOSTID="random"
+          WIPEFS_ALL         => use "true" or "false"
+          SGDISK_CLEAR       => use "true" or "false"
+          ZERO_DISKS         => use "true" or "false"
+          ATIME              => Set to "on" or "off" (Setting to "off" is recommended for SSD)
+          SNAPSHOT_ROOT      => use "true" or "false" (Sets the value of com.sun:auto-snapshot)
+          SNAPSHOT_HOME      => use "true" or "false" (Sets the value of com.sun:auto-snapshot)
+          USE_ZSWAP          => Create a zvolume to use for swap (Not recommended)
+          ZSWAP_SIZE         => e.g. ZSWAP_SIZE="4G"
+          NIXCFG_LOCATION    =>
 EOF
     exit
 }
