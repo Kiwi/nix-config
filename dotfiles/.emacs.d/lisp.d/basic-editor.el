@@ -71,26 +71,25 @@
 (with-region-or-buffer untabify)
 
 ;; automatically indent code
-(use-package aggressive-indent :disabled :init
-  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
-  :config (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
+(use-package aggressive-indent :init
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 
-;; Auto-indent current and new lines
-(electric-indent-mode 1)
+;; ;; Auto-indent current and new lines
+;; (electric-indent-mode 1)
 
-;; Auto-indent yanked (pasted) code
-(dolist (command '(yank yank-pop))
-  (eval `(defadvice ,command (after indent-region activate)
-           (and (not current-prefix-arg)
-                (member major-mode '(emacs-lisp-mode lisp-mode
-                                                     clojure-mode    scheme-mode
-                                                     haskell-mode    ruby-mode
-                                                     rspec-mode      python-mode
-                                                     c-mode          c++-mode
-                                                     objc-mode       latex-mode
-                                                     plain-tex-mode))
-                (let ((mark-even-if-inactive transient-mark-mode))
-                  (indent-region (region-beginning) (region-end) nil))))))
+;; ;; Auto-indent yanked (pasted) code
+;; (dolist (command '(yank yank-pop))
+;;   (eval `(defadvice ,command (after indent-region activate)
+;;            (and (not current-prefix-arg)
+;;                 (member major-mode '(emacs-lisp-mode lisp-mode
+;;                                                      clojure-mode    scheme-mode
+;;                                                      haskell-mode    ruby-mode
+;;                                                      rspec-mode      python-mode
+;;                                                      c-mode          c++-mode
+;;                                                      objc-mode       latex-mode
+;;                                                      plain-tex-mode))
+;;                 (let ((mark-even-if-inactive transient-mark-mode))
+;;                   (indent-region (region-beginning) (region-end) nil))))))
 
 (use-package whitespace :init
   (add-hook 'prog-mode-hook 'whitespace-mode)
