@@ -71,15 +71,13 @@ Available variables to be set:
 
           ATIME              => Set to "on" or "off" (Setting to "off" is recommended for SSD)
 
-          SNAPSHOT_ROOT      => use "true" or "false" (Sets the value of com.sun:auto-snapshot)
+          SNAPSHOT_ROOT      => use "true" / "false" or "" (Sets the value of com.sun:auto-snapshot)
 
-          SNAPSHOT_HOME      => use "true" or "false" (Sets the value of com.sun:auto-snapshot)
+          SNAPSHOT_HOME      => use "true" / "false" or "" (Sets the value of com.sun:auto-snapshot)
 
-          USE_ZSWAP          => Create a zvolume to use for swap (Not recommended)
+          USE_ZSWAP          => use "true" / "false" (Creates a swap zvol)
 
           ZSWAP_SIZE         => e.g. ZSWAP_SIZE="4G"
-
-          NIXCFG_LOCATION    =>
 EOF
     exit
 }
@@ -345,8 +343,8 @@ __zfs_auto_snapshot() {
 }
 
 __bootstrap_nixcfg() {
-    echo "Moving repo from /tmp to /mnt${NIXCFG_LOCATION}..."
-    cp -rp /tmp/NIXCFG_REPO /mnt${NIXCFG_LOCATION}
+    echo "Moving repo from /tmp to /mnt..."
+    cp -rp /tmp/NIXCFG_REPO /mnt/nixcfg
 
     echo "Executing nixos-generate-config --root /mnt"
     nixos-generate-config --root /mnt || __fail_warning
@@ -358,6 +356,9 @@ __bootstrap_nixcfg() {
         echo "${POOL_HOSTID}"
     fi
 
+    #sanitize NIXCFG_HOST for import heredoc
+    # NIXCFG_HOST=$(echo "${NIXCFG_HOST}" | cut -d '.' -f 2)
+
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [
@@ -366,7 +367,7 @@ __bootstrap_nixcfg() {
 networking.hostId = "${POOL_HOSTID}";
 }
 EOF
-    sed -i "/imports/a ../..${NIXCFG_LOCATION}${NIXCFG_HOST}" \
+    sed -i "/imports/a ../../nixcfg/${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
     __nixos-install() {
@@ -375,11 +376,11 @@ EOF
     }
 
     __fail_retry() {
-    read -p "nixos-install --root /mnt failed, retry? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        __nixos-install
-    fi
+        read -p "nixos-install --root /mnt failed, retry? (Y or N) " -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            __nixos-install
+        fi
     }
 
     __nixos-install || __fail_retry
@@ -436,4 +437,4 @@ __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
 __zfs_auto_snapshot    # set com.sun:auto-snapshot properties
 __bootstrap_nixcfg     # bootstrap the users custom nix configurations
-__thank_you            # may you have a Happy Hacking. :)
+# __thank_you            # may you have a Happy Hacking. :)
