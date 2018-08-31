@@ -21,9 +21,9 @@ Themelios - Bootstrap a zfs-on-root NixOS in one-shot.
 Usage: themelios <git remote> <host.nix>
 Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
 
-For Example:
+One example:
 
-       themelios https://github.com/a-schaefers/nix-config.git hpZ620.nix
+       themelios hpZ620.nix https://github.com/a-schaefers/nix-config.git
 
 Github users may also use a shorthand:
 
@@ -129,7 +129,12 @@ __bootstrap_git() {
 }
 
 __get_custom_nixcfg() {
-
+    # git clone the declared repo from NIXCFG_REPO ($2)
+    # github users https remote will be switched to ssh remote automatically after initial clone.
+    # github users also may use "shorthand" USERNAME/REPO-NAME
+    # optional NIXFG_BRANCH ($3) may be used additionally for users who need to build from a non-master branch.
+    GH_SHORTHAND=$(echo ${NIXCFG_REPO} | grep -v ".git")
+    GITHUB_URL=$(echo ${NIXCFG_REPO} | grep "github.com")
     __checkout_branch() {
         echo "Checking out ${GITHUBSSHREMOTE}"
         cd /tmp/NIXCFG_REPO
@@ -140,11 +145,6 @@ __get_custom_nixcfg() {
         cd /tmp/NIXCFG_REPO
         git remote set-url origin ${GITHUBSSHREMOTE}
     }
-
-    GH_SHORTHAND=$(echo ${NIXCFG_REPO} | grep -v ".git")
-    GITHUB_URL=$(echo ${NIXCFG_REPO} | grep "github.com")
-
-    # for github users we clone https but we switch to ssh remote for interactive convenience.
     __github_clone_and_switch() {
         echo "Cloning repo via ${GITHUBHTTPSREMOTE}"
         GITHUBHTTPSREMOTE=https://github.com/${GITHUB_USER}/${GITHUB_REPO}
@@ -153,36 +153,39 @@ __get_custom_nixcfg() {
         __switch_github_remotes
         [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
     }
-
     if [[ ${GITHUB_URL} ]]
     then
          GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
          GITHUB_REPO=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 5)
          __github_clone_and_switch
-
     elif [[ ${GH_SHORTHAND} ]]
     then
         GITHUB_USER=$(echo ${NIXCFG_REPO} | cut -d '/' -f 1)
         GITHUB_REPO=$(echo ${NIXCFG_REPO} | cut -d '/' -f 2)
         __github_clone_and_switch
-
     else
         echo "Cloning repo via ${NIXCFG_REPO}"
         git clone ${NIXCFG_REPO} /tmp/NIXCFG_REPO || __fail_warning
         [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
     fi
 
+    # find NIXCFG_HOST ($1)
     echo "Extracting configuration variables from bootstrap block..."
     BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)
+
+    # get the variables from NIXCFG_HOST
     IFS=$'\n'
     for CFG_VAR in ${BOOTSTRAP_BLOCK}
     do
         export ${CFG_VAR}
         echo "${CFG_VAR}"
     done
-    POOL_DISKS=$(echo $POOL_DISKS | sed 's/ /\n/g')
-    echo "POOL_DISKS parsed as: ${POOL_DISKS}"
 
+    # probably don't need this anymore.
+    # POOL_DISKS=$(echo $POOL_DISKS | sed 's/ /\n/g')
+    # echo "POOL_DISKS parsed as: ${POOL_DISKS}"
+
+    # probably can also do away with this and just comment a themelios.sh file with var details.
     # translate configuration options if needed.
     echo "Translating configuration options..."
     if [[ ${ATIME} == "true" ]]
@@ -405,9 +408,10 @@ __bootstrap_zfs        # install zfs if needed to the livedisk
 __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
 __get_custom_nixcfg    # download the host machine configuration
+exit
 __disk_prep            # use sgdisk and wipefs to cleanup old disks
 __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
 __zfs_auto_snapshot    # set com.sun:auto-snapshot properties
 __bootstrap_nixcfg     # bootstrap the users custom nix configurations
-__thank_you            # May you have a Happy Hacking. :)
+__thank_you            # may you have a Happy Hacking. :)
