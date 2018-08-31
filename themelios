@@ -356,9 +356,10 @@ __bootstrap_nixcfg() {
         echo "${POOL_HOSTID}"
     fi
 
-    #sanitize NIXCFG_HOST for import heredoc
-    # NIXCFG_HOST=$(echo "${NIXCFG_HOST}" | cut -d '.' -f 2)
+    #sanitize TLN for import heredoc
+    TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||' >)
 
+    # setup user's future /etc/nixos/configuration.nix file to import their custom TOP_LEVEL_NIXFILE.
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [
@@ -367,7 +368,7 @@ __bootstrap_nixcfg() {
 networking.hostId = "${POOL_HOSTID}";
 }
 EOF
-    sed -i "/imports/a ../../nixcfg/${NIXCFG_HOST}" \
+    sed -i "/imports/a ../../nixcfg/${TOP_LEVEL_NIXFILE}" \
         /mnt/etc/nixos/configuration.nix
 
     __nixos-install() {
