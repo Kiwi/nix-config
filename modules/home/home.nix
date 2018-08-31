@@ -16,6 +16,7 @@ let
     git clone git@github.com:apoptosis/episteme.git
     git clone git@github.com:dustinlacewell/emacs-nougat.git
     git clone git@github.com:bbatsov/prelude.git
+    git clone git@github.com:a-schaefers/themelios.git
   '';
 
   cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
