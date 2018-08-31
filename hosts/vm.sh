@@ -13,3 +13,4 @@ SNAPSHOT_HOME="true"
 USE_ZSWAP="false"
 ZSWAP_SIZE=4G
 TOP_LEVEL_NIXFILE="hosts/vm.nix"
+NIXCFG_DIR="nix-config"
