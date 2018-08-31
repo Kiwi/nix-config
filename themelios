@@ -38,8 +38,8 @@ Github users may also use a shorthand:
        themelios configuration.sh a-schaefers/nix-config
 
 Store all machine-specific settings in bash variables in a separate <configuration.sh> script in your <git repo>.
-Themelios will clone the repo, source the script, configure a zfs-on-root system to your specifications,
-and finally bootstrap your system by importing your NixOS configuration.nix setup-- (just use relative path imports!)
+Themelios will clone the repo, source the script, configure a zfs-on-root system to your specification,
+and finally bootstrap your system by importing your NixOS configuration.nix setup. Use relative path imports!
 
 Configuration.sh:
 The "configuration.sh" file may be named anything and located anywhere in the project_root.
@@ -447,8 +447,8 @@ __initial_warning      # warn user of potential doom
 __bootstrap_zfs        # install zfs if needed to the livedisk
 __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
-__get_custom_nixcfg    # download the host machine configuration
-__disk_prep            # use sgdisk and wipefs to cleanup old disks
+__get_custom_nixcfg    # download the machine configuration from git
+__disk_prep            # use sgdisk wipefs or dd to cleanup old disks
 __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
 __zfs_auto_snapshot    # set com.sun:auto-snapshot properties
