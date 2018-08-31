@@ -103,7 +103,7 @@ contents with a zfs-on-root NixOS installation and bootstrap your configuration.
 }
 
 __fail_warning() {
-    read -p "The previous command failed. Continue running script or abort? (Y or N) " -n 1 -r
+    read -p "The previous command failed. Continue running script? (Y or N) " -n 1 -r
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
         echo "Aborted." ; exit
@@ -172,9 +172,9 @@ __get_custom_nixcfg() {
     }
     if [[ ${GITHUB_URL} ]]
     then
-         GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
-         GITHUB_REPO=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 5)
-         __github_clone_and_switch
+        GITHUB_USER=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 4)
+        GITHUB_REPO=$(echo ${NIXCFG_REPO} | grep github | cut -d '/' -f 5)
+        __github_clone_and_switch
     elif [[ ${GH_SHORTHAND} ]]
     then
         GITHUB_USER=$(echo ${NIXCFG_REPO} | cut -d '/' -f 1)
@@ -256,10 +256,24 @@ __datasets_create() {
     # / (root) datasets
     zfs create -o mountpoint=none -o canmount=off -o sync=always ${POOL_NAME}/ROOT
     zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/ROOT/nixos
-    zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
     mount -t zfs ${POOL_NAME}/ROOT/nixos /mnt
+    zpool set bootfs=${POOL_NAME}/ROOT/nixos ${POOL_NAME}
 
-    mkdir /mnt/{home,tmp}
+    # TRADEOFF Disk space vs. Robustness. imo-- just garbage collect more often and don't use this option.
+    # /nix optional dataset outside of / dataset (I don't like this idea, but set this variable if you want.)
+    # Save some potential disk space at the cost of losing ZFS boot environments (less robust.)
+    __slash_nix_outside_root() {
+        zfs create -o mountpoint=none -o canmount=off -o sync=always ${POOL_NAME}/NIX
+        zfs create -o mountpoint=legacy -o canmount=on ${POOL_NAME}/NIX/nix
+        mkdir /mnt/nix
+        mount -t zfs ${POOL_NAME}/NIX/nix /mnt/nix
+    }
+    if [[ ${NIXDIR_NOROOT} == "true" ]]
+    then
+        __slash_nix_outside_root
+    fi
+
+    mkdir -p /mnt/{home,tmp}
 
     # /home datasets
     zfs create -o mountpoint=none -o canmount=off ${POOL_NAME}/HOME
