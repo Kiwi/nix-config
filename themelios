@@ -6,17 +6,16 @@
 
 usage() {
     cat << EOF
-Usage: themelios <configuration.sh> <git remote> <branch (optional)>
+Usage:
+        themelios configuration.sh git-remote [branch]
 
-One example:
-
-       themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
+Example:
+        themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
 
 Github users may also use a shorthand:
+        themelios configuration.sh a-schaefers/nix-config
 
-       themelios configuration.sh a-schaefers/nix-config
-
-Use -h or --help for more instructions.
+Use -h or --help for more information.
 EOF
     exit
 }
@@ -25,14 +24,13 @@ help() {
     cat <<EOF
 Themelios - Bootstrap a zfs-on-root NixOS in one command.
 
-Usage: themelios <configuration.sh> <git remote> <branch (optional)>
+Usage:
+       themelios configuration.sh git-remote [branch]
 
-One example:
-
+Example:
        themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
 
 Github users may also use a shorthand:
-
        themelios configuration.sh a-schaefers/nix-config
 
 Store all machine-specific settings in bash variables in a separate <configuration.sh> script in your <git repo>.
@@ -69,6 +67,10 @@ TOP_LEVEL_NIXFILE="hosts/vm.nix"
 
 # Directory name of <git-remote> in "/" (root). Do not use slashes.
 NIXCFG_DIR="nix-config"
+
+# Setting this to true would trade-off the ability to use zfs boot environments for extra disk space.
+# OTOH, if you garbage collect often, this should not be much of an issue. (Recommended false.)
+NIXDIR_NOROOT="false" # mount /nix outside of the / (root) dataset.
 
 Debug options:
 
