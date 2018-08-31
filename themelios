@@ -6,8 +6,15 @@
 
 usage() {
     cat << EOF
-Usage: themelios <host.nix> <git remote> <branch (optional)>
-Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
+Usage: themelios <configuration.sh> <git remote> <branch (optional)>
+
+One example:
+
+       themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
+
+Github users may also use a shorthand:
+
+       themelios configuration.sh a-schaefers/nix-config
 
 Use -h or --help for more instructions.
 EOF
@@ -16,61 +23,39 @@ EOF
 
 help() {
     cat <<EOF
-Themelios - Bootstrap a zfs-on-root NixOS in one-shot.
+Themelios - Bootstrap a zfs-on-root NixOS in one-shot:
 
-Usage: themelios <git remote> <host.nix>
-Where host.nix is in the project_root/hosts/ directory and contains a "bootstrap block."
+Store all machine-specific settings as bash variables in a separate <configuration.sh> script in your <git repo>.
+Themelios will clone the repo, source the script, configure a zfs-on-root system to your specifications,
+and finally bootstrap your system by importing your NixOS configuration.nix setup-- (just use relative path imports!)
 
-One example:
+Configuration.sh:
+The "configuration.sh" file may be named anything and located anywhere in the project_root.
 
-       themelios hpZ620.nix https://github.com/a-schaefers/nix-config.git
+Available variables to be set:
 
-Github users may also use a shorthand:
-
-       themelios a-schaefers/nix-config hpZ620.nix
-
-The idea of project_root/hosts/ is that it contains all machine-specific NixOS
-configurations, including any and all imports--
-(just use relative path imports!)
-
-The /etc/nixos/configuration.nix file created by themelios will simply import
-your host.nix file. You may place all of your per-machine configurations in this
- file and themelios will bootstrap your machine.
-
-A Bootstrap block in a project_root/hosts/host.nix file needs to be formatted
-as follows:
-
-  #|POOL_NAME=zroot
-  #|POOL_TYPE=raidz1
-  #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
-  #|POOL_HOSTID=random
-  #|WIPEFS_ALL=true
-  #|SGDISK_CLEAR=true
-  #|ZERO_DISKS=false
-  #|ATIME=false
-  #|SNAPSHOT_ROOT=true
-  #|SNAPSHOT_HOME=true
-  #|USE_ZSWAP=false
-  #|ZSWAP_SIZE=4G
-  #|NIXCFG_LOCATION=/nix-config/
-
-Notes:
--Set one variable per line beginning with #| (NO LINE BREAKS / NO QUOTES)
--POOL_TYPE needs to be single,mirror,raidz1,raidz2,raidz3
--POOL_DISKS should be separated by spaces and using /dev/disk/by-id is
-recommended but not required.
--Using both WIPEFS_ALL And SGDISK_CLEAR is recommended for used disks unless you are
-zeroing them.
--ATIME is not recommended for use with SSD.
--Swapping is not a great idea with ZFS, but it is an option.
+          TOP_LEVEL_NIXFILE
+          POOL_NAME
+          POOL_TYPE
+          POOL_DISKS
+          POOL_HOSTID
+          WIPEFS_ALL
+          SGDISK_CLEAR
+          ZERO_DISKS
+          ATIME
+          SNAPSHOT_ROOT
+          SNAPSHOT_HOME
+          USE_ZSWAP
+          ZSWAP_SIZE
+          NIXCFG_LOCATION
 EOF
     exit
 }
 
 [[ $1 == "-h" ]] && help
 [[ $1 == "--help" ]] && help
-[[ $# -lt 2 ]] || usage
-[[ $# -gt 3 ]] || usage
+[[ $# -lt 2 ]] && usage
+[[ $# -gt 3 ]] && usage
 NIXCFG_HOST=$1
 NIXCFG_REPO=$2
 NIXCFG_BRANCH=$3
