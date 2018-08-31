@@ -357,7 +357,7 @@ __bootstrap_nixcfg() {
     fi
 
     #sanitize TLN for import heredoc
-    TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||' >)
+    TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||')
 
     # setup user's future /etc/nixos/configuration.nix file to import their custom TOP_LEVEL_NIXFILE.
     cat <<EOF > /mnt/etc/nixos/configuration.nix
