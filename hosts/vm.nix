@@ -32,19 +32,4 @@
     firewall.allowedTCPPorts = [ 22 ];
     firewall.allowedUDPPorts = [ 22 ];
   };
-
-   # Bootstrap Block - Set one variable per line beginning with #|
-     #|POOL_NAME=zroot
-     #|POOL_TYPE=raidz1
-     #|POOL_DISKS=/dev/sda /dev/sdb /dev/sdc
-     #|POOL_HOSTID=random
-     #|NIXCFG_LOCATION=/nix-config/
-     #|SGDISK_CLEAR=true
-     #|WIPEFS_ALL=true
-     #|ZERO_DISKS=false
-     #|ATIME=false
-     #|SNAPSHOT_ROOT=true
-     #|SNAPSHOT_HOME=true
-     #|USE_ZSWAP=true
-     #|ZSWAP_SIZE=4G
  }

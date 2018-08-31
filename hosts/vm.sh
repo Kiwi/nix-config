@@ -1,0 +1,15 @@
+POOL_NAME="zroot"
+POOL_TYPE="raidz1"
+POOL_DISKS="/dev/sda
+/dev/sdb
+/dev/sdc"
+POOL_HOSTID="random"
+NIXCFG_LOCATION="/nix-config/"
+SGDISK_CLEAR="true"
+WIPEFS_ALL="true"
+ZERO_DISKS="false"
+ATIME="off"
+SNAPSHOT_ROOT="true"
+SNAPSHOT_HOME="true"
+USE_ZSWAP="false"
+ZSWAP_SIZE=4G

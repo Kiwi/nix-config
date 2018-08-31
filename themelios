@@ -169,17 +169,23 @@ __get_custom_nixcfg() {
         [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
     fi
 
-    # find NIXCFG_HOST ($1)
-    echo "Extracting configuration variables from bootstrap block..."
-    BOOTSTRAP_BLOCK=$(grep "#|" /tmp/NIXCFG_REPO/hosts/${NIXCFG_HOST} | cut -d '|' -f 2)
+    # find NIXCFG_HOST ($1) and source the variables
+    echo "Extracting configuration variables..."
+    NIXCFG_HOST=$(cd /tmp/NIXCFG_REPO && find -name "${NIXCFG_HOST}")
+    source "${NIXCFG_HOST}" || __fail_warning
+    cat <<EOF
+${NIXCFG_HOST}
+EOF
 
-    # get the variables from NIXCFG_HOST
-    IFS=$'\n'
-    for CFG_VAR in ${BOOTSTRAP_BLOCK}
-    do
-        export ${CFG_VAR}
-        echo "${CFG_VAR}"
-    done
+    # probably don't need this anymore.
+    # get the variables from the NIXCFG_HOST
+    # OUTPUT_HOST=$(cat /tmp/NIXCFG_REPO/${NIXCFG_HOST})
+    # IFS=$'\n'
+    # for CFG_VAR in ${OUTPUT_HOST}
+    # do
+    #     env ${CFG_VAR}
+    #     echo "${CFG_VAR}"
+    # done
 
     # probably don't need this anymore.
     # POOL_DISKS=$(echo $POOL_DISKS | sed 's/ /\n/g')
@@ -187,17 +193,17 @@ __get_custom_nixcfg() {
 
     # probably can also do away with this and just comment a themelios.sh file with var details.
     # translate configuration options if needed.
-    echo "Translating configuration options..."
-    if [[ ${ATIME} == "true" ]]
-    then
-        ATIME="on"
-    else
-        ATIME="off"
-    fi
-    if [[ ${POOL_TYPE} == "single" ]]
-    then
-        POOL_TYPE=""
-    fi
+    # echo "Translating configuration options..."
+    # if [[ ${ATIME} == "true" ]]
+    # then
+    #     ATIME="on"
+    # else
+    #     ATIME="off"
+    # fi
+    # if [[ ${POOL_TYPE} == "single" ]]
+    # then
+    #     POOL_TYPE=""
+    # fi
 }
 
 __disk_prep() {
@@ -343,7 +349,7 @@ __bootstrap_nixcfg() {
 networking.hostId = "${POOL_HOSTID}";
 }
 EOF
-    sed -i "/imports/a ../..${NIXCFG_LOCATION}hosts/${NIXCFG_HOST}" \
+    sed -i "/imports/a ../..${NIXCFG_LOCATION}${NIXCFG_HOST}" \
         /mnt/etc/nixos/configuration.nix
 
     __nixos-install() {
@@ -408,7 +414,6 @@ __bootstrap_zfs        # install zfs if needed to the livedisk
 __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
 __get_custom_nixcfg    # download the host machine configuration
-exit
 __disk_prep            # use sgdisk and wipefs to cleanup old disks
 __zpool_create         # create the zpool, make gpt bios boot partition
 __datasets_create      # create a zfs dataset layout
