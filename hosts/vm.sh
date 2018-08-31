@@ -16,7 +16,7 @@ SNAPSHOT_HOME="true"
 USE_ZSWAP="false"     # Creates a swap zvol
 ZSWAP_SIZE="4G"
 
-THEMELIOS_ZFS="false"  # Creates /etc/nixos/themelios-zfs.nix with sensible settings
+THEMELIOS_ZFS="true"  # Creates /etc/nixos/themelios-zfs.nix with sensible zfs-on-root settings
 
 # Your top-level configuration.nix file relative path from the project_root.
 # e.g. for the file project_root/hosts/hpZ620/default.nix use the following:
