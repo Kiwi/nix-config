@@ -50,6 +50,8 @@ Available variables to be set:
                              e.g. for the file project_root/hosts/hpZ620/default.nix use the following:
                              TOP_LEVEL_NIXFILE="hosts/hpZ620/default.nix"
 
+                             NOTE: This variable is used as an import in /etc/nixos/configuration.nix.
+
           POOL_NAME          => e.g. POOL_NAME="zroot" or POOL_NAME="rpool"
 
           POOL_TYPE          => may be "" for single disk, or mirror/raidz1/raidz2/raidz3
