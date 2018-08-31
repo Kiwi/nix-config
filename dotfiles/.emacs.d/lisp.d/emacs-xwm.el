@@ -64,6 +64,10 @@
                         (string= "gimp" exwm-instance-name))
                 (exwm-workspace-rename-buffer exwm-title))))
 
+  (exwm-input-set-key (kbd "<f12>")
+                      '(lambda ()
+                         (interactive)
+                         (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh")))
   ;; Window and Buffer management
   (exwm-input-set-key (kbd "<f1>") 'my-startup-screen-hook)
   (exwm-input-set-key (kbd "<f2>") 'gnus)
@@ -87,11 +91,6 @@
 
   ;; external displays
   (require 'exwm-randr)
-  (setq exwm-randr-workspace-output-plist '(0 "VGA-1"))
-  (add-hook 'exwm-randr-screen-change-hook
-            (lambda ()
-              (start-process-shell-command
-               "xrandr" nil "xrandr --output VGA-1 --right-of LVDS-1 --auto")))
   (exwm-randr-enable)
 
   (exwm-enable))
