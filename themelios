@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
+# MIT License
+
 # Copyright 2018 Adam Schaefers sch@efers.org
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 usage() {
     cat << EOF
 Usage:
         themelios configuration.sh git-remote [branch]
-
-Example:
-        themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
-
-Github users may also use a shorthand:
-        themelios configuration.sh a-schaefers/nix-config
 
 Use -h or --help for more information.
 EOF
@@ -22,25 +33,24 @@ EOF
 
 help() {
     cat <<EOF
-Themelios - Bootstrap a zfs-on-root NixOS in one command.
+Example command:
+         themelios configuration.sh https://github.com/a-schaefers/themelios.git master
 
-Usage:
-       themelios configuration.sh git-remote [branch]
-
-Example:
-       themelios configuration.sh https://github.com/a-schaefers/nix-config.git master
+This command will download the a-schaefers/themelios repo from github, then
+check out the master branch, then search the project for a file by the name of "configuration.sh",
+and then finally begin the bootstrap process with no-questions-asked beyond "are you sure?"
 
 Github users may also use a shorthand:
-       themelios configuration.sh a-schaefers/nix-config
+        themelios configuration.sh a-schaefers/themelios
 
-Store all machine-specific settings in bash variables in a separate <configuration.sh> script in your <git repo>.
-Themelios will clone the repo, source the script, configure a zfs-on-root system to your specification,
-and finally bootstrap your system by importing your NixOS configuration.nix setup. Use relative path imports!
+Specificying the [branch] is optional in all cases.
 
-Configuration.sh:
-The "configuration.sh" file may be named anything and located anywhere in the project_root.
+"configuration.sh" may actually be named anything and located anywhere in the project.
+Themelios will find it automatically. This allows for using multiple, per-machine
+configuration.sh files, provided they are uniquely named.
 
-Available variables to be set:
+In summary, feed Themelios a git repository url and the name of any file which
+[only] contains the following configuration variables:
 
 # Themelios configuration.sh example
 POOL_NAME="zroot"
@@ -52,29 +62,54 @@ POOL_DISKS="/dev/sda
 /dev/sdc"
 
 SGDISK_CLEAR="true"   # Use sgdisk --clear
-WIPEFS_ALL="true"     # wipefs --all
-ZERO_DISKS="false"
-ATIME="off"           # recommended "off" for SSD disks.
-SNAPSHOT_ROOT="true"  # Sets the value of com.sun:auto-snapshot
+WIPEFS_ALL="true"     # Use wipefs --all
+ZERO_DISKS="false"    # Use dd if=/dev/zero ...
+ATIME="off"           # Set to "on" or "off" (recommended "off" for SSD.)
+SNAPSHOT_ROOT="true"  # Set the value of com.sun:auto-snapshot
 SNAPSHOT_HOME="true"
 USE_ZSWAP="false"     # Creates a swap zvol
-ZSWAP_SIZE=4G
+ZSWAP_SIZE="4G"
 
-# Your top-level configuration.nix file relative path from the project_root.
-# e.g. for the file project_root/hosts/hpZ620/default.nix use the following:
-# TOP_LEVEL_NIXFILE="hosts/hpZ620/default.nix"
-TOP_LEVEL_NIXFILE="hosts/vm.nix"
+# Your top-level configuration.nix file-- (use the relative path from the project_root.)
+# For example, to bootstrap the file project_root/hosts/vm-example/default.nix use the following:
+TOP_LEVEL_NIXFILE="hosts/vm-example"
 
 # Directory name of <git-remote> in "/" (root). Do not use slashes.
 NIXCFG_DIR="nix-config"
 
+# If true, mount /nix outside of the / (root) dataset.
 # Setting this to true would trade-off the ability to use zfs boot environments for extra disk space.
-# OTOH, if you garbage collect often, this should not be much of an issue. (Recommended false.)
+# If you use nix.gc.automatic, then this should not be much of an issue. Recommended "false".
 NIXDIR_NOROOT="false" # mount /nix outside of the / (root) dataset.
 
-Debug options:
+# Creates /etc/nixos/themelios-zfs.nix with sensible settings
+THEMELIOS_ZFS="true"
 
-          See debug section at the end of this script.
+# Enable ZFS_CARE Options? (Only enable this if THEMELIOS_ZFS="true" also.)
+THEMELIOS_ZFS_CARE="false"
+
+####################
+# ZFS_CARE Options #
+####################
+
+# Auto Scrubs
+care_autoScrub="true"
+
+# Auto Snapshots
+care_autoSnapshot_enabled="true"
+care_autoSnapshot_frequent="8" # Take a snapshot every 15 minutes and keep 8 in rotation
+care_autoSnapshot_hourly="0"
+care_autoSnapshot_daily="7" # Take a daily snapshot and keep 7 in rotation
+care_autoSnapshot_weekly="0"
+care_autoSnapshot_monthly="0"
+
+# Auto Garbage Collection
+care_gc_automatic="true"
+care_gc_dates="daily"
+care_gc_options="--delete-older-than 7d"
+
+# Auto /tmp clean
+care_cleanTmpDir="true"
 EOF
     exit
 }
@@ -303,60 +338,123 @@ __datasets_create() {
     fi
 }
 
-__zfs_auto_snapshot() {
-    if [[ ${SNAPSHOT_HOME} == "true" ]]
-    then
-        echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
-        zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
-    elif [[ ${SNAPSHOT_ROOT} == "false" ]]
-    then
-        echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
-        zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
-    fi
+ __zfs_auto_snapshot() {
+     if [[ ${SNAPSHOT_HOME} == "true" ]]
+     then
+         echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
+         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
+     elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+     then
+         echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
+         zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
+     fi
 
-    if [[ ${SNAPSHOT_ROOT} == "true" ]]
-    then
-        echo "Setting com.sun:auto-snapshot=true for ROOT datasets..."
-        zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
-    elif [[ ${SNAPSHOT_ROOT} == "false" ]]
-    then
-        echo "Setting com.sun:auto-snapshot=false for ROOT datasets..."
-        zfs set com.sun:auto-snapshot=false ${POOL_NAME}/ROOT
-    fi
-}
+     if [[ ${SNAPSHOT_ROOT} == "true" ]]
+     then
+         echo "Setting com.sun:auto-snapshot=true for ROOT datasets..."
+         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
+     elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+     then
+         echo "Setting com.sun:auto-snapshot=false for ROOT datasets..."
+         zfs set com.sun:auto-snapshot=false ${POOL_NAME}/ROOT
+     fi
+ }
 
-__bootstrap_nixcfg() {
-    echo "Moving repo from /tmp to /mnt..."
-    cp -rp /tmp/NIXCFG_REPO /mnt/${NIXCFG_DIR}
+ __bootstrap_nixcfg() {
+     echo "Moving repo from /tmp to /mnt..."
+     cp -rp /tmp/NIXCFG_REPO /mnt/${NIXCFG_DIR}
 
-    echo "Executing nixos-generate-config --root /mnt"
-    nixos-generate-config --root /mnt || __fail_warning
+     echo "Executing nixos-generate-config --root /mnt"
+     nixos-generate-config --root /mnt || __fail_warning
 
-    [[ ! ${POOL_HOSTID} ]] && POOL_HOSTID="random"
-    if [[ ${POOL_HOSTID} == "random" ]]
-    then
-        echo "Generating random hostid..."
-        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
-        echo "${POOL_HOSTID}"
-    fi
+     [[ ! ${POOL_HOSTID} ]] && POOL_HOSTID="random"
+     if [[ ${POOL_HOSTID} == "random" ]]
+     then
+         echo "Generating random hostid..."
+         POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
+         echo "${POOL_HOSTID}"
+     fi
 
-    #sanitize TLN for import heredoc
-    TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||')
+     #sanitize TLN for import heredoc
+     TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||')
 
     # setup user's future /etc/nixos/configuration.nix file to import their custom TOP_LEVEL_NIXFILE.
+    if [[ ${THEMELIOS_ZFS} == "true" ]]
+    then
+        THEMELIOS_OPTIONAL_GENERATED="./themelios-zfs.nix"
+    else
+        ZFS_REQUIRED_HOSTID="networking.hostId = \"${POOL_HOSTID}\";"
+    fi
     cat <<EOF > /mnt/etc/nixos/configuration.nix
 { ... }:
 { imports = [
+../../${NIXCFG_DIR}/${TOP_LEVEL_NIXFILE}
 ./hardware-configuration.nix
+${THEMELIOS_OPTIONAL_GENERATED}
 ];
-networking.hostId = "${POOL_HOSTID}";
+${ZFS_REQUIRED_HOSTID}
 }
 EOF
-    sed -i "/imports/a ../../${NIXCFG_DIR}/${TOP_LEVEL_NIXFILE}" \
-        /mnt/etc/nixos/configuration.nix
+
+    [[ ${THEMELIOS_ZFS} == "true" ]] && cat << EOF > /mnt/etc/nixos/themelios-zfs.nix
+{ ... }:
+{ imports = [];
+
+# some zfs-on-root sensible settings
+
+# configure grub using /dev/disk/by-d and zfs-support
+boot.supportedFilesystems = [ "zfs" ];
+boot.loader.grub.enable = true;
+boot.loader.grub.version = 2;
+boot.loader.grub.devices = [
+$(IFS=$'\n'
+for DISK_ID in ${POOL_DISKS}
+do
+echo $(echo "\"${DISK_ID}\"")
+done)
+];
+
+# The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
+# You should try to make this ID unique among your machines.
+networking.hostId = "${POOL_HOSTID}";
+
+# noop elevator recommended.
+# shell_on_fail allows to force import manually in the case of zfs import failure.
+boot.kernelParams = [ "elevator=noop" "boot.shell_on_fail" ];
+
+# grub on ZFS has been known to have a hard time finding kernels with really/long/dir/paths
+# Just copy the kernels to /boot and avoid the issue.
+boot.loader.grub.copyKernels = true;
+
+# Setting these to false will ensure some safeguards are active that ZFS uses to protect your ZFS pools.
+boot.zfs.forceImportAll = false;
+boot.zfs.forceImportRoot = false;
+
+$([[ ${THEMELIOS_ZFS_CARE} == "true" ]] && cat <<-CARE
+services.zfs.autoScrub.enable = ${care_autoScrub};
+services.zfs.autoSnapshot = {
+enable = ${care_autoSnapshot_enabled};
+frequent = ${care_autoSnapshot_frequent};
+hourly = ${care_autoSnapshot_hourly};
+daily = ${care_autoSnapshot_daily};
+weekly = ${care_autoSnapshot_weekly};
+monthly = ${care_autoSnapshot_monthly};
+};
+
+# Use gc.automatic with zfs-auto-snapshot to keep disk space under control.
+nix.gc.automatic = ${care_gc_automatic};
+nix.gc.dates = "${care_gc_dates}";
+nix.gc.options = "${care_gc_options}";
+
+# clean /tmp automatically on boot
+boot.cleanTmpDir = ${care_cleanTmpDir};
+CARE
+)
+}
+EOF
 
     # nixos-install section
-    __nixos-install-show-trace-termbin() {
+    __nixos-install-show-trace() {
         nixos-install --root /mnt --show-trace || __nixos-install_fail_retry
     }
     __nixos-install_fail_retry() {
@@ -365,7 +463,7 @@ EOF
         read -p "nixos-install --root /mnt failed, retry? will add --show-trace (Y or N) " -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]
         then
-            __nixos-install-show-trace-termbin
+            __nixos-install-show-trace
         else
             exit
         fi
@@ -374,11 +472,9 @@ EOF
         echo "executing nixos-install --root /mnt"
         nixos-install --root /mnt || __nixos-install_fail_retry
     }
-    if [[ ! ${NOINSTALL} ]]
-    then
-        __nixos-install
-    fi
-}
+
+    __nixos-install
+ }
 
 __thank_you() {
     cat <<EOF
@@ -400,7 +496,7 @@ N::::::N        N::::::NI::::::::IX:::::X       X:::::X
 NNNNNNNN         NNNNNNNIIIIIIIIIIXXXXXXX       XXXXXXX
 EOF
 
-    __umount_mnt() {
+    __umount_export() {
         if [[ ${USE_ZSWAP} == "true" ]]
         then
             swapoff /dev/zvol/${POOL_NAME}/SWAP/swap0
@@ -409,9 +505,9 @@ EOF
         umount /mnt/home
         umount /mnt/tmp
         umount /mnt
+        zpool export ${POOL_NAME}
     }
-    [[ ! ${NOUMOUNT} ]] && __umount_mnt
-    [[ ! ${NOINSTALL} ]] && zpool export ${POOL_NAME}
+    [[ ! ${NOUMOUNT} ]] && __umount_export
 
     read -p "Finished. Reboot now? (Y or N) " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
@@ -424,8 +520,7 @@ EOF
 
 # debug section
 
-# Pass NOUMOUNT=1 to not unmount /mnt automatically
-# Pass NOINSTALL=1 to skip nixos-install command
+# Pass NOUMOUNT=1 to not unmount /mnt or export the pool after install automatically
 # run "STARTOVER=1 POOL=poolname ./themelios foo bar" to rerun the script with a fresh start.
 __start_over() {
     umount /mnt/home
