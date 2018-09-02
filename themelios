@@ -33,24 +33,14 @@ EOF
 
 help() {
     cat <<EOF
-Example command:
-         themelios configuration.sh https://github.com/a-schaefers/themelios.git master
+Usage:
+        themelios configuration.sh git-remote [branch]
 
-This command will download the a-schaefers/themelios repo from github, then
-check out the master branch, then search the project for a file by the name of "configuration.sh",
-and then finally begin the bootstrap process with no-questions-asked beyond "are you sure?"
+For detailed examples and instructions please visit the github page:
 
-Github users may also use a shorthand:
-        themelios configuration.sh a-schaefers/themelios
+    https://github.com/a-schaefers/themelios
 
-Specificying the [branch] is optional in all cases.
-
-"configuration.sh" may actually be named anything and located anywhere in the project.
-Themelios will find it automatically. This allows for using multiple, per-machine
-configuration.sh files, provided they are uniquely named.
-
-In summary, feed Themelios a git repository url and the name of any file which
-[only] contains the following configuration variables:
+Essentially, feed Themelios a git repository url that contains a file which has the following configuration variables:
 
 # Themelios configuration.sh example
 POOL_NAME="zroot"
@@ -121,6 +111,11 @@ EOF
 NIXCFG_HOST=$1
 NIXCFG_REPO=$2
 NIXCFG_BRANCH=$3
+
+function die(){
+    echo "$1"
+    exit 1
+}
 
 __initial_warning() {
     echo "WARNING: The following script intends to replace all of your disk(s) \
@@ -216,13 +211,21 @@ __get_custom_nixcfg() {
         [[ ${NIXCFG_BRANCH} ]] && __checkout_branch
     fi
 
-    # find NIXCFG_HOST ($1) and source the variables
-    echo "Extracting configuration variables..."
-    NIXCFG_HOST=$(cd /tmp/NIXCFG_REPO && find -name "${NIXCFG_HOST}")
-    source "${NIXCFG_HOST}" || __fail_warning
-    cat <<EOF
-${NIXCFG_HOST}
-EOF
+    __find_configuration_sh() {
+        # If given a unique filename, use the filename to source the config variables.
+        cd /tmp/NIXCFG_REPO
+        find -type f -name "${NIXCFG_HOST}" | grep "." && \
+            NIXCFG_HOST=$(find -type f -name "${NIXCFG_HOST}") && \
+            [ ! -f "${NIXCFG_HOST}" ] && die "configuration.sh file not found."
+
+        # If given a unique dirname, use unique_dirname/configuration.sh convention to source the variables.
+        find -type d -name "${NIXCFG_HOST}" | grep "." && \
+            NIXCFG_HOST=$(echo $(find -type d -name "${NIXCFG_HOST}")/configuration.sh)
+    }
+    # If not given a path with slashes to a configuration.sh file, then use find.
+    echo ${NIXCFG_HOST} | grep "/" || __find_configuration_sh
+
+    source "${NIXCFG_HOST}" || die "configuration.sh file not found."
 }
 
 __disk_prep() {
@@ -336,47 +339,49 @@ __datasets_create() {
         mkswap -f /dev/zvol/${POOL_NAME}/SWAP/swap0
         swapon /dev/zvol/${POOL_NAME}/SWAP/swap0
     fi
+
+    __zfs_auto_snapshot() {
+        # set com.sun:auto-snapshot properties
+        if [[ ${SNAPSHOT_HOME} == "true" ]]
+        then
+            echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
+            zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
+        elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+        then
+            echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
+            zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
+        fi
+
+        if [[ ${SNAPSHOT_ROOT} == "true" ]]
+        then
+            echo "Setting com.sun:auto-snapshot=true for ROOT datasets..."
+            zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
+        elif [[ ${SNAPSHOT_ROOT} == "false" ]]
+        then
+            echo "Setting com.sun:auto-snapshot=false for ROOT datasets..."
+            zfs set com.sun:auto-snapshot=false ${POOL_NAME}/ROOT
+        fi
+    }
+    __zfs_auto_snapshot
 }
 
- __zfs_auto_snapshot() {
-     if [[ ${SNAPSHOT_HOME} == "true" ]]
-     then
-         echo "Setting com.sun:auto-snapshot=true for HOME datasets..."
-         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/HOME
-     elif [[ ${SNAPSHOT_ROOT} == "false" ]]
-     then
-         echo "Setting com.sun:auto-snapshot=false for HOME datasets..."
-         zfs set com.sun:auto-snapshot=false ${POOL_NAME}/HOME
-     fi
+__bootstrap_nixcfg() {
+    echo "Moving repo from /tmp to /mnt..."
+    cp -rp /tmp/NIXCFG_REPO /mnt/${NIXCFG_DIR}
 
-     if [[ ${SNAPSHOT_ROOT} == "true" ]]
-     then
-         echo "Setting com.sun:auto-snapshot=true for ROOT datasets..."
-         zfs set com.sun:auto-snapshot=true ${POOL_NAME}/ROOT
-     elif [[ ${SNAPSHOT_ROOT} == "false" ]]
-     then
-         echo "Setting com.sun:auto-snapshot=false for ROOT datasets..."
-         zfs set com.sun:auto-snapshot=false ${POOL_NAME}/ROOT
-     fi
- }
+    echo "Executing nixos-generate-config --root /mnt"
+    nixos-generate-config --root /mnt || __fail_warning
 
- __bootstrap_nixcfg() {
-     echo "Moving repo from /tmp to /mnt..."
-     cp -rp /tmp/NIXCFG_REPO /mnt/${NIXCFG_DIR}
+    [[ ! ${POOL_HOSTID} ]] && POOL_HOSTID="random"
+    if [[ ${POOL_HOSTID} == "random" ]]
+    then
+        echo "Generating random hostid..."
+        POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
+        echo "${POOL_HOSTID}"
+    fi
 
-     echo "Executing nixos-generate-config --root /mnt"
-     nixos-generate-config --root /mnt || __fail_warning
-
-     [[ ! ${POOL_HOSTID} ]] && POOL_HOSTID="random"
-     if [[ ${POOL_HOSTID} == "random" ]]
-     then
-         echo "Generating random hostid..."
-         POOL_HOSTID="$(head -c4 /dev/urandom | od -A none -t x4 | cut -d ' ' -f 2)"
-         echo "${POOL_HOSTID}"
-     fi
-
-     #sanitize TLN for import heredoc
-     TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||')
+    #sanitize TLN for import heredoc
+    TOP_LEVEL_NIXFILE=$(echo "${TOP_LEVEL_NIXFILE}" | sed 's|^./||')
 
     # setup user's future /etc/nixos/configuration.nix file to import their custom TOP_LEVEL_NIXFILE.
     if [[ ${THEMELIOS_ZFS} == "true" ]]
@@ -474,7 +479,7 @@ EOF
     }
 
     __nixos-install
- }
+}
 
 __thank_you() {
     cat <<EOF
@@ -505,15 +510,17 @@ EOF
         umount /mnt/home
         umount /mnt/tmp
         umount /mnt
+
+        echo "Exporting ${POOL_NAME}"
         zpool export ${POOL_NAME}
+
+        read -p "Finished. Reboot now? (Y or N) " -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            reboot
+        fi
     }
     [[ ! ${NOUMOUNT} ]] && __umount_export
-
-    read -p "Finished. Reboot now? (Y or N) " -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        reboot
-    fi
 
     exit
 }
@@ -540,8 +547,12 @@ __bootstrap_git        # install git if needed to the livedisk
 __switch_if_needed     # reconfigure nix livedisk if needed
 __get_custom_nixcfg    # download the machine configuration from git
 __disk_prep            # use sgdisk wipefs or dd to cleanup old disks
-__zpool_create         # create the zpool, make gpt bios boot partition
-__datasets_create      # create a zfs dataset layout
-__zfs_auto_snapshot    # set com.sun:auto-snapshot properties
+
+# Create zpool and maybe-use optional user overlay ~/themelios-pool
+if [[ -e ~/mypool ]] ; then source ~/themelios-pool ; else __zpool_create ; fi
+
+# Create datasets and maybe-use optional user overlay ~/themelios-datasets
+if [[ -e ~/mypool ]] ; then source ~/themelios-datasets ; else __datasets_create ; fi
+
 __bootstrap_nixcfg     # bootstrap the users custom nix configurations
 __thank_you            # may you have a Happy Hacking. :)
