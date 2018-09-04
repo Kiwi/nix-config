@@ -1,18 +1,14 @@
-# build via
-# nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
-# The resulting image can be found in result:
-# ls result/iso/
-
+# nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=/nix-config/lib/myrescueiso.nix
 {config, pkgs, ...}:
-{
+let
+  themelios = pkgs.writeScriptBin "themelios" ''
+    bash <(curl https://raw.githubusercontent.com/a-schaefers/themelios/master/themelios) $@
+  '';
+in {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
-
-    # Provide an initial copy of the NixOS channel so that the user
-    # doesn't need to run "nix-channel --update" first.
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
-
 
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
@@ -20,20 +16,13 @@
   ];
 
   networking = {
-    usePredictableInterfaceNames = false;
-    interfaces.eth0.ip4 = [{
-      address = "192.168.122.99";
-      prefixLength = 24;
-    }];
-    defaultGateway = "192.168.122.1";
+    networkmanager.enable = true;
+    wireless.enable = false;
     nameservers = [ "8.8.8.8" "8.8.4.4" ];
     firewall.allowPing = true;
     firewall.allowedTCPPorts = [ 22 ];
     firewall.allowedUDPPorts = [ 22 ];
   };
-
   boot.supportedFilesystems = [ "zfs" ];
-
-  environment.systemPackages = with pkgs; [ git ];
-
+  environment.systemPackages = with pkgs; [ git themelios ];
 }

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 # only dell latitude e6430 laptop specific settings
  {
-   imports = [ ../modules ];
+   imports = [ ../../modules ];
 
    boot.kernelModules = [ "microcode" "coretemp" ];
    boot.kernelParams = [ "i915.enable_fbc=1" ];
