@@ -1,5 +1,11 @@
 ;;; -*- lexical-binding: t; -*-
 
+(defun my/shell ()
+  (interactive)
+  "Startup to full-windowed shell-mode"
+  (shell)
+  (delete-other-windows))
+
 (defun spacemacs/alternate-buffer (&optional window)
   "Switch back and forth between current and last buffer in the current WINDOW."
   (interactive)
@@ -29,7 +35,7 @@
 (defun my/kill-all-buffers ()
   (interactive)
   (mapc 'kill-buffer (buffer-list))
-  (my-startup-screen-hook))
+  (my/shell))
 (global-set-key (kbd "C-c K") 'my/kill-all-buffers)
 
 ;; Local Variables:
