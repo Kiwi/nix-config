@@ -86,6 +86,7 @@
 (use-package company-quickhelp :init
   (add-hook 'after-init-hook 'company-quickhelp-mode)
   :config (setq company-quickhelp-delay nil)
+  (setq company-global-modes '(not shell-mode))
   (define-key company-active-map (kbd "<f1>") #'company-quickhelp-manual-begin))
 
 ;; linting in the fringe

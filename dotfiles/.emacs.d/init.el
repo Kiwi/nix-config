@@ -29,7 +29,6 @@
 (setq inhibit-startup-screen t
       initial-major-mode 'emacs-lisp-mode
       initial-scratch-message nil)
-(add-hook 'window-setup-hook 'my-startup-screen-hook)
 
 ;; Make Emacs verify tls certificates (depends: gnutls-cli certifi)
 (setq tls-checktrust t)
