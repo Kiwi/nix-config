@@ -70,6 +70,7 @@ with lib;
     environment.systemPackages = with pkgs; [
       # Custom Emacs and some Emacs deps used by my config
       myEmacs
+      vim
       poppler_utils poppler_gi libpng12 zlib
       (python36.withPackages(ps: with ps; [ certifi ]))
       gnutls gnupg gnupg1compat
