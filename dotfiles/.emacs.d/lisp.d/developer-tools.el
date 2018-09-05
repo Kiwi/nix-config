@@ -64,14 +64,6 @@
   (setq avy-background t)
   (setq avy-style 'at-full))
 
-;; highlight search words in the context also (used by ace-isearch)
-(use-package anzu
-  :init
-  (add-hook 'after-init-hook 'global-anzu-mode)
-  :config
-  (global-set-key (kbd "M-%") 'anzu-query-replace)
-  (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
-
 ;; discoverable binds
 (use-package which-key :init
   (add-hook 'after-init-hook 'which-key-mode)
