@@ -39,8 +39,9 @@
   ;; html mail no thanks
   (with-eval-after-load "mm-decode"
     (add-to-list 'mm-discouraged-alternatives "text/html")
-    (add-to-list 'mm-discouraged-alternatives "text/richtext"))
-  (setq mm-automatic-display (remove "text/html" mm-automatic-display))
+    (add-to-list 'mm-discouraged-alternatives "text/richtext")
+    (setq mm-automatic-display (remove "text/html" mm-automatic-display)))
+
 
   ;; misc settings from spacemacs that I am in the habit of using.
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
