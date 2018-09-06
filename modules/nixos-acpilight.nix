@@ -11,7 +11,7 @@ with lib;
         pkgs.acpilight
       ];
       nixpkgs.config.packageOverrides = super: {
-        acpilight = pkgs.callPackage ../../../pkgs/acpilight.nix {};
+      acpilight = pkgs.callPackage ../pkgs/acpilight.nix {};
       };
 
     };

@@ -7,9 +7,9 @@ adamSymlinks = pkgs.writeScriptBin "mynixos-symlinks" ''
 #!${pkgs.stdenv.shell}
 mkdir ~/.emacs.d
 mkdir -p ~/.config/{mpv,mimi}
-ln -sf /nix-config/dotfiles/bin ~/bin
+ln -sfn /nix-config/dotfiles/bin ~/bin
 ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
-ln -sf /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
+ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
 ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
 ln -sf /nix-config/dotfiles/.gitconfig ~/.gitconfig
 ln -sf /nix-config/dotfiles/.bash_profile ~/.bash_profile
