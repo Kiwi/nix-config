@@ -3,6 +3,16 @@
 ;; use the nixos bash shell with M-x shell
 (setq explicit-shell-file-name "/run/current-system/sw/bin/bash")
 
+;; ansi-term shut up use bash
+(defun my/ansi-term ()
+  (interactive)
+  (ansi-term "/run/current-system/sw/bin/bash"))
+
+(defun my/shell ()
+  (interactive)
+  (shell)
+  (delete-other-windows))
+
 ;; use real bash-completion with shell-mode
 (use-package bash-completion
   :init
