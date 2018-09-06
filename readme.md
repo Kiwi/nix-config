@@ -1,20 +1,22 @@
-## How I bootstrap custom zfs-on-root NixOS installs with one command.
+## How I bootstrap customized, per-machine zfs-on-root NixOS installs with one command.
 
-My Laptop:
+### Laptop:
 ```bash
 [root@nixos:~] themelios latitudeE6430 a-schaefers/nix-config
 ```
 
-My Workstation:
+### Workstation:
 ```bash
 [root@nixos:~] themelios hpZ620 a-schaefers/nix-config
 ```
 
-Virtual Machine:
-```bash
-[root@nixos:~] themelios vm a-schaefers/nix-config
-```
+## The Golden Chain - A reproducible system.
+[themelios.sh](https://github.com/a-schaefers/themelios) >
+   bootstraps a machine-specific configuration.sh and default.nix from the [hosts/ directory](https://github.com/a-schaefers/nix-config/tree/master/hosts).
 
-For more information check out [Themelios](https://github.com/a-schaefers/themelios).
+[NixOS](https://nixos.org/) with [lib/recimport.nix](https://github.com/a-schaefers/nix-config/blob/master/lib/recimport.nix) >
+    auto-imports _everything_ in the [modules/ directory](https://github.com/a-schaefers/nix-config/tree/master/modules).
+
+[Emacs](https://www.gnu.org/software/emacs/) uses [straight.el](https://github.com/raxod502/straight.el) for reproducible package management and easy use-package integration. See [dotfiles/emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el)
 
 May the source be with you. |—O—|
