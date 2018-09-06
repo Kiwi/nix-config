@@ -1,17 +1,8 @@
 { config, pkgs, lib, ... }:
 # all $HOME and user configurations
 with lib;
-  let
-    # workaround https://github.com/NixOS/nix/issues/2405
-    extraPkgs = import <nixpkgs> { config={}; overlays=[]; };
-    homeManager = extraPkgs.fetchFromGitHub {
-      owner = "rycee";
-    repo = "home-manager";
-    rev = "9fe6fa7f44d8672f1824620192fe585edee14fcc";
-      sha256 = "qw8mmvd4229vr42cvxixd1i2w7qmyy1c";
-    };
-
-adamDotfiles = "/nix-config/dotfiles";
+let
+  adamDotfiles = "/nix-config/dotfiles";
 
   cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
     #!${pkgs.stdenv.shell}
@@ -39,12 +30,11 @@ adamDotfiles = "/nix-config/dotfiles";
     systemctl restart home-manager-adam || exit
     pkill emacs
   '';
-
-  in
+in
   {
     imports = [
       # make home-manager available https://nixos.wiki/wiki/Home_Manager
-      "${homeManager}/nixos"
+      "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
     ];
 
     options.mine.home.enable = mkEnableOption "Home Profile";
