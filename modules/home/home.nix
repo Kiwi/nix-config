@@ -1,7 +1,14 @@
 { config, pkgs, lib, ... }:
 # all $HOME and user configurations
 with lib;
-let
+  let
+    extraPkgs = import <nixpkgs> { config={}; overlays=[]; };
+    homeManager = extraPkgs.fetchFromGitHub {
+      owner = "rycee";
+    repo = "home-manager";
+    rev = "gitrev";
+    sha256 = "hash";
+  };
   adamDotfiles = "/nix-config/dotfiles";
 
   cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
@@ -34,7 +41,7 @@ in
   {
     imports = [
       # make home-manager available https://nixos.wiki/wiki/Home_Manager
-      "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos"
+      "${homeManager}/nixos"
     ];
 
     options.mine.home.enable = mkEnableOption "Home Profile";
