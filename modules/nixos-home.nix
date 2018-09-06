@@ -5,6 +5,7 @@ let
 
 adamSymlinks = pkgs.writeScriptBin "mynixos-symlinks" ''
 #!${pkgs.stdenv.shell}
+# TODO automate this :)
 mkdir ~/.emacs.d
 mkdir -p ~/.config/{mpv,mimi}
 ln -sfn /nix-config/dotfiles/bin ~/bin
@@ -42,7 +43,7 @@ find -name "*" | egrep -v \
 "bash_history|ssh|gnupg|gpg|mozilla|qBittorrent|emacs|slime|repos|Documents|Downloads" \
 | xargs rm -f
 find . -type d -empty -delete
-pkill emacs
+mynixos-symlinks
 '';
 in
 {

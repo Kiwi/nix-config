@@ -1,28 +1,34 @@
 { config, pkgs, ... }:
-# only dell latitude e6430 laptop specific settings
- {
-   imports = [ ../../modules ];
+# only dell latitude E6430 specific settings
+{
+imports = [ ../../modules ];
 
-   boot.kernelModules = [ "microcode" "coretemp" ];
-   boot.kernelParams = [ "i915.enable_fbc=1" ];
-   networking.hostName = "E6430";
+# computer specific
+networking.hostName = "E6430";
 
-   mine.workstation.enable = true;
-   mine.home.enable = true;
-   mine.libvirtd.enable = true;
-   mine.acpilight.enable = true;
+# hardware specific
+boot.kernelModules = [ "microcode" "coretemp" ];
+boot.kernelParams = [ "i915.enable_fbc=1" ];
 
-   services.tlp.enable = true;
+# my modules
+# modules.etc.enable = true; # general settings
+modules.world.enable = true; # general packages
+mine.workstation.enable = true; # desktop workstation packages and settings
+mine.home.enable = true; # home / user related settings
+mine.libvirtd.enable = true; # libvirtd specific module
 
-   services.xserver.libinput.enable = true;
-   services.xserver.libinput.accelSpeed = "0.9";
+# boost laptop power savings
+services.tlp.enable = true;
 
-   services.xserver.videoDrivers = [ "modesetting" ];
+# touchpad
+services.xserver.libinput.enable = true;
+services.xserver.libinput.accelSpeed = "0.9";
 
-   # compton's glx backend activates driver vsync automatically in this particular laptop,
-   # necessary because the modesetting xorg driver does not have a TearFree option.
-   services.compton = {
-     enable = true;
-     backend = "glx";
-   };
- }
+# xf86-video-intel works better for this laptop than modesetting :)
+services.xserver.videoDrivers = [ "intel" ];
+services.xserver.deviceSection = ''
+Option "DRI" "3"
+Option "TearFree" "true"
+Option "AccelMethod" "glamor"
+'';
+}

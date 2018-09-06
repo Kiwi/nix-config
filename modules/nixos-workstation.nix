@@ -30,7 +30,7 @@ driSupport = true;
 driSupport32Bit = true;
 };
 
-# Xorg, Slim, Emacs
+# Xorg, Slim, Emacs for window manager.
 services.xserver = {
 enable = true;
 layout = "us";
@@ -81,7 +81,7 @@ gnutls gnupg gnupg1compat
 glxinfo
 wmctrl
 scrot
-xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
+xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot xorg.xbacklight
 numlockx
 xclip xsel
 libnotify dunst
