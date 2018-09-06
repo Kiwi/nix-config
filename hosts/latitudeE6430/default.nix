@@ -5,15 +5,8 @@
 
    boot.kernelModules = [ "microcode" "coretemp" ];
    boot.kernelParams = [ "i915.enable_fbc=1" ];
-   boot.loader.grub.devices = [
-     "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
-     "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0"
-   ];
-
    networking.hostName = "E6430";
-   networking.hostId = "007f0100";
 
-   mine.zfs.enable = true;
    mine.workstation.enable = true;
    mine.home.enable = true;
    mine.libvirtd.enable = true;
