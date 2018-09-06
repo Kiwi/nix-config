@@ -7,7 +7,7 @@ with lib;
       owner = "rycee";
     repo = "home-manager";
     rev = "gitrev";
-    sha256 = "hash";
+    sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
   };
   adamDotfiles = "/nix-config/dotfiles";
 
