@@ -21,7 +21,7 @@ let
 
   cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
     #!${pkgs.stdenv.shell}
-    # remove $HOME cruft with a list of exceptions to keep.
+    # yes i know this is rediculous, but what the hay.
     cd ~/
     find -name "*" | egrep -v \
     "bash_history|ssh|gnupg|gpg|mozilla|qBittorrent|emacs|slime|repos|Documents|Downloads" \
