@@ -7,7 +7,7 @@ with lib;
     homeManager = extraPkgs.fetchFromGitHub {
       owner = "rycee";
     repo = "home-manager";
-    rev = "gitrev";
+    rev = "9fe6fa7f44d8672f1824620192fe585edee14fcc";
       sha256 = "qw8mmvd4229vr42cvxixd1i2w7qmyy1c";
     };
 
