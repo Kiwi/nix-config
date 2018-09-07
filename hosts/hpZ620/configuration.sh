@@ -11,7 +11,7 @@ use_zero_disks="false"     # use dd if=/dev/zero ...
 zfs_pool_name="zroot"
 zfs_pool_type="mirror"     # use "" for single, or "mirror", "raidz1", etc.
 
-# Note: using /dev/disk/by-id is also preferable. #TODO
+# Note: using /dev/disk/by-id is also preferable.
 zfs_pool_disks=("/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B77820D2629"
                 "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B77820D2E9A")
 
