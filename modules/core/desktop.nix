@@ -51,6 +51,9 @@ in
 options.modules.desktop.enable = mkEnableOption "Desktop Profile";
 config = mkIf config.modules.desktop.enable {
 
+# splash screen.
+boot.plymouth.enable = true;
+
 # setup users
 users.users.adam =
 { isNormalUser = true;
@@ -88,7 +91,7 @@ enable = true;
 layout = "us";
 useGlamor = true;
 displayManager.slim.enable = true;
-displayManager.slim.autoLogin = true;
+displayManager.slim.autoLogin = false;
 displayManager.slim.defaultUser = "adam";
 displayManager.sessionCommands = ''
 ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
