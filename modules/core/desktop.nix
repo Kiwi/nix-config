@@ -112,6 +112,11 @@ xterm.enable = false;
 };
 windowManager.exwm.enable = true;
 windowManager.exwm.enableDefaultConfig = false;
+windowManager.exwm.extraPackages = epkgs: [
+# epkgs.emms
+# epkgs.magit
+# ...
+];
 
 };
 
