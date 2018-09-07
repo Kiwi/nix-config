@@ -16,7 +16,7 @@ modules.desktop.enable = true;
 modules.libvirtd.enable = true;
 
 # video
-services.xserver.videoDrivers = [ "modesetting" ]; # might need to be amdgpu here.
+services.xserver.videoDrivers = [ "modesetting" ];
 services.xserver.deviceSection = ''
 Option "DRI" "3"
 Option "TearFree" "true"
