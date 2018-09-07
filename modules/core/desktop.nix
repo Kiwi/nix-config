@@ -94,7 +94,6 @@ ${pkgs.numlockx}/bin/numlockx
 ${pkgs.dunst}/bin/dunst &
 '';
 
-
 # desktopManager = {
 # xterm.enable = false;
 # default = "emacs";
@@ -107,6 +106,10 @@ ${pkgs.dunst}/bin/dunst &
 # '';}];};
 
 # testing this
+desktopManager = {
+default = "none";
+xterm.enable = false;
+};
 windowManager.exwm.enable = true;
 windowManager.exwm.enableDefaultConfig = false;
 
