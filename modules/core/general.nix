@@ -2,7 +2,7 @@
 with lib;
 {
 imports = [];
-options.modules.general.enable = mkEnableOption "Etc Profile";
+options.modules.general.enable = mkEnableOption "General Profile";
 config = mkIf config.modules.general.enable {
 
 i18n = {

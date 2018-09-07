@@ -3,11 +3,12 @@
 {
 imports = [ ../../modules ];
 
-networking.hostName = "latitude";
+networking.hostName = "latitudeE6430";
 
 # hardware specific
 boot.kernelModules = [ "microcode" "coretemp" ];
 boot.kernelParams = [ "i915.enable_fbc=1" ];
+boot.initrd.kernelModules = [ "i915" ];
 
 # my modules
 modules.general.enable = true;     # general profile for all machines
@@ -28,6 +29,11 @@ Option "DRI" "3"
 Option "TearFree" "true"
 Option "AccelMethod" "glamor"
 '';
+
+# pkgs only for this machine
+environment.systemPackages = with pkgs; [
+xorg.xbacklight
+];
 
 # This value determines the NixOS release with which your system is to be
 # compatible, in order to avoid breaking some software such as database

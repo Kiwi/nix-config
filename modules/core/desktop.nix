@@ -88,7 +88,7 @@ enable = true;
 layout = "us";
 useGlamor = true;
 displayManager.slim.enable = true;
-displayManager.slim.autoLogin = false;
+displayManager.slim.autoLogin = true;
 displayManager.slim.defaultUser = "adam";
 displayManager.sessionCommands = ''
 ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
@@ -136,7 +136,7 @@ gnutls gnupg gnupg1compat
 glxinfo
 wmctrl
 scrot
-xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot xorg.xbacklight
+xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
 numlockx
 xclip xsel
 libnotify dunst
