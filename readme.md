@@ -1,11 +1,9 @@
-## How I bootstrap customized, per-machine zfs-on-root NixOS installs with one command using this repo.
-
-### My Laptop:
+## Laptops:
 ```bash
 [root@nixos:~] themelios latitudeE6430 a-schaefers/nix-config
 ```
 
-### My Workstation:
+## Workstations:
 ```bash
 [root@nixos:~] themelios hpZ620 a-schaefers/nix-config
 ```
