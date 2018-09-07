@@ -15,6 +15,6 @@
 
 [NixOS](https://nixos.org/) with [lib/recimport.nix](https://github.com/a-schaefers/nix-config/blob/master/lib/recimport.nix) auto-imports _everything_ in the [modules/ directory](https://github.com/a-schaefers/nix-config/tree/master/modules).
 
-[dotfiles/emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el) uses [straight.el](https://github.com/raxod502/straight.el) for reproducible package management and easy use-package integration.
+[dotfiles/emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el) uses [straight.el](https://github.com/raxod502/straight.el) for reproducible package management and easy [use-package](https://github.com/jwiegley/use-package) integration.
 
 May the source be with you. |—O—|
