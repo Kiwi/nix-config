@@ -3,27 +3,31 @@ with lib;
 let
 myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 
+# create my symlinks
 adamSymlinks = pkgs.writeScriptBin "mynixos-symlinks" ''
 #!${pkgs.stdenv.shell}
-# TODO automate this :)
-mkdir ~/.emacs.d
-mkdir -p ~/.config/{mpv,mimi}
-ln -sfn /nix-config/dotfiles/bin ~/bin
-ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
-ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
-ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
-ln -sf /nix-config/dotfiles/.gitconfig ~/.gitconfig
 ln -sf /nix-config/dotfiles/.bash_profile ~/.bash_profile
 ln -sf /nix-config/dotfiles/.bashrc ~/.bashrc
 ln -sf /nix-config/dotfiles/.inputrc ~/.inputrc
-ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
+ln -sf /nix-config/dotfiles/.gitconfig ~/.gitconfig
 ln -sf /nix-config/dotfiles/.mailcap ~/.mailcap
+ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
+
+mkdir ~/.emacs.d
+ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
+ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
+
+mkdir -p ~/.config/{mpv,mimi,bin}
 ln -sf /nix-config/dotfiles/.config/mpv/mpv.conf ~/.config/mpv/mpv.conf
+ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
+ln -sf /nix-config/dotfiles/bin/emacsmail ~/bin/emacsmail
+ln -sf /nix-config/dotfiles/bin/xdg-open ~/bin/xdg-open
+ln -sf /nix-config/dotfiles/bin/nextmonitor.sh ~/bin/nextmonitor.sh
 '';
 
+# clone my repos script
 cloneRepos = pkgs.writeScriptBin "mynixos-cloneRepos" ''
 #!${pkgs.stdenv.shell}
-# clone all of my favorite repos
 mkdir ~/repos/
 cd ~/repos/
 git clone git@github.com:cooslug/cooslug.github.io.git
@@ -33,17 +37,6 @@ git clone git@github.com:apoptosis/episteme.git
 git clone git@github.com:a-schaefers/a-schaefers.github.io.git
 git clone git@github.com:TemptorSent/Funtools.git
 git clone git@github.com:bbatsov/prelude.git
-'';
-
-cleanHome = pkgs.writeScriptBin "mynixos-cleanHome" ''
-#!${pkgs.stdenv.shell}
-# Yes, I know this is rediculous, but what the hay guys :)
-cd ~/
-find -name "*" | egrep -v \
-"bash_history|ssh|gnupg|gpg|mozilla|qBittorrent|emacs|slime|repos|Documents|Downloads" \
-| xargs rm -f
-find . -type d -empty -delete
-mynixos-symlinks
 '';
 
 in
@@ -100,16 +93,24 @@ ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 ${pkgs.numlockx}/bin/numlockx
 ${pkgs.dunst}/bin/dunst &
 '';
-desktopManager = {
-xterm.enable = false;
-default = "emacs";
-session = [ {
-manage = "desktop";
-name = "emacs";
-start = ''
-${myEmacs}/bin/emacs &
-waitPID=$!
-'';}];};};
+
+
+# desktopManager = {
+# xterm.enable = false;
+# default = "emacs";
+# session = [ {
+# manage = "desktop";
+# name = "emacs";
+# start = ''
+# ${myEmacs}/bin/emacs &
+# waitPID=$!
+# '';}];};
+
+# testing this
+windowManager.exwm.enable = true;
+windowManager.exwm.enableDefaultConfig = false;
+
+};
 
 environment.sessionVariables = {
 EDITOR = "emacsclient";
@@ -126,7 +127,6 @@ environment.systemPackages = with pkgs; [
 # Custom Emacs and some Emacs deps used by my config
 myEmacs
 cloneRepos
-cleanHome
 adamSymlinks
 gitAndTools.gitFull gitAndTools.gitflow
 tmux
