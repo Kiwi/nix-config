@@ -11,9 +11,9 @@ boot.kernelParams = [ "intel_iommu=on iommu=pt" "amdgpu.audio=0" "amdgpu.dc=1" ]
 boot.initrd.kernelModules = [ "amdgpu" ];
 
 # my modules
-modules.general.enable = true;     # general profile for all machines
-modules.desktop.enable = true;     # desktop profile for all machines
-modules.libvirtd.enable = true;    # libvirtd module
+modules.general.enable = true;
+modules.desktop.enable = true;
+modules.libvirtd.enable = true;
 
 # video
 services.xserver.videoDrivers = [ "modesetting" ]; # might need to be amdgpu here.
@@ -22,6 +22,11 @@ Option "DRI" "3"
 Option "TearFree" "true"
 Option "AccelMethod" "glamor"
 '';
+
+services.compton = {
+enable = true;
+backend = "glx";
+};
 
 # This value determines the NixOS release with which your system is to be
 # compatible, in order to avoid breaking some software such as database

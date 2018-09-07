@@ -11,9 +11,9 @@ boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
 
 # my modules
-modules.general.enable = true;     # general profile for all machines
-modules.desktop.enable = true;     # desktop profile for all machines
-modules.libvirtd.enable = true;    # libvirtd module
+modules.general.enable = true;
+modules.desktop.enable = true;
+modules.libvirtd.enable = true;
 
 # boost laptop power savings
 services.tlp.enable = true;
@@ -29,6 +29,11 @@ Option "DRI" "3"
 Option "TearFree" "true"
 Option "AccelMethod" "glamor"
 '';
+
+services.compton = {
+enable = true;
+backend = "glx";
+};
 
 # pkgs only for this machine
 environment.systemPackages = with pkgs; [
