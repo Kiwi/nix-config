@@ -37,7 +37,8 @@ backend = "glx";
 
 # pkgs only for this machine
 environment.systemPackages = with pkgs; [
-xorg.xbacklight
+# xorg.xbacklight doesn't work with modesetting driver.
+# waiting for acpilight to enter the nixos repos... yay.
 ];
 
 # This value determines the NixOS release with which your system is to be
