@@ -23,7 +23,7 @@ services.xserver.libinput.enable = true;
 services.xserver.libinput.accelSpeed = "0.9";
 
 # xf86-video-intel works better for this laptop than modesetting :)
-services.xserver.videoDrivers = [ "intel" ];
+services.xserver.videoDrivers = [ "modesetting" ];
 services.xserver.deviceSection = ''
 Option "DRI" "3"
 Option "TearFree" "true"
