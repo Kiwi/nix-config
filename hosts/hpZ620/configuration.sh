@@ -11,9 +11,9 @@ use_zero_disks="false"     # use dd if=/dev/zero ...
 zfs_pool_name="zroot"
 zfs_pool_type="mirror"     # use "" for single, or "mirror", "raidz1", etc.
 
-# Note: using /dev/disk/by-id is also preferable.
-zfs_pool_disks=("/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
-                "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0")
+# Note: using /dev/disk/by-id is also preferable. #TODO
+zfs_pool_disks=(""
+                "")
 
 # Datasets to be set with com.sun:auto-snapshot=true.
 zfs_auto_snapshot=("$zfs_pool_name/HOME" "$zfs_pool_name/ROOT")
@@ -37,7 +37,7 @@ zfs_dataset_overlay_file=""      # override datasets_create()
 
 # Your top-level configuration.nix file to be bootstrapped-- (use the relative path from the project_root.)
 # For example, to bootstrap project_root/hosts/vm-example/default.nix
-nix_top_level_configuration="hosts/latitudeE6430"
+nix_top_level_configuration="hosts/hpZ620"
 
 # Directory name of to clone your git-remote in "/" (root). Do not use slashes.
 # This is intended to be the directory to operate the nix installation from.
