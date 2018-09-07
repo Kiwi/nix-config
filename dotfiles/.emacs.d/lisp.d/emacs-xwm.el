@@ -68,6 +68,10 @@
                       '(lambda ()
                          (interactive)
                          (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh")))
+  (exwm-input-set-key (kbd "<f11>")
+                      '(lambda ()
+                         (interactive)
+                         (start-process-shell-command "xmodmap ~/.Xmodmap ; xset r rate 250 50" nil "xmodmap ~/.Xmodmap ; xset r rate 250 50")))
   ;; Window and Buffer management
   (exwm-input-set-key (kbd "<f1>") 'my/shell)
   (exwm-input-set-key (kbd "<f2>") 'gnus)
