@@ -116,10 +116,10 @@
   (exwm-input-set-key (kbd "H-<iso-lefttab>") 'spacemacs/alternate-window)
   (exwm-input-set-key (kbd "H-<tab>") 'spacemacs/alternate-buffer)
 
-  (exwm-input-set-key (kbd "H-q") 'kill-buffer-and-window)
-  (exwm-input-set-key (kbd "H-d") 'delete-window)
   (exwm-input-set-key (kbd "H-/") 'winner-undo)
   (exwm-input-set-key (kbd "H-?") 'winner-redo)
+  (exwm-input-set-key (kbd "H-<backspace>") 'kill-buffer-and-window)
+  (exwm-input-set-key (kbd "H-0") 'delete-window)
   (exwm-input-set-key (kbd "H-1") 'delete-other-windows)
   (exwm-input-set-key (kbd "H-2") 'split-window-below)
   (exwm-input-set-key (kbd "H-3") 'split-window-right))
