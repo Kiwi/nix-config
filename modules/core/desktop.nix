@@ -78,14 +78,12 @@ driSupport = true;
 driSupport32Bit = true;
 };
 
-# Xorg, Slim, Exwm
+# Xorg, lightdm, emacs
 services.xserver = {
 enable = true;
 layout = "us";
 useGlamor = true;
-displayManager.slim.enable = true;
-displayManager.slim.autoLogin = false;
-displayManager.slim.defaultUser = "adam";
+displayManager.lightdm.enable = true;
 displayManager.sessionCommands = ''
 ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50
@@ -93,32 +91,16 @@ ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 ${pkgs.numlockx}/bin/numlockx
 ${pkgs.dunst}/bin/dunst &
 '';
-
-# desktopManager = {
-# xterm.enable = false;
-# default = "emacs";
-# session = [ {
-# manage = "desktop";
-# name = "emacs";
-# start = ''
-# ${myEmacs}/bin/emacs &
-# waitPID=$!
-# '';}];};
-
-# testing this
 desktopManager = {
-default = "none";
 xterm.enable = false;
-};
-windowManager.exwm.enable = true;
-windowManager.exwm.enableDefaultConfig = false;
-windowManager.exwm.extraPackages = epkgs: [
-# epkgs.emms
-# epkgs.magit
-# ...
-];
-
-};
+default = "emacs";
+session = [ {
+manage = "desktop";
+name = "emacs";
+start = ''
+${pkgs.emacs}/bin/emacs &
+waitPID=$!
+'';}];};};
 
 environment.sessionVariables = {
 EDITOR = "emacsclient";
@@ -143,6 +125,10 @@ shellcheck
 poppler_utils poppler_gi libpng12 zlib
 (python36.withPackages(ps: with ps; [ certifi ]))
 gnutls gnupg gnupg1compat
+
+# desktop appearance
+lxappearance
+numix-cursor-theme
 
 # desktop support applications
 glxinfo
