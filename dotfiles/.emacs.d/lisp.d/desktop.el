@@ -76,10 +76,11 @@
   (exwm-input-set-key (kbd "<f19>") 'helm-run-external-command)
   (exwm-input-set-key (kbd "<f18>") 'helm-mini)
   (exwm-input-set-key (kbd "<f17>") 'exwm-input-toggle-keyboard)
-  (exwm-input-set-key (kbd "H-q") 'kill-buffer-and-window)
-  (exwm-input-set-key (kbd "H-d") 'delete-window)
+
+  (exwm-input-set-key (kbd "H-<backspace>") 'kill-buffer-and-window)
   (exwm-input-set-key (kbd "H-/") 'winner-undo)
   (exwm-input-set-key (kbd "H-?") 'winner-redo)
+  (exwm-input-set-key (kbd "H-0") 'delete-window)
   (exwm-input-set-key (kbd "H-1") 'delete-other-windows)
   (exwm-input-set-key (kbd "H-2") 'split-window-below)
   (exwm-input-set-key (kbd "H-3") 'split-window-right)
