@@ -6,6 +6,7 @@ let
 # create my symlinks
 adamSymlinks = pkgs.writeScriptBin "mynixos-symlinks" ''
 #!${pkgs.stdenv.shell}
+ln -sfn /nix-config/dotfiles/bin ~/bin
 ln -sf /nix-config/dotfiles/.bash_profile ~/.bash_profile
 ln -sf /nix-config/dotfiles/.bashrc ~/.bashrc
 ln -sf /nix-config/dotfiles/.inputrc ~/.inputrc
@@ -15,17 +16,14 @@ ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
 ln -sf /nix-config/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 ln -sf /nix-config/dotfiles/.Xresources ~/.Xresources
 
-mkdir ~/.emacs.d
+mkdir ~/{bin,.emacs.d}
 ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
 ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
 
-mkdir -p ~/.config/{mpv,mimi,bin,gtk-3.0}
+mkdir -p ~/.config/{mpv,mimi,gtk-3.0}
 ln -sf /nix-config/dotfiles/.config/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -sf /nix-config/dotfiles/.config/mpv/mpv.conf ~/.config/mpv/mpv.conf
 ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
-ln -sf /nix-config/dotfiles/bin/emacsmail ~/bin/emacsmail
-ln -sf /nix-config/dotfiles/bin/xdg-open ~/bin/xdg-open
-ln -sf /nix-config/dotfiles/bin/nextmonitor.sh ~/bin/nextmonitor.sh
 '';
 
 # clone my repos script
