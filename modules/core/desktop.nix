@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+# myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 
 # create my symlinks
 adamSymlinks = pkgs.writeScriptBin "mynixos-symlinks" ''
@@ -78,7 +78,7 @@ driSupport = true;
 driSupport32Bit = true;
 };
 
-# Xorg, Slim, Emacs for window manager.
+# Xorg, Slim, Exwm
 services.xserver = {
 enable = true;
 layout = "us";
@@ -132,8 +132,9 @@ dejavu_fonts
 source-code-pro ];
 
 environment.systemPackages = with pkgs; [
-# Custom Emacs and some Emacs deps used by my config
-myEmacs
+# Emacs and related things.
+# myEmacs
+emacs
 cloneRepos
 adamSymlinks
 gitAndTools.gitFull gitAndTools.gitflow
