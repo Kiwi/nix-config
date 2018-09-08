@@ -111,7 +111,8 @@ _JAVA_AWT_WM_NONREPARENTING = "1";
 # some basic xft fonts
 fonts.fonts = with pkgs; [
 dejavu_fonts
-source-code-pro ];
+source-code-pro
+];
 
 environment.systemPackages = with pkgs; [
 # Emacs and related things.
@@ -129,6 +130,8 @@ gnutls gnupg gnupg1compat
 # desktop appearance
 lxappearance
 numix-cursor-theme
+arc-theme
+arc-icon-theme
 
 # desktop support applications
 glxinfo
