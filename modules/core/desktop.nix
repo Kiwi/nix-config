@@ -12,12 +12,15 @@ ln -sf /nix-config/dotfiles/.inputrc ~/.inputrc
 ln -sf /nix-config/dotfiles/.gitconfig ~/.gitconfig
 ln -sf /nix-config/dotfiles/.mailcap ~/.mailcap
 ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
+ln -sf /nix-config/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
+ln -sf /nix-config/dotfiles/.Xresources ~/.Xresources
 
 mkdir ~/.emacs.d
 ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
 ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
 
-mkdir -p ~/.config/{mpv,mimi,bin}
+mkdir -p ~/.config/{mpv,mimi,bin,gtk-3.0}
+ln -sf /nix-config/dotfiles/.config/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -sf /nix-config/dotfiles/.config/mpv/mpv.conf ~/.config/mpv/mpv.conf
 ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
 ln -sf /nix-config/dotfiles/bin/emacsmail ~/bin/emacsmail
