@@ -55,11 +55,11 @@
                         (string= "gimp" exwm-instance-name))
                 (exwm-workspace-rename-buffer exwm-title))))
 
-  (exwm-input-set-key (kbd "<f12>")
+  (exwm-input-set-key (kbd "S-<f12>")
                       '(lambda ()
                          (interactive)
                          (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh")))
-  (exwm-input-set-key (kbd "<f11>")
+  (exwm-input-set-key (kbd "S-<f11>")
                       '(lambda ()
                          (interactive)
                          (start-process-shell-command "xmodmap ~/.Xmodmap ; xset r rate 250 50" nil "xmodmap ~/.Xmodmap ; xset r rate 250 50")))
