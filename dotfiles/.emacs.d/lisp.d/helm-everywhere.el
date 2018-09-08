@@ -3,8 +3,31 @@
 (use-package helm :demand
   :config (require 'helm-config)
 
+  ;; raise windows using wmctrl
   (when (executable-find "wmctrl")
     (setq helm-raise-command "wmctrl -xa %s"))
+
+  ;; don't show nixos .wrapper-binaries
+  (progn
+    (setq helm-external-commands-list
+          (cl-loop
+           for dir in (split-string (getenv "PATH") path-separator)
+           when (and (file-exists-p dir) (file-accessible-directory-p dir))
+           for lsdir = (cl-loop for i in (directory-files dir t)
+                                for bn = (file-name-nondirectory i)
+                                when (and (not (member bn completions))
+                                          (not (file-directory-p i))
+                                          (file-executable-p i))
+                                collect bn)
+           append lsdir into completions
+           finally return
+           completions))
+    (setq helm-external-commands-list
+          (cl-remove-if (lambda (v) (string-match "^\\." v)) helm-external-commands-list)))
+
+
+
+
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
@@ -54,6 +77,8 @@
 
 ;; add emms
 (use-package helm-emms)
+
+;; nixos specific, remove hidden files from helm launcher
 
 ;; Local Variables:
 ;; coding: utf-8
