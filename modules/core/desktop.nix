@@ -88,10 +88,10 @@ displayManager.lightdm.enable = true;
 displayManager.sessionCommands = ''
 ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50
-${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 ${pkgs.numlockx}/bin/numlockx
 ${pkgs.dunst}/bin/dunst &
 '';
+# ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 desktopManager = {
 xterm.enable = false;
 default = "emacs";
