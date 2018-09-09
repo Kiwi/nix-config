@@ -153,5 +153,6 @@ openvpn
 ];
 
 programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+services.sshd.permitRootLogin = true;
 };
 }
