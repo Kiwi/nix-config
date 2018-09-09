@@ -55,70 +55,23 @@
                         (string= "gimp" exwm-instance-name))
                 (exwm-workspace-rename-buffer exwm-title))))
 
-  (exwm-input-set-key (kbd "S-<f12>")
-                      '(lambda ()
-                         (interactive)
-                         (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh")))
-  (exwm-input-set-key (kbd "S-<f11>")
-                      '(lambda ()
-                         (interactive)
-                         (start-process-shell-command "xmodmap ~/.Xmodmap ; xset r rate 250 50" nil "xmodmap ~/.Xmodmap ; xset r rate 250 50")))
   ;; Window and Buffer management
   (exwm-input-set-key (kbd "<f1>") 'my/shell)
   (exwm-input-set-key (kbd "<f2>") 'gnus)
   (exwm-input-set-key (kbd "<f3>") 'my/erc-bounce)
   (exwm-input-set-key (kbd "<f4>") 'emms-hydra/body)
-  (exwm-input-set-key (kbd "H-w") (lambda ()
-                                    (interactive)
-                                    (other-window -1)))
+  (exwm-input-set-key (kbd "<H-return>") (lambda ()
+                                           (interactive)
+                                           (other-window -1)))
   (exwm-input-set-key (kbd "H-<iso-lefttab>") 'spacemacs/alternate-window)
   (exwm-input-set-key (kbd "H-<tab>") 'spacemacs/alternate-buffer)
   (exwm-input-set-key (kbd "<f19>") 'helm-run-external-command)
   (exwm-input-set-key (kbd "<f18>") 'helm-mini)
   (exwm-input-set-key (kbd "<f17>") 'exwm-input-toggle-keyboard)
 
-  (exwm-input-set-key (kbd "H-<backspace>") 'kill-buffer-and-window)
+  (exwm-input-set-key (kbd "<H-backspace>") 'kill-buffer-and-window)
   (exwm-input-set-key (kbd "H-/") 'winner-undo)
   (exwm-input-set-key (kbd "H-?") 'winner-redo)
-  (exwm-input-set-key (kbd "H-0") 'delete-window)
-  (exwm-input-set-key (kbd "H-1") 'delete-other-windows)
-  (exwm-input-set-key (kbd "H-2") 'split-window-below)
-  (exwm-input-set-key (kbd "H-3") 'split-window-right)
-
-  ;; switch display to next monitor toggle.
-  (exwm-input-set-key
-   (kbd "s-m")
-   '(lambda ()
-      (interactive)
-      (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh")))
-
-  ;; for when i unplug / replug keyboards or return from laptop suspend...
-  (exwm-input-set-key
-   (kbd "s-k")
-   '(lambda ()
-      (interactive)
-      (start-process-shell-command "xmodmap ~/.Xmodmap" nil "xmodmap ~/.Xmodmap")
-      (start-process-shell-command "xset r rate 250 50" nil "xset r rate 250 50")))
-
-  ;; Window and Buffer management
-  (exwm-input-set-key (kbd "<f1>") 'my/shell)
-  (exwm-input-set-key (kbd "<f2>") 'gnus)
-  (exwm-input-set-key (kbd "<f3>") 'my/erc-bounce)
-  (exwm-input-set-key (kbd "<f4>") 'emms-hydra/body)
-
-  (exwm-input-set-key (kbd "<f19>") 'helm-run-external-command) ;; xmodmap r-ctrl
-  (exwm-input-set-key (kbd "<f18>") 'helm-mini) ;; xmodmap "menu"
-  (exwm-input-set-key (kbd "<f17>") 'exwm-input-toggle-keyboard) ;; xmodmap l-ctrl
-
-  (exwm-input-set-key (kbd "H-w") (lambda ()
-                                    (interactive)
-                                    (other-window -1)))
-  (exwm-input-set-key (kbd "H-<iso-lefttab>") 'spacemacs/alternate-window)
-  (exwm-input-set-key (kbd "H-<tab>") 'spacemacs/alternate-buffer)
-
-  (exwm-input-set-key (kbd "H-/") 'winner-undo)
-  (exwm-input-set-key (kbd "H-?") 'winner-redo)
-  (exwm-input-set-key (kbd "H-<backspace>") 'kill-buffer-and-window)
   (exwm-input-set-key (kbd "H-0") 'delete-window)
   (exwm-input-set-key (kbd "H-1") 'delete-other-windows)
   (exwm-input-set-key (kbd "H-2") 'split-window-below)

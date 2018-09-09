@@ -32,6 +32,19 @@
   (my/shell))
 (global-set-key (kbd "C-c K") 'my/kill-all-buffers)
 
+;; switch display to next monitor toggle.
+(defun my/next-monitor ()
+  (interactive)
+  (start-process-shell-command "bash ~/bin/nextmonitor.sh" nil "bash ~/bin/nextmonitor.sh"))
+
+;; for when i unplug / replug keyboards or return from laptop suspend...
+(defun my/keys ()
+  (interactive)
+  '(lambda ()
+     (start-process-shell-command "xmodmap ~/.Xmodmap" nil "xmodmap ~/.Xmodmap")
+     (start-process-shell-command "xset r rate 250 50" nil "xset r rate 250 50")))
+
+
 ;; Local Variables:
 ;; coding: utf-8
 ;; no-byte-compile: t
