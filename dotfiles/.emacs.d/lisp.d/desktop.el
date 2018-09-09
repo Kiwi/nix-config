@@ -8,18 +8,6 @@
   (exwm-enable)
 
   (setq exwm-workspace-number 1)
-  (setq exwm-input-global-keys
-        `(([?\s-r] . exwm-reset)
-          ([?\s-w] . exwm-workspace-switch)
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))
-          ([?\s-&] . (lambda (command)
-		       (interactive (list (read-shell-command "$ ")))
-		       (start-process-shell-command command nil command)))))
 
   (setq exwm-input-simulation-keys
         '(
@@ -55,18 +43,15 @@
                         (string= "gimp" exwm-instance-name))
                 (exwm-workspace-rename-buffer exwm-title))))
 
-  ;; Window and Buffer management
   (exwm-input-set-key (kbd "<f1>") 'my/shell)
   (exwm-input-set-key (kbd "<f2>") 'gnus)
   (exwm-input-set-key (kbd "<f3>") 'my/erc-bounce)
   (exwm-input-set-key (kbd "<f4>") 'emms-hydra/body)
-  (exwm-input-set-key (kbd "s-SPC") 'helm-run-external-command)
   (exwm-input-set-key (kbd "<f17>") 'exwm-input-toggle-keyboard)
-  ;; (exwm-input-set-key (kbd "<f19>") ')
-  ;; (exwm-input-set-key (kbd "<f18>") ')
+  (exwm-input-set-key (kbd "<f18>") 'helm-mini)
+  (exwm-input-set-key (kbd "<f19>") 'helm-run-external-command)
 
-  ;; buffer and window mgmt
-  (exwm-input-set-key (kbd "s-b") 'helm-mini)
+  ;; window mgmt
   (exwm-input-set-key (kbd "s-<tab>") 'spacemacs/alternate-buffer)
   (exwm-input-set-key (kbd "s-[") 'previous-buffer)
   (exwm-input-set-key (kbd "s-]") 'next-buffer)
