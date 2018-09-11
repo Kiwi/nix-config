@@ -1,6 +1,6 @@
 # Themelios configuration.sh
 
-# Disk preparation settings #
+# DISK PREPARATION SETTINGS #
 
 use_sgdisk_clear="true"    # use sgdisk --clear
 use_wipefs_all="true"      # use wipefs --all
@@ -19,19 +19,19 @@ zfs_pool_disks=("/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B77820D2629"
 zfs_auto_snapshot=("$zfs_pool_name/HOME" "$zfs_pool_name/ROOT")
 
 # If true, mount /nix outside of the / (root) dataset.
-# Setting this to true would trade-off the ability to use zfs boot environments for extra disk space.
-# If you use nix.gc.automatic, then this should not be much of an issue. recommended "false".
-zfs_dataset_slashnix_no_root="false"
+# Recommended true for now due to https://github.com/a-schaefers/themelios/issues/1
+zfs_dataset_slashnix_no_root="true"
 
 # Todo allow true or false for this exception.
 zfs_use_atime="off"              # set to "on" or "off" (recommended "off" for ssd.)
 
-zfs_make_swap="false"            # creates a swap zvol
+zfs_make_swap="false"            # creates a swap zvol (Not recommended in zfs-land.)
 zfs_swap_size="4G"
 
 # If set, themelios will source them if the files exist alongside configuration.sh
 zfs_pool_overlay_file=""         # override zpool_create()
 zfs_dataset_overlay_file=""      # override datasets_create()
+postinstall_overlay_file=""      # run arbritrary code after nixos-install and before umount /mnt.
 
 # NIX_OS BOOTSTRAP SETTINGS #
 
@@ -61,10 +61,10 @@ nix_zfs_extra_auto_snapshot_daily="7"      # take a daily snapshot and keep 7 in
 nix_zfs_extra_auto_snapshot_weekly="0"
 nix_zfs_extra_auto_snapshot_monthly="0"
 
-# Use gc.automatic with autoSnapshot to keep disk space under control.
+# Use NixOs automatic garbage collection?
 nix_zfs_extra_gc_automatic="true"
-nix_zfs_extra_gc_dates="daily"
-nix_zfs_extra_gc_options="--delete-older-than 7d"
+nix_zfs_extra_gc_dates="weekly"
+nix_zfs_extra_gc_options="--delete-older-than 30d"
 
 # Clean /tmp automatically on boot.
 nix_zfs_extra_clean_tmp_dir="true"
