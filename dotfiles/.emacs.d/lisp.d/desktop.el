@@ -70,13 +70,13 @@
 (use-package desktop-environment :demand
   :config
   (desktop-environment-mode)
-  (setq desktop-environment-brightness-get-command "xbacklight -getf"
+  (setq desktop-environment-brightness-get-command "light -G"
         desktop-environment-brightness-get-regexp "\\([0-9]+\\)"
-        desktop-environment-brightness-set-command "sudo xbacklight %s"
-        desktop-environment-brightness-small-decrement "-dec 5"
-        desktop-environment-brightness-small-increment "-inc 5"
-        desktop-environment-brightness-normal-increment "-inc 10"
-        desktop-environment-brightness-normal-decrement "-dec 10"))
+        desktop-environment-brightness-set-command "light %s"
+        desktop-environment-brightness-small-decrement "-A 5"
+        desktop-environment-brightness-small-increment "-U 5"
+        desktop-environment-brightness-normal-increment "-A 10"
+        desktop-environment-brightness-normal-decrement "-U 10"))
 
 ;; Local Variables:
 ;; coding: utf-8
