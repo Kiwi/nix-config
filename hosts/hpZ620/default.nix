@@ -6,6 +6,8 @@ imports = [ ../../modules ];
 networking.hostName = "hpZ620";
 
 # hardware specific
+nix.buildCores = 0;
+nix.maxJobs = 24;
 boot.kernelPackages = pkgs.linuxPackages_4_17;
 boot.kernelModules = [ "microcode" "coretemp" "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
 boot.extraModprobeConfig ="options vfio-pci ids=10de:0dd8,10de:0be9";

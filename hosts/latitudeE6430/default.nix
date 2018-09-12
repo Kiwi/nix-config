@@ -6,6 +6,8 @@ imports = [ ../../modules ];
 networking.hostName = "latitudeE6430";
 
 # hardware specific
+nix.buildCores = 0;
+nix.maxJobs = 4;
 boot.kernelModules = [ "microcode" "coretemp" ];
 boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
