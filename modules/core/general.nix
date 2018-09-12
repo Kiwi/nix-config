@@ -16,6 +16,7 @@ time.timeZone = "America/Los_Angeles";
 programs.mtr.enable = true;
 programs.bash.enableCompletion = true;
 
+networking.enableIPv6 = false;
 networking.networkmanager.enable = true;
 networking.firewall.allowPing = true;
 networking.firewall.allowedTCPPorts = [ 22 ];
@@ -28,6 +29,8 @@ powerManagement.enable = true;
 nix.allowedUsers = [ "root" "@wheel" ];
 nix.trustedUsers = [ "root" "@wheel" ];
 nix.useSandbox = true;
+
+nixpkgs.config.allowUnfree = true;
 
 environment.systemPackages = with pkgs; [
 wget
