@@ -32,6 +32,16 @@ enable = true;
 backend = "glx";
 };
 
+hardware.opengl.extraPackages = with pkgs;
+[ libvdpau-va-gl vaapiVdpau ];
+hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux;
+[ libvdpau-va-gl vaapiVdpau ];
+
+# environment.sessionVariables = {
+# LIBVA_DRIVER_NAME = "";
+# VDPAU_DRIVER = "";
+# };
+
 # This value determines the NixOS release with which your system is to be
 # compatible, in order to avoid breaking some software such as database
 # servers. You should change this only after NixOS release notes say you
