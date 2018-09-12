@@ -16,7 +16,7 @@ ln -sf /nix-config/dotfiles/.Xmodmap ~/.Xmodmap
 ln -sf /nix-config/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 ln -sf /nix-config/dotfiles/.Xresources ~/.Xresources
 
-mkdir ~/{bin,.emacs.d}
+mkdir ~/.emacs.d
 ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
 ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
 
@@ -24,6 +24,16 @@ mkdir -p ~/.config/{mpv,mimi,gtk-3.0}
 ln -sf /nix-config/dotfiles/.config/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -sf /nix-config/dotfiles/.config/mpv/mpv.conf ~/.config/mpv/mpv.conf
 ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
+
+ln -sf /nix-config/dotfiles/Private/ssh ~/.ssh
+ln -sf /nix-config/dotfiles/Private/gnupg ~/.gnupg
+ln -sf /nix-config/dotfiles/Private/authinfo.gpg ~/.authinfo.gpg
+ln -sf /nix-config/dotfiles/Private/passwd.gpg ~/.passwd.gpg
+
+sudo ln -sf /nix-config/dotfiles/.bashrc /root/.bashrc
+sudo ln -sf /nix-config/dotfiles/.bash_profile /root/.bash_profile
+sudo ln -sf /nix-config/dotfiles/.inputrc /root/.inputrc
+
 '';
 
 # clone my repos script
