@@ -148,7 +148,7 @@ arc-icon-theme
 glxinfo
 wmctrl
 scrot
-xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
+xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot libva-utils vdpauinfo
 numlockx
 xclip xsel
 libnotify dunst
