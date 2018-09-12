@@ -44,6 +44,9 @@ nix_top_level_configuration="hosts/latitudeE6430"
 # For example, here is mine! https://github.com/a-schaefers/nix-config
 nix_repo_name="nix-config"
 
+# Optionally inserted as "nixos-install --root /mnt $nix_install_opts"
+nix_install_opts="--max-jobs 4 --cores 0"
+
 # Creates /etc/nixos/zfs-configuration.nix with sensible settings.
 nix_zfs_configuration_enabled="true"
 
