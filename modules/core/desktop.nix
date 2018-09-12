@@ -33,7 +33,7 @@ ln -sf /nix-config/dotfiles/Private/passwd.gpg ~/.passwd.gpg
 sudo ln -sf /nix-config/dotfiles/.bashrc /root/.bashrc
 sudo ln -sf /nix-config/dotfiles/.bash_profile /root/.bash_profile
 sudo ln -sf /nix-config/dotfiles/.inputrc /root/.inputrc
-
+sudo ln -sfn /nix-config/dotfiles/Private/mullvad /root/
 '';
 
 # clone my repos script
