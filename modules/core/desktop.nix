@@ -155,7 +155,7 @@ libnotify dunst
 
 # desktop apps
 pandoc
-firefox qbittorrent mpv pavucontrol
+firefox qbittorrent mpv youtube-dl pavucontrol
 gimp kdenlive darktable krita inkscape
 
 # security
