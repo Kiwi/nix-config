@@ -2,8 +2,7 @@
 This repo contains all of my Linux configuration files for everything I do on a computer.
 Using this setup, I am able to bootstrap my complete, custom NixOS installations in one-command.
 This includes zfs-on-root with auto snapshotting, custom disk array and pool setup,
-my operating system services and settings, all of my favorite applications, my mouse cursor theme--
-_the works!_
+my operating system services and settings, all of my favorite applications-- _the works!_
 
 ## Why
 I like to build robust and reproducible, automated systems.
