@@ -17,8 +17,9 @@ within the [hosts/ directory](https://github.com/a-schaefers/nix-config/tree/mas
 [NixOS](https://nixos.org/) with
 [lib/recimport.nix](https://github.com/a-schaefers/nix-config/blob/master/lib/recimport.nix)
 auto-imports _everything_ in the
-[modules/ directory](https://github.com/a-schaefers/nix-config/tree/master/modules) and
-the hosts/ default.nix file determines which modules should actually be enabled or not.
+[modules/ directory](https://github.com/a-schaefers/nix-config/tree/master/modules). The
+corresponding hosts/machine-name/default.nix file determines which modules should
+actually be enabled or not.
 
 [dotfiles/.emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el)
 uses [straight.el](https://github.com/raxod502/straight.el) for reproducible Emacs
