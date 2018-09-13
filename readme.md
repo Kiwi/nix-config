@@ -59,4 +59,4 @@ In addition to all the previously mentioned projects, everyone in #nixos and #em
 and to [ldlework](https://github.com/dustinlacewell/dotfiles)
 who has an excellent setup which inspired many things about my own.
 
-# May the source be with you. |—O—|
+Use the source, Luke. |—O—|
