@@ -1,8 +1,8 @@
 ## What
 This repo contains all of my Linux configuration files for everything I do on a computer.
-Using this setup, I am able to bootstrap my complete, custom NixOS installations in one-command.
-This includes zfs-on-root with auto snapshotting, custom disk array and pool setup,
-my operating system services and settings, all of my favorite applications-- _the works!_
+Using this setup, I am able to bootstrap complete, custom NixOS installations with one-command.
+This includes zfs-on-root with custom disk arrays and automatic pool setup,
+ my system services and settings, all of my favorite applications-- _the works!_
 
 ## Why
 I like to build robust and reproducible, automated systems.
@@ -55,9 +55,7 @@ configuration and package management in elisp.
 [root@nixos:~] themelios hpZ620 a-schaefers/nix-config
 ```
 
-## Thanks
-In addition to all the previously mentioned projects, everyone in #nixos and #emacs on freenode,
+## Mahalo
+to everyone in #nixos and #emacs on freenode,
 and to [ldlework](https://github.com/dustinlacewell/dotfiles)
-who has an excellent setup which inspired many things about my own.
-
-Use the source, Luke. |—O—|
+who has an excellent setup which inspired many things about my own-- __"Thanks."__
