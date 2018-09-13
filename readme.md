@@ -57,7 +57,7 @@ configuration and package management in elisp.
 
 ## Mahalo
 to everyone in #nixos and #emacs on freenode,
-and to [ldlework](https://github.com/dustinlacewell/dotfiles)
-who has an excellent setup which inspired many things about my own--
+and to [ldlework's dotfiles](https://github.com/dustinlacewell/dotfiles), which helped inspire many
+things about my own--
 
 __"Thanks."__
