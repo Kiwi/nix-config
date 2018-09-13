@@ -44,12 +44,13 @@ is a "Next-generation, purely functional package manager for the Emacs hacker." 
 [use-package](https://github.com/jwiegley/use-package) integration and find doing all Emacs configuration
 in lisp is a simpler solution than using a nix and/or lisp hybrid configuration.
 
-## laptop:
+## How I bootstrap my complete, custom NixOS installations in one-command:
+- My laptop:
 ```bash
 [root@nixos:~] themelios latitudeE6430 a-schaefers/nix-config
 ```
 
-## workstation:
+- My workstation:
 ```bash
 [root@nixos:~] themelios hpZ620 a-schaefers/nix-config
 ```
