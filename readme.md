@@ -41,8 +41,8 @@ just a few of my favorite Emacs packages that I use daily:
 [dotfiles/.emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el)
 I use [straight.el](https://github.com/raxod502/straight.el), which
 is a "Next-generation, purely functional package manager for the Emacs hacker." I appreciate Straight's
-[use-package](https://github.com/jwiegley/use-package) integration and find doing all Emacs configuration
-in lisp is a simpler solution than using a nix and/or lisp hybrid configuration.
+[use-package](https://github.com/jwiegley/use-package) integration and prefer doing all Emacs
+configuration and package management in elisp.
 
 ## How I bootstrap my complete, custom NixOS installations in one-command:
 - My laptop:
