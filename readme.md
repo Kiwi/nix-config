@@ -37,7 +37,7 @@ just a few of my favorite Emacs packages that I use daily:
   - shell and ansi-term (terminals)
   - [And much more...](https://github.com/a-schaefers/nix-config/tree/master/dotfiles/.emacs.d/lisp.d)
 
-  I have made an exception for Emacs, instead of using the nix built-in package manager, in my
+I have made an exception for Emacs, instead of using the nix built-in package manager, in my
 [dotfiles/.emacs.d/init.el](https://github.com/a-schaefers/nix-config/blob/master/dotfiles/.emacs.d/init.el)
 I use [straight.el](https://github.com/raxod502/straight.el), which
 is a "Next-generation, purely functional package manager for the Emacs hacker." I appreciate Straight's
