@@ -14,9 +14,9 @@ boot.extraModprobeConfig ="options vfio-pci ids=10de:0dd8,10de:0be9";
 boot.kernelParams = [ "intel_iommu=on iommu=pt" "amdgpu.audio=0" "amdgpu.dc=1" ];
 
 modules.hardware.platform.hpZ620.enable = true;
-modules.workstation.enable = true;
-modules.workstation.wmsupport.enable = true;
-modules.workstation.exwm.enable = true;
-modules.workstation.developer.enable = true;
+modules.desktop.enable = true;
+modules.desktop.wmsupport.enable = true;
+modules.desktop.exwm.enable = true;
+modules.desktop.developer.enable = true;
 modules.services.libvirtd.enable = true;
 }

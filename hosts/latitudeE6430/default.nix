@@ -7,9 +7,9 @@ system.stateVersion = "18.03";
 networking.hostName = "latitudeE6430";
 
 modules.hardware.platform.latitudeE6430.enable = true;
-modules.workstation.enable = true;
-modules.workstation.wmsupport.enable = true;
-modules.workstation.exwm.enable = true;
-modules.workstation.developer.enable = true;
+modules.desktop.enable = true;
+modules.desktop.wmsupport.enable = true;
+modules.desktop.exwm.enable = true;
+modules.desktop.developer.enable = true;
 modules.services.libvirtd.enable = true;
 }

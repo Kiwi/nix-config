@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.workstation.exwm.enable = mkEnableOption "modules.workstation.exwm";
-config = mkIf config.modules.workstation.exwm.enable {
+options.modules.desktop.exwm.enable = mkEnableOption "modules.desktop.exwm";
+config = mkIf config.modules.desktop.exwm.enable {
 
 services.xserver.desktopManager = {
 xterm.enable = false;

@@ -2,8 +2,8 @@
 with lib;
 let
 in {
-options.modules.workstation.enable = mkEnableOption "modules.workstation";
-config = mkIf config.modules.workstation.enable {
+options.modules.desktop.enable = mkEnableOption "modules.desktop";
+config = mkIf config.modules.desktop.enable {
 
 # splash screen.
 boot.plymouth.enable = true;

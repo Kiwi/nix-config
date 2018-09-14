@@ -9,7 +9,7 @@ nix.buildCores = 0;
 nix.maxJobs = 24;
 boot.kernelModules = [ "microcode" "coretemp" ];
 
-modules.hardware.power.workstations.enable = true;
+modules.hardware.power.desktops.enable = true;
 modules.hardware.amdgpu.enable = true;
 };
 }

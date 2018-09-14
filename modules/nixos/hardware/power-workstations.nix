@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
-# generic workstation power settings
+# generic desktop power settings
 with lib;
 {
-options.modules.hardware.power.workstations.enable = mkEnableOption "modules.hardware.power.workstations";
-config = mkIf config.modules.hardware.power.workstations.enable {
+options.modules.hardware.power.desktops.enable = mkEnableOption "modules.hardware.power.desktops";
+config = mkIf config.modules.hardware.power.desktops.enable {
 
 powerManagement = {
 enable = true;

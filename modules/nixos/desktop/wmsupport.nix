@@ -36,8 +36,8 @@ sudo ln -sfn /nix-config/dotfiles/Private/mullvad /root/
 '';
 
 in {
-options.modules.workstation.wmsupport.enable = mkEnableOption "modules.workstation.wmsupport";
-config = mkIf config.modules.workstation.wmsupport.enable {
+options.modules.desktop.wmsupport.enable = mkEnableOption "modules.desktop.wmsupport";
+config = mkIf config.modules.desktop.wmsupport.enable {
 
 services.xserver.displayManager = {
 lightdm.enable = true;
