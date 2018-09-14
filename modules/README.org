@@ -1,1 +1,1 @@
-Everything in General is autoloaded, everything else is an option toggle that may be enabled in the ./hosts/machine-name/default.nix file.
+default.nix here only loads ./lib/recimport.nix which recursively loads every file in every directory from here forward.
