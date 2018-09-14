@@ -23,18 +23,12 @@ services.smartd.enable = true;
 sound.enable = true;
 hardware.pulseaudio.enable = true;
 
-# Xorg, lightdm
+# Xorg
 services.xserver = {
 enable = true;
 layout = "us";
 useGlamor = true;
-displayManager.lightdm.enable = true;
-displayManager.sessionCommands = ''
-${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
-${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
-${pkgs.xlibs.xset}/bin/xset r rate 250 50
-${pkgs.numlockx}/bin/numlockx
-'';};
+};
 
 # mesa
 hardware.opengl = {
