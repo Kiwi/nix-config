@@ -8,16 +8,13 @@ config = mkIf config.modules.desktop.enable {
 # splash screen.
 boot.plymouth.enable = true;
 
-# misc services I don't really use
+# misc desktop-ish services I don't really use
 
 # services.samba.enable = true;
 # services.locate.enable = true;
 # services.printing.enable = true;
 # services.avahi.enable = true;
 # services.avahi.nssmdns = true;
-
-services.acpid.enable = true;
-services.smartd.enable = true;
 
 # pulseaudio
 sound.enable = true;
@@ -42,9 +39,8 @@ dejavu_fonts
 source-code-pro
 ];
 
+# typical desktop apps
 environment.systemPackages = with pkgs; [
-pmutils acpi acpid lm_sensors smartmontools
-
 glxinfo libva-utils vdpauinfo
 
 firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol

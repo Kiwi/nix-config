@@ -10,6 +10,7 @@ boot.kernelModules = [ "microcode" "coretemp" ];
 boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
 
+modules.hardware.enable = true;
 modules.hardware.power.laptops.enable = true;
 modules.hardware.intelgfx.enable = true;
 modules.hardware.touchpad.enable = true;
