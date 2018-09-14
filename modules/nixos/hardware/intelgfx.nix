@@ -11,11 +11,6 @@ Option "TearFree" "true"
 Option "AccelMethod" "glamor"
 '';
 
-services.compton = {
-enable = true;
-backend = "glx";
-};
-
 hardware.opengl.extraPackages = with pkgs;
 [ vaapiIntel libvdpau-va-gl vaapiVdpau ];
 hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux;

@@ -8,7 +8,7 @@ imports = [ ../../modules ];
 # set specific name of computer
 networking.hostName = "adamant";
 
-# machine-specific 4 threads (This can vary from machine-to-machine even of the same model number.)
+# machine-specific threads (This can vary from machine-to-machine even of the same model number.)
 nix.maxJobs = 4;
 
 # use a generic latitudeE6430 profile

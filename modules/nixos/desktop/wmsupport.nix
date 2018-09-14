@@ -51,6 +51,11 @@ ${mynixos-symlinks}/bin/mynixos-symlinks
 '';
 };
 
+services.compton = {
+enable = true;
+backend = "glx";
+};
+
 environment.systemPackages = with pkgs; [
 mynixos-symlinks
 
