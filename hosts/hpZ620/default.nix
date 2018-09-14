@@ -1,12 +1,11 @@
 { config, pkgs, ... }:
-# only hpZ620 workstation specific settings
+# only hpZ620 specific settings
 {
 imports = [ ../../modules ];
 
 system.stateVersion = "18.03";
 networking.hostName = "hpZ620";
 
-# machine specific
 powerManagement.enable = true;
 nix.buildCores = 0;
 nix.maxJobs = 24;
