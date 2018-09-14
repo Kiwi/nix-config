@@ -14,12 +14,11 @@ boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
 
 # my modules
-modules.workstation.enable = true;
-modules.devtools.enable = true;
 modules.intelgfx.enable = true;
-modules.exwm.enable = true;
-modules.wmsupport.enable = true;
-modules.dotfiles.enable = true;
+modules.workstation.enable = true;
+modules.workstation.wmsupport.enable = true;
+modules.workstation.exwm.enable = true;
+modules.workstation.developer.enable = true;
 modules.libvirtd.enable = true;
 
 # boost laptop power savings

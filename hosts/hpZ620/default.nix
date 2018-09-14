@@ -16,11 +16,10 @@ boot.kernelParams = [ "intel_iommu=on iommu=pt" "amdgpu.audio=0" "amdgpu.dc=1" ]
 boot.initrd.kernelModules = [ "amdgpu" ];
 
 # my modules
-modules.workstation.enable = true;
-modules.devtools.enable = true;
 modules.amdgpu.enable = true;
-modules.exwm.enable = true;
-modules.wmsupport.enable = true;
-modules.dotfiles.enable = true;
+modules.workstation.enable = true;
+modules.workstation.wmsupport.enable = true;
+modules.workstation.exwm.enable = true;
+modules.workstation.developer.enable = true;
 modules.libvirtd.enable = true;
 }

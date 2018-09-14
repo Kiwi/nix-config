@@ -3,8 +3,8 @@ with lib;
 let
 # myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in {
-options.modules.devtools.enable = mkEnableOption "dev Profile";
-config = mkIf config.modules.devtools.enable {
+options.modules.workstation.developer.enable = mkEnableOption "workstation.developer";
+config = mkIf config.modules.workstation.developer.enable {
 
 environment.systemPackages = with pkgs; [
 emacs
