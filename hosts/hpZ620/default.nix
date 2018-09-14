@@ -18,27 +18,10 @@ boot.initrd.kernelModules = [ "amdgpu" ];
 
 # my modules
 modules.workstation.enable = true;
+modules.dev.enable = true;
 modules.amdgpu.enable = true;
 modules.exwm.enable = true;
 modules.dotfiles.enable = true;
 modules.libvirtd.enable = true;
-
-# video
-services.xserver.videoDrivers = [ "modesetting" ];
-services.xserver.deviceSection = ''
-Option "DRI" "3"
-Option "TearFree" "true"
-Option "AccelMethod" "glamor"
-'';
-
-services.compton = {
-enable = true;
-backend = "glx";
-};
-
-hardware.opengl.extraPackages = with pkgs;
-[ libvdpau-va-gl vaapiVdpau ];
-hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux;
-[ libvdpau-va-gl vaapiVdpau ];
 
 }

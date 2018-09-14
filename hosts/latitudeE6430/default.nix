@@ -8,6 +8,7 @@ networking.hostName = "latitudeE6430";
 
 # my modules
 modules.workstation.enable = true;
+modules.dev.enable = true;
 modules.intelgfx.enable = true;
 modules.exwm.enable = true;
 modules.dotfiles.enable = true;

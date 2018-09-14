@@ -52,10 +52,6 @@ source-code-pro
 environment.systemPackages = with pkgs; [
 pmutils acpi acpid lm_sensors smartmontools
 
-gitAndTools.gitFull gitAndTools.gitflow
-tmux
-shellcheck
-aspell aspellDicts.en
 poppler_utils poppler_gi libpng12 zlib
 
 numix-cursor-theme
@@ -70,9 +66,7 @@ numlockx
 xclip xsel
 libnotify dunst
 
-pandoc
 firefox chromium qbittorrent mpv youtube-dl pavucontrol
-gimp kdenlive darktable krita inkscape
 ];
 
 };
