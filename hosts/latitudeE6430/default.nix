@@ -15,9 +15,10 @@ boot.initrd.kernelModules = [ "i915" ];
 
 # my modules
 modules.workstation.enable = true;
-modules.dev.enable = true;
+modules.devtools.enable = true;
 modules.intelgfx.enable = true;
 modules.exwm.enable = true;
+modules.wmsupport.enable = true;
 modules.dotfiles.enable = true;
 modules.libvirtd.enable = true;
 

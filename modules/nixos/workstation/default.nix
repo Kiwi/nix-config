@@ -45,18 +45,7 @@ source-code-pro
 environment.systemPackages = with pkgs; [
 pmutils acpi acpid lm_sensors smartmontools
 
-poppler_utils poppler_gi libpng12 zlib
-
-numix-cursor-theme
-arc-theme
-arc-icon-theme
-
-glxinfo
-wmctrl
-scrot
-xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot libva-utils vdpauinfo
-numlockx
-xclip xsel
+glxinfo libva-utils vdpauinfo
 
 firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];

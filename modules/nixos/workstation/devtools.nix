@@ -3,13 +3,15 @@ with lib;
 let
 # myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in {
-options.modules.dev.enable = mkEnableOption "dev Profile";
-config = mkIf config.modules.dev.enable {
+options.modules.devtools.enable = mkEnableOption "dev Profile";
+config = mkIf config.modules.devtools.enable {
 
 environment.systemPackages = with pkgs; [
 emacs
 #myEmacs
+poppler_utils poppler_gi libpng12 zlib
 aspell aspellDicts.en
+
 gitAndTools.gitFull gitAndTools.gitflow
 tmux
 shellcheck

@@ -17,10 +17,10 @@ boot.initrd.kernelModules = [ "amdgpu" ];
 
 # my modules
 modules.workstation.enable = true;
-modules.dev.enable = true;
+modules.devtools.enable = true;
 modules.amdgpu.enable = true;
 modules.exwm.enable = true;
+modules.wmsupport.enable = true;
 modules.dotfiles.enable = true;
 modules.libvirtd.enable = true;
-
 }
