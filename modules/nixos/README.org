@@ -1,1 +1,1 @@
-Everything in General is autoloaded, everything else is an option toggle that may be enabled in the ./hosts/machine-name/default.nix file.
+Everything in General is autoloaded, everything else is an option toggle that may be enabled in the ../../hosts/machine-name/default.nix file.

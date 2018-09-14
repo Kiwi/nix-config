@@ -1,1 +1,1 @@
-default.nix here only loads ./lib/recimport.nix which recursively loads every file in every directory from here forward.
+default.nix here only imports ../lib/recimport.nix which recursively imports every file in every directory from here forward.
