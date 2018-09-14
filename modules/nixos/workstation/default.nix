@@ -34,7 +34,6 @@ ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50
 ${pkgs.numlockx}/bin/numlockx
-${pkgs.dunst}/bin/dunst &
 '';};
 
 # mesa
@@ -64,7 +63,6 @@ scrot
 xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot libva-utils vdpauinfo
 numlockx
 xclip xsel
-libnotify dunst
 
 firefox chromium qbittorrent mpv youtube-dl pavucontrol
 ];
