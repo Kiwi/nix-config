@@ -22,4 +22,9 @@ enableIPv6 = false;
 nameservers = [ "8.8.8.8" "8.8.4.4" ];
 };
 
+services.openssh.permitRootLogin = "yes";
+
+nix.allowedUsers = [ "root" "@wheel" ];
+nix.trustedUsers = [ "root" "@wheel" ];
+
 }
