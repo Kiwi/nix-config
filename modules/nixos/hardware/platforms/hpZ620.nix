@@ -6,10 +6,8 @@ options.modules.hardware.platform.hpZ620.enable = mkEnableOption "hardware.platf
 config = mkIf config.modules.hardware.platform.hpZ620.enable {
 
 nix.buildCores = 0;
-nix.maxJobs = 24;
 boot.kernelModules = [ "microcode" "coretemp" ];
-
 modules.hardware.power.desktops.enable = true;
-modules.hardware.amdgpu.enable = true;
+
 };
 }

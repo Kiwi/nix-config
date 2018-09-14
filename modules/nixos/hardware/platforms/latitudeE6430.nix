@@ -6,7 +6,6 @@ options.modules.hardware.platform.latitudeE6430.enable = mkEnableOption "hardwar
 config = mkIf config.modules.hardware.platform.latitudeE6430.enable {
 
 nix.buildCores = 0;
-nix.maxJobs = 4;
 boot.kernelModules = [ "microcode" "coretemp" ];
 boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
