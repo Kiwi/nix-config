@@ -55,9 +55,9 @@ configuration and package management in elisp.
 [root@nixos:~] themelios hpZ620 a-schaefers/nix-config
 ```
 
-## Mahalo
-to everyone in #nixos and #emacs on freenode,
-and to [ldlework's dotfiles](https://github.com/dustinlacewell/dotfiles), which helped inspire many
-things about my own--
+## Credits
+- Everyone in #nixos and #emacs on freenode, for always helping me out.
+- [ldlework's dotfiles](https://github.com/dustinlacewell/dotfiles), which helped inspire my nix files and the themelios installer.
+- Various Emacs starter-kits, technomancy, purcell, prelude, spacemacs, the Emacs wiki, etc. I've taken bits and pieces from everywhere by now.
 
 __"Thanks."__
