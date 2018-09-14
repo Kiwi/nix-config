@@ -1,8 +1,9 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.intelgfx.enable = mkEnableOption "Intelgfx Profile";
-config = mkIf config.modules.intelgfx.enable {
+options.modules.hardware.intelgfx.enable = mkEnableOption "Intelgfx Profile";
+config = mkIf config.modules.hardware.intelgfx.enable {
+
 services.xserver.videoDrivers = [ "modesetting" ];
 services.xserver.deviceSection = ''
 Option "DRI" "3"

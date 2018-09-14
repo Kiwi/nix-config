@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.amdgpu.enable = mkEnableOption "Amdgpu Profile";
-config = mkIf config.modules.amdgpu.enable {
+options.modules.hardware.amdgpu.enable = mkEnableOption "Amdgpu Profile";
+config = mkIf config.modules.hardware.amdgpu.enable {
 
 services.xserver.videoDrivers = [ "modesetting" ];
 

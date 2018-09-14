@@ -15,11 +15,12 @@ boot.extraModprobeConfig ="options vfio-pci ids=10de:0dd8,10de:0be9";
 boot.kernelParams = [ "intel_iommu=on iommu=pt" "amdgpu.audio=0" "amdgpu.dc=1" ];
 boot.initrd.kernelModules = [ "amdgpu" ];
 
+#TODO not done yet.
 # my modules
-modules.amdgpu.enable = true;
+modules.hardware.amdgpu.enable = true;
 modules.workstation.enable = true;
 modules.workstation.wmsupport.enable = true;
 modules.workstation.exwm.enable = true;
 modules.workstation.developer.enable = true;
-modules.libvirtd.enable = true;
+modules.services.libvirtd.enable = true;
 }

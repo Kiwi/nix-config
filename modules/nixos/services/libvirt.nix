@@ -3,8 +3,8 @@ with lib;
 {
 imports = [  ];
 
-options.modules.libvirtd.enable = mkEnableOption "Libvirtd Profile";
-config = mkIf config.modules.libvirtd.enable {
+options.modules.services.libvirtd.enable = mkEnableOption "Libvirtd Profile";
+config = mkIf config.modules.services.libvirtd.enable {
 
 services.dnsmasq.enable = true;
 virtualisation.libvirtd.enable = true;
