@@ -15,6 +15,7 @@ networking.hostName = "adamZ";
 
 # machine-specific threads (This can vary from machine-to-machine even of the same model number.)
 nix.maxJobs = 24;
+nix.buildCores = 0;
 
 # pci passthrough for the quadro2000
 # additionally graphic card settings for the primary amd rx460

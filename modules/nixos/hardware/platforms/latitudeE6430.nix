@@ -5,8 +5,6 @@ with lib;
 options.modules.hardware.platform.latitudeE6430.enable = mkEnableOption "hardware.platform.latitudeE6430";
 config = mkIf config.modules.hardware.platform.latitudeE6430.enable {
 
-nix.buildCores = 0;
-boot.kernelModules = [ "microcode" "coretemp" ];
 boot.kernelParams = [ "i915.enable_fbc=1" ];
 boot.initrd.kernelModules = [ "i915" ];
 
