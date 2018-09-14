@@ -3,7 +3,7 @@ with lib;
 {
 imports = [  ];
 
-options.modules.services.libvirtd.enable = mkEnableOption "Libvirtd Profile";
+options.modules.services.libvirtd.enable = mkEnableOption "modules.services.libvirtd";
 config = mkIf config.modules.services.libvirtd.enable {
 
 services.dnsmasq.enable = true;

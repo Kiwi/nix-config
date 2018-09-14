@@ -3,7 +3,7 @@
 with lib;
 
 {
-options.modules.hardware.touchpad.enable = mkEnableOption "Libinput Touchpad";
+options.modules.hardware.touchpad.enable = mkEnableOption "modules.hardware.touchpad";
 config = mkIf config.modules.hardware.touchpad.enable {
 
 services.xserver.libinput = {

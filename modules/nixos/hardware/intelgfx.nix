@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.hardware.intelgfx.enable = mkEnableOption "Intelgfx Profile";
+options.modules.hardware.intelgfx.enable = mkEnableOption "modules.hardware.intelgfx";
 config = mkIf config.modules.hardware.intelgfx.enable {
 
 services.xserver.videoDrivers = [ "modesetting" ];

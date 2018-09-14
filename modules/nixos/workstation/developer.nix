@@ -3,7 +3,7 @@ with lib;
 let
 # myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in {
-options.modules.workstation.developer.enable = mkEnableOption "workstation.developer";
+options.modules.workstation.developer.enable = mkEnableOption "modules.workstation.developer";
 config = mkIf config.modules.workstation.developer.enable {
 
 environment.systemPackages = with pkgs; [

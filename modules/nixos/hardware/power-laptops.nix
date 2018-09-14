@@ -2,7 +2,7 @@
 # generic laptop power savings settings.
 with lib;
 {
-options.modules.hardware.power.laptops.enable = mkEnableOption "Intelgfx Profile";
+options.modules.hardware.power.laptops.enable = mkEnableOption "modules.hardware.power.laptops";
 config = mkIf config.modules.hardware.power.laptops.enable {
 
 powerManagement.enable = true;

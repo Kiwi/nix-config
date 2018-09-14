@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.hardware.amdgpu.enable = mkEnableOption "Amdgpu Profile";
+options.modules.hardware.amdgpu.enable = mkEnableOption "modules.hardware.amdgpu";
 config = mkIf config.modules.hardware.amdgpu.enable {
 
 boot.initrd.kernelModules = [ "amdgpu" ];

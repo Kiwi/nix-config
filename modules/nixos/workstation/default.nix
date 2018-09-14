@@ -2,7 +2,7 @@
 with lib;
 let
 in {
-options.modules.workstation.enable = mkEnableOption "Workstation Profile";
+options.modules.workstation.enable = mkEnableOption "modules.workstation";
 config = mkIf config.modules.workstation.enable {
 
 # splash screen.

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.workstation.exwm.enable = mkEnableOption "Exwm Profile";
+options.modules.workstation.exwm.enable = mkEnableOption "modules.workstation.exwm";
 config = mkIf config.modules.workstation.exwm.enable {
 
 services.xserver.desktopManager = {

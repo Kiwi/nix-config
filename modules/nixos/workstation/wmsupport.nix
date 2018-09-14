@@ -36,7 +36,7 @@ sudo ln -sfn /nix-config/dotfiles/Private/mullvad /root/
 '';
 
 in {
-options.modules.workstation.wmsupport.enable = mkEnableOption "WM Support Profile";
+options.modules.workstation.wmsupport.enable = mkEnableOption "modules.workstation.wmsupport";
 config = mkIf config.modules.workstation.wmsupport.enable {
 
 services.xserver.displayManager = {
