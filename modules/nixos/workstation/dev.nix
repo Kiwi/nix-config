@@ -14,7 +14,7 @@ gitAndTools.gitFull gitAndTools.gitflow
 tmux
 shellcheck
 
-gimp kdenlive darktable krita inkscape
+gimp kdenlive frei0r darktable krita inkscape
 
 pandoc
 ];

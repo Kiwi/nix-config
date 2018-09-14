@@ -58,7 +58,7 @@ xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot libva-utils vdpauinfo
 numlockx
 xclip xsel
 
-firefox chromium qbittorrent mpv youtube-dl pavucontrol
+firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
 };

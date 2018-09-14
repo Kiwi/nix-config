@@ -12,7 +12,7 @@ bash.enableCompletion = true;
 environment.systemPackages = with pkgs; [
 nix-prefetch-scripts nixops nix-index
 coreutils pciutils
-gptfdisk exfat dosfstools
+gptfdisk dosfstools
 unzip zip
 lsof htop iotop powertop tree pstree
 ltrace strace linuxPackages.perf

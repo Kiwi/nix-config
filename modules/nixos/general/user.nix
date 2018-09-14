@@ -6,10 +6,13 @@ isNormalUser = true;
 createHome = true;
 extraGroups = [
 "wheel"
-"disk" "audio" "video"
+"disk"
+"audio"
+"video"
 "systemd-journal"
 "networkmanager"
-"libvirtd" ];
+"libvirtd"
+];
 initialPassword = "password";
 };
 }
