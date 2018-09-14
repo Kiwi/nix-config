@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
-# generic dell latitude E6430 configuration
+# generic HP Z620 configuration
 with lib;
 {
 options.modules.hardware.platform.hpZ620.enable = mkEnableOption "Intelgfx Profile";
