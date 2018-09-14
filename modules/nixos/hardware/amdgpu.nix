@@ -4,6 +4,8 @@ with lib;
 options.modules.hardware.amdgpu.enable = mkEnableOption "Amdgpu Profile";
 config = mkIf config.modules.hardware.amdgpu.enable {
 
+boot.initrd.kernelModules = [ "amdgpu" ];
+
 services.xserver.videoDrivers = [ "modesetting" ];
 
 services.xserver.deviceSection = ''
