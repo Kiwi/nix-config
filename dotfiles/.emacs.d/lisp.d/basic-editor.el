@@ -19,6 +19,7 @@
  mouse-yank-at-point t
  require-final-newline t
  load-prefer-newer t
+ vc-follow-symlinks t
  ediff-window-setup-function 'ediff-setup-windows-plain
  save-place-file (concat user-emacs-directory "places")
  backup-directory-alist `(("." . ,(concat user-emacs-directory
