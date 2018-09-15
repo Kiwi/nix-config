@@ -31,7 +31,7 @@ system.stateVersion = "18.03";
 
 # Setup my desktop developer profiles.
 modules.desktop.enable = true;
-modules.desktop.security = true;
+modules.desktop.security.enable = true;
 modules.desktop.wmsupport.enable = true;
 modules.desktop.exwm.enable = true;
 modules.desktop.developer.enable = true;
