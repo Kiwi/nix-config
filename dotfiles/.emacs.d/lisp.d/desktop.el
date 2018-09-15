@@ -83,7 +83,9 @@
   (exwm-input-set-key (kbd "s-0") 'delete-window)
   (exwm-input-set-key (kbd "s-1") 'delete-other-windows)
   (exwm-input-set-key (kbd "s-2") 'split-window-below)
-  (exwm-input-set-key (kbd "s-3") 'split-window-right))
+  (exwm-input-set-key (kbd "s-3") 'split-window-right)
+
+  (exwm-input-set-key (kbd "s-m") 'my/next-monitor))
 
 ;; Local Variables:
 ;; coding: utf-8
