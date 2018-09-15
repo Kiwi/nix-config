@@ -47,12 +47,12 @@ configuration and package management in elisp.
 ## How I bootstrap my complete, custom NixOS installations in one-command:
 - My laptop:
 ```bash
-[root@nixos:~] themelios latitudeE6430 a-schaefers/nix-config
+[root@nixos:~] themelios adamant a-schaefers/nix-config
 ```
 
 - My workstation:
 ```bash
-[root@nixos:~] themelios hpZ620 a-schaefers/nix-config
+[root@nixos:~] themelios Z a-schaefers/nix-config
 ```
 
 ## Credits
