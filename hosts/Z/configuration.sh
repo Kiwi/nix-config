@@ -12,8 +12,8 @@ zfs_pool_name="zroot"
 zfs_pool_type="mirror"     # use "" for single, or "mirror", "raidz1", etc.
 
 # Note: using /dev/disk/by-id is also preferable.
-zfs_pool_disks=("/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76820C5544"
-                "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B76822C9FD0")
+zfs_pool_disks=("/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B77820D2629"
+                "/dev/disk/by-id/ata-KINGSTON_SA400S37120G_50026B77820D2E9A")
 
 # Datasets to be set with com.sun:auto-snapshot=true.
 zfs_auto_snapshot=("$zfs_pool_name/HOME" "$zfs_pool_name/ROOT")
@@ -37,7 +37,7 @@ postinstall_overlay_file="postinstall.sh"      # run arbritrary code after nixos
 
 # Your top-level configuration.nix file to be bootstrapped-- (use the relative path from the project_root.)
 # For example, to bootstrap project_root/hosts/vm-example/default.nix
-nix_top_level_configuration="hosts/latitudeE6430"
+nix_top_level_configuration="hosts/Z"
 
 # Directory name of to clone your git-remote in "/" (root). Do not use slashes.
 # This is intended to be the directory to operate the nix installation from.
@@ -45,7 +45,7 @@ nix_top_level_configuration="hosts/latitudeE6430"
 nix_repo_name="nix-config"
 
 # Optionally inserted as "nixos-install --root /mnt $nix_install_opts"
-nix_install_opts="--max-jobs 4 --cores 0"
+nix_install_opts="--max-jobs 24 --cores 0"
 
 # Creates /etc/nixos/zfs-configuration.nix with sensible settings.
 nix_zfs_configuration_enabled="true"

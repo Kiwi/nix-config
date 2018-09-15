@@ -12,7 +12,7 @@ modules.hardware.platform.hpZ620.enable = true;
 modules.hardware.amdgpu.enable = true;
 
 # set specific name of computer
-networking.hostName = "adamZ";
+networking.hostName = "Z";
 
 # machine-specific threads (This can vary from machine-to-machine even of the same model number.)
 nix.maxJobs = 24;
