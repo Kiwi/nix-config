@@ -49,6 +49,9 @@ firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 # default desktop exwm and wmsupport profile
 exwm.enable = mkDefault true;
 wmsupport.enable = mkDefault true;
+modules.desktop = enableMultiple [
+"exwm" "wmsupport"
+];
 
 };
 }
