@@ -2,8 +2,8 @@
 # Enable for all machines with real hardware (e.g. NOT virtual machines.)
 with lib;
 {
-options.modules.hardware.enable = mkEnableOption "modules.hardware";
-config = mkIf config.modules.hardware.enable {
+options.modules.hardware.metal.enable = mkEnableOption "modules.hardware";
+config = mkIf config.modules.hardware.metal.enable {
 
 nix.buildCores = 0;
 
