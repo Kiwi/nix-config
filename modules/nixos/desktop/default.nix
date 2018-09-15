@@ -2,6 +2,7 @@
 with lib;
 let
 in {
+imports = [ ../../../lib/enableMultiple.nix ];
 options.modules.desktop.enable = mkEnableOption "modules.desktop";
 config = mkIf config.modules.desktop.enable {
 
@@ -46,13 +47,12 @@ glxinfo libva-utils vdpauinfo
 firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
-# default desktop exwm and wmsupport profile
-modules.desktop = {
-exwm.enable = mkDefault true;      # Use Emacs as a window manager
-wmsupport.enable = mkDefault true; # Better support for Window Managers
-security.enable = mkDefault true;  # My security settings for desktops
-developer.enable = mkDefault true; # My developer profile
-};
+modules.desktop = enableMultiple [
+"exwm"
+"wmsupport"
+"security"
+"developer"
+];
 
 };
 }
