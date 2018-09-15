@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-# HP Z620 Machine-unique Hardware & Software Configuration
+# HP Z620 - Top Level Nixfile
 {
 imports = [
 ../../modules
@@ -22,5 +22,5 @@ modules.hardware.amdgpu.enable = true;
 modules.desktop.enable = true;
 
 # Services
-modules.services.libvirtd.enable = true; # Virtual machines
+modules.services.libvirtd.enable = true;
 }

@@ -1,5 +1,5 @@
 { config, pkgs, ... }:
-# Dell Latitude E6430 Machine-unique Hardware & Software Configuration
+# Dell Latitude E6430 - Top Level Nixfile
 {
 imports = [ ../../modules ];
 
@@ -15,5 +15,5 @@ modules.hardware.platform.latitudeE6430.enable = true;
 modules.desktop.enable = true;
 
 # Services
-modules.services.libvirtd.enable = true; # Virtual machines
+modules.services.libvirtd.enable = true;
 }
