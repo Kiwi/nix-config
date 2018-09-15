@@ -47,8 +47,12 @@ firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
 # default desktop exwm and wmsupport profile
-exwm.enable = mkDefault true;
-wmsupport.enable = mkDefault true;
+modules.desktop = {
+exwm.enable = mkDefault true;      # Use Emacs as a window manager
+wmsupport.enable = mkDefault true; # Better support for Window Managers
+security.enable = mkDefault true;  # My security settings for desktops
+developer.enable = mkDefault true; # My developer profile
+};
 
 };
 }
