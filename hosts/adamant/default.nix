@@ -1,29 +1,23 @@
 { config, pkgs, ... }:
-# dell latitude E6430 machine-hardware unique and machine-purpose unique settings
+# Dell Latitude E6430 Machine-unique Hardware & Software Configuration
 {
 imports = [ ../../modules ];
 
-# Machine-Hardware Specific Configuration #
+system.stateVersion = "18.03";
+
+# Computer name
+networking.hostName = "adamant";
 
 # use a generic latitudeE6430 profile
 modules.hardware.platform.latitudeE6430.enable = true;
 
-# set specific name of computer
-networking.hostName = "adamant";
+# Desktop
+modules.desktop.enable = true;           # Generic Xorg, Mesa, Browser apps
+modules.desktop.wmsupport.enable = true; # Better support for Window Managers (No Desktop Environment)
+modules.desktop.exwm.enable = true;      # Use Emacs as a window manager
+modules.desktop.developer.enable = true; # My developer profile
+modules.desktop.security.enable = true;  # My security settings for desktops
 
-# machine-specific threads (This can vary from machine-to-machine even of the same model number.)
-nix.maxJobs = 4;
-nix.buildCores = 0;
-
-# Machine-Purpose Specific Configuration # (The purpose this machine is to be used for.)
-
-system.stateVersion = "18.03";
-
-# Setup my desktop developer profiles.
-modules.desktop.enable = true;
-modules.desktop.security.enable = true;
-modules.desktop.wmsupport.enable = true;
-modules.desktop.exwm.enable = true;
-modules.desktop.developer.enable = true;
-modules.services.libvirtd.enable = true;
+# Services
+modules.services.libvirtd.enable = true; # Virtual machines
 }

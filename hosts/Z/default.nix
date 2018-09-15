@@ -1,22 +1,18 @@
 { config, pkgs, ... }:
-#  HP Z620 machine-hardware unique and machine-purpose unique settings
+# HP Z620 Machine-unique Hardware & Software Configuration
 {
 imports = [ ../../modules ];
 
-# Machine-Hardware Specific Configuration #
+system.stateVersion = "18.03";
 
-# use a generic hpZ620 profile
-modules.hardware.platform.hpZ620.enable = true;
-
-# use a generic amdgpu profile
-modules.hardware.amdgpu.enable = true;
-
-# set specific name of computer
+# Computer name
 networking.hostName = "Z";
 
-# machine-specific threads (This can vary from machine-to-machine even of the same model number.)
-nix.maxJobs = 24;
-nix.buildCores = 0;
+# Use a generic hpZ620 profile
+modules.hardware.platform.hpZ620.enable = true;
+
+# Use a generic amdgpu profile
+modules.hardware.amdgpu.enable = true;
 
 # pci passthrough for the quadro2000
 # additionally amdgpu.audio parameter unique for the amd rx460
@@ -25,15 +21,13 @@ boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
 boot.extraModprobeConfig ="options vfio-pci ids=10de:0dd8,10de:0be9";
 boot.kernelParams = [ "intel_iommu=on iommu=pt" "amdgpu.audio=0" ];
 
-# Machine-Software Specific Configuration # (The purpose this machine is to be used for.)
+# Desktop
+modules.desktop.enable = true;           # Generic Xorg, Mesa, Browser apps
+modules.desktop.wmsupport.enable = true; # Better support for Window Managers (No Desktop Environment)
+modules.desktop.exwm.enable = true;      # Use Emacs as a window manager
+modules.desktop.developer.enable = true; # My developer profile
+modules.desktop.security.enable = true;  # My security settings for desktops
 
-system.stateVersion = "18.03";
-
-# Setup my desktop developer profiles.
-modules.desktop.enable = true;
-modules.desktop.security.enable = true;
-modules.desktop.wmsupport.enable = true;
-modules.desktop.exwm.enable = true;
-modules.desktop.developer.enable = true;
-modules.services.libvirtd.enable = true;
+# Services
+modules.services.libvirtd.enable = true; # Virtual machines
 }
