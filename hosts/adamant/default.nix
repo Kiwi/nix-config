@@ -1,11 +1,7 @@
 { config, pkgs, ... }:
 # Dell Latitude E6430 Machine-unique Hardware & Software Configuration
 {
-imports = [
-../../modules
-./pci-passthrough.nix
-./quirks.nix
-];
+imports = [ ../../modules ];
 
 system.stateVersion = "18.03";
 
