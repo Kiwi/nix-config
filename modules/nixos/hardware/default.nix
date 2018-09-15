@@ -5,7 +5,7 @@ with lib;
 options.modules.hardware.enable = mkEnableOption "modules.hardware";
 config = mkIf config.modules.hardware.enable {
 
-boot.kernelModules = [ "microcode" "coretemp" ];
+boot.kernelModules = [ "coretemp" ];
 
 services.acpid.enable = true;
 
