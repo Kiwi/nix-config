@@ -19,10 +19,11 @@ mkdir ~/.emacs.d
 ln -sfn /nix-config/dotfiles/.emacs.d/lisp.d ~/.emacs.d/lisp.d
 ln -sf /nix-config/dotfiles/.emacs.d/init.el ~/.emacs.d/init.el
 
-mkdir -p ~/.config/{mpv,mimi,gtk-3.0}
+mkdir -p ~/.config/{mpv,mimi,gtk-3.0,dunst}
 ln -sf /nix-config/dotfiles/.config/gtk-3.0/settings.ini ~/.config/gtk-3.0/settings.ini
 ln -sf /nix-config/dotfiles/.config/mpv/mpv.conf ~/.config/mpv/mpv.conf
 ln -sf /nix-config/dotfiles/.config/mimi/mime.conf ~/.config/mimi/mime.conf
+ln -sf /nix-config/dotfiles/.config/dunst/dunstrc ~/.config/dunst/dunstrc
 
 ln -sfn /nix-config/dotfiles/Private/ssh ~/.ssh
 ln -sf /nix-config/dotfiles/Private/gnupg ~/.gnupg
@@ -64,7 +65,7 @@ numix-cursor-theme
 arc-theme
 arc-icon-theme
 
-dunst
+libnotify dunst
 wmctrl
 scrot
 xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
