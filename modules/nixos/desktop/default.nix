@@ -46,9 +46,9 @@ glxinfo libva-utils vdpauinfo
 firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
-modules.desktop = enableMultiple [
-"exwm" "wmsupport"
-];
+# default desktop exwm and wmsupport profile
+exwm.enable = mkDefault true;
+wmsupport.enable = mkDefault true;
 
 };
 }
