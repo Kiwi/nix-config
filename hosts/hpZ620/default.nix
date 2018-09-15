@@ -1,4 +1,5 @@
 { config, pkgs, ... }:
+#  HP Z620 machine-hardware unique and machine-purpose unique settings
 {
 imports = [ ../../modules ];
 

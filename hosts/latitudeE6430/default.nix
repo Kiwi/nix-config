@@ -5,15 +5,15 @@ imports = [ ../../modules ];
 
 # Machine-Hardware Specific Configuration #
 
+# use a generic latitudeE6430 profile
+modules.hardware.platform.latitudeE6430.enable = true;
+
 # set specific name of computer
 networking.hostName = "adamant";
 
 # machine-specific threads (This can vary from machine-to-machine even of the same model number.)
 nix.maxJobs = 4;
 nix.buildCores = 0;
-
-# use a generic latitudeE6430 profile
-modules.hardware.platform.latitudeE6430.enable = true;
 
 # Machine-Purpose Specific Configuration # (The purpose this machine is to be used for.)
 
