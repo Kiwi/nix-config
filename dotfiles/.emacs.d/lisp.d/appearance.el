@@ -11,7 +11,7 @@
   :config (setf rm-blacklist ""))
 
 ;; set font and size
-(set-face-attribute 'default nil :font "Source Code Pro 16")
+(set-face-attribute 'default nil :font "Source Code Pro 20")
 
 ;; show clock on modeline
 (setq display-time-default-load-average nil
