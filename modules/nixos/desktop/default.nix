@@ -44,7 +44,7 @@ source-code-pro
 environment.systemPackages = with pkgs; [
 glxinfo libva-utils vdpauinfo
 
-firefox chromium qbittorrent mpv ffmpeg youtube-dl pavucontrol
+firefox chromium thunderbird qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
 modules.desktop = enableMultiple [
