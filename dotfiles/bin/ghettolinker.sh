@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
+# ghettolink - no warranty. :)
 
-# dotroot
 dotuser="adam"
 dotroot="/nix-config/dotfiles"
 
@@ -9,24 +9,42 @@ dotroot="/nix-config/dotfiles"
 use_dir_symlinks=(".emacs.d/lisp.d"
                   "bin")
 
+# directories not to auto symlink at all
 ignore_dirs=("Private")
+
+# special directions runs last (put any exceptional instructions here.)
+special_directions() {
+    # symlink every file in my Private/ dir to ~/.
+    pvt=(Private/*)
+    for p in "${pvt[@]}"
+    do
+        p=${p##*/}
+        ln -sf ${dotroot}/Private/"$p" /home/${dotuser}/."$p"
+    done
+}
 
 #####################################################
 
 #initial checks
-[[ $THEMELIOS_INSTALL ]] && mnt="/mnt"
+[[ $THEMELIOS_INSTALL ]] && nixos-enter
 dotroot=${dotroot%/}
 
 # go to right place.
-cd "${mnt}$dotroot" || exit
+cd "$dotroot" || exit
 
 # make empty dirtree
 dirray=($(find . -type d | grep "./"))
+
+# remove ignore dirs from tree
+for ignore_dir in "${ignore_dirs[@]}"; do
+    dirray=(${dirray[@]//*$ignore_dir*})
+done
+
 for d in "${dirray[@]}"
 do
     d=$(echo "$d" | sed 's|^./||')
     d=${d%/}
-    mkdir -p "${mnt}"/home/"${dotuser}"/test/"$d"
+    mkdir -p ""/home/"${dotuser}"/"$d"
 done
 
 # populate dirtree with symlinks
@@ -35,7 +53,7 @@ for f in "${filray[@]}"
 do
     f=$(echo "$f" | sed 's|^./||')
     f=${f%/}
-    ln -sf ${mnt}${dotroot}/"$f" ${mnt}/home/${dotuser}/test/"$f"
+    ln -sf ${dotroot}/"$f" /home/${dotuser}/"$f"
 done
 
 # use directory symlinks for exceptions specified in the array.
@@ -44,7 +62,13 @@ do
     spdir=$(echo "$spdir" | sed 's|^./||')
     spdir=${spdir%/}
     # del the real directory full of symlinks
-    rm -rf ${mnt}/home/${dotuser}/test/"${spdir}"
+    rm -rf /home/${dotuser}/"${spdir}"
     # just symlink the directory full of real files instead
-    ln -sfn ${mnt}${dotroot}/"$spdir" ${mnt}/home/${dotuser}/test/"$spdir"
+    ln -sfn ${dotroot}/"$spdir" /home/${dotuser}/"$spdir"
 done
+
+special_directions
+
+[[ $THEMELIOS_INSTALL ]] && exit
+
+echo "Complete"
