@@ -14,12 +14,12 @@ ignore_dirs=("Private")
 
 # special directions runs last (put any exceptional instructions here.)
 special_directions() {
-    # symlink every file in my Private/ dir to ~/.
+    # symlink everything in my Private/ dir to ~/.
     pvt=(Private/*)
     for p in "${pvt[@]}"
     do
         p=${p##*/}
-        ln -sf ${dotroot}/Private/"$p" /home/${dotuser}/."$p"
+        ln -sfn ${dotroot}/Private/"$p" /home/${dotuser}/."$p"
     done
 }
 
