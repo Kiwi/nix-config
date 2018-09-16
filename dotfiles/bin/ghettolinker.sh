@@ -44,7 +44,7 @@ for d in "${dirray[@]}"
 do
     d=$(echo "$d" | sed 's|^./||')
     d=${d%/}
-    mkdir -p ""/home/"${dotuser}"/"$d"
+    mkdir -p /home/"${dotuser}"/"$d"
 done
 
 # populate dirtree with symlinks
