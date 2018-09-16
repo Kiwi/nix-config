@@ -69,6 +69,11 @@ done
 
 special_directions
 
-[[ $THEMELIOS_INSTALL ]] && exit
+final_touch() {
+    chown -R adam:users /home/adam
+    chown -R adam:users /nix-config/
+    exit
+}
+[[ $THEMELIOS_INSTALL ]] && final_touch
 
 echo "Complete"
