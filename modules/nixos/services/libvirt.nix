@@ -6,6 +6,8 @@ imports = [  ];
 options.modules.services.libvirtd.enable = mkEnableOption "modules.services.libvirtd";
 config = mkIf config.modules.services.libvirtd.enable {
 
+users.users.adam.extraGroups = [ "libvirtd" ];
+
 services.dnsmasq.enable = true;
 virtualisation.libvirtd.enable = true;
 networking.firewall.checkReversePath = false;

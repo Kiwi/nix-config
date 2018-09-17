@@ -11,7 +11,6 @@ extraGroups = [
 "video"
 "systemd-journal"
 "networkmanager"
-"libvirtd"
 ];
 initialPassword = "password";
 };
