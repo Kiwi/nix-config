@@ -7,8 +7,9 @@ umount /tmp/Private
 # make my symlinks
 /mnt/nix-config/dotfiles/bin/ghettolinker.sh
 
-# own my files
+# own my files and clone my git repos
 cat << EOF | nixos-enter
 chown -R adam:users /nix-config
 chown -R adam:users /home/adam
+sudo -u adam /home/adam/bin/clonerepos.sh
 EOF
