@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 with import ../../../util;
-let
-in {
+{
 options.modules.desktop.enable = mkEnableOption "modules.desktop";
 config = mkIf config.modules.desktop.enable {
 
@@ -44,7 +43,7 @@ source-code-pro
 environment.systemPackages = with pkgs; [
 glxinfo libva-utils vdpauinfo
 
-firefox qbittorrent mpv ffmpeg youtube-dl pavucontrol
+firefox thunderbird qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
 modules.desktop = enableMultiple [
