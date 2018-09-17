@@ -26,15 +26,16 @@ special_directions() {
 #####################################################
 
 # initial checks
+dotroot=${dotroot%/}
+
+# rerun the script in a nixos-enter (chroot) if my config is found to be in /mnt
 chrootlink() {
     cat << EOF | nixos-enter
-/nix-config/dotfiles/bin/ghettolinker.sh
+${dotroot}/bin/ghettolinker.sh
 exit
 EOF
-
 }
-[[ -d /mnt/nix-config ]] && chrootlink
-dotroot=${dotroot%/}
+[[ -d /mnt/${dotroot} ]] && chrootlink
 
 # go to right place.
 cd "$dotroot" || exit
