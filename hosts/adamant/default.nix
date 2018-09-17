@@ -16,5 +16,4 @@ modules.desktop.enable = true;
 
 # Services
 modules.services.libvirtd.enable = true;
-
 }
