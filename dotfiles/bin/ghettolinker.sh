@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ghettolink - no warranty. :)
+# ghettolinker.sh - no warranty. :)
 
 dotuser="adam"
 dotroot="/nix-config/dotfiles"
@@ -62,7 +62,7 @@ do
     spdir=$(echo "$spdir" | sed 's|^./||')
     spdir=${spdir%/}
     # del the real directory full of symlinks
-    rm -rf /home/${dotuser}/"${spdir}"
+    rm -rf /home/${dotuser:?}/"${spdir}"
     # just symlink the directory full of real files instead
     ln -sfn ${dotroot}/"$spdir" /home/${dotuser}/"$spdir"
 done
@@ -70,8 +70,8 @@ done
 special_directions
 
 final_touch() {
-    chown -R adam:users /home/adam
-    chown -R adam:users /nix-config/
+    chown -R $dotuser:users /home/$dotuser
+    chown -R $dotuser:users /"$nix_repo_name"
     exit
 }
 [[ $THEMELIOS_INSTALL ]] && final_touch
