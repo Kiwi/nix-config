@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # ghettolinker.sh - no warranty. :)
 
+# this script to (re)generates symlinks in a user's $HOME based on a dotfiles directory.
+
+# It will run itself in a nixos chroot if it finds itself mounted in /mnt
+# (non-nixos users might want to modify or comment the chrootlink() lines)
+
 dotuser="adam"
 dotroot="/nix-config/dotfiles"
 
