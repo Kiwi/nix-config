@@ -25,8 +25,15 @@ special_directions() {
 
 #####################################################
 
-#initial checks
-[[ $THEMELIOS_INSTALL ]] && nixos-enter
+# initial checks
+chrootlink() {
+    cat << EOF | nixos-enter
+/nix-config/dotfiles/bin/ghettolinker.sh
+exit
+EOF
+
+}
+[[ -d /mnt/nix-config ]] && chrootlink
 dotroot=${dotroot%/}
 
 # go to right place.
@@ -68,12 +75,3 @@ do
 done
 
 special_directions
-
-final_touch() {
-    chown -R $dotuser:users /home/$dotuser
-    chown -R $dotuser:users /"$nix_repo_name"
-    exit
-}
-[[ $THEMELIOS_INSTALL ]] && final_touch
-
-echo "Complete"
