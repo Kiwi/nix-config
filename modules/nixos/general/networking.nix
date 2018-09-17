@@ -2,6 +2,8 @@
 {
 services.openssh.enable = true;
 
+users.users.adam.extraGroups = [ "networkmanager" ];
+
 networking = {
 networkmanager = {
 enable = true;

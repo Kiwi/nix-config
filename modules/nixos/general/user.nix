@@ -10,7 +10,6 @@ extraGroups = [
 "audio"
 "video"
 "systemd-journal"
-"networkmanager"
 ];
 initialPassword = "password";
 };
