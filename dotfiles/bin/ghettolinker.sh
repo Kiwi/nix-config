@@ -14,7 +14,7 @@ dotroot="/nix-config/dotfiles"
 use_dir_symlinks=(".emacs.d/lisp.d"
                   "bin")
 
-# directories not to auto symlink at all
+# directories with files not to symlink
 ignore_dirs=("Private")
 
 # special directions runs last (put any exceptional instructions here.)
