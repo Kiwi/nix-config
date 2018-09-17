@@ -14,9 +14,9 @@ security.sudo.wheelNeedsPassword = false;
 
 programs.gnupg.agent.enable = true;  #= { enable = true; enableSSHSupport = true; };
 
-# networking = {
-# enableIPv6 = false;
-# };
+networking = {
+enableIPv6 = false;
+};
 
 services.openssh.permitRootLogin = "yes";
 
