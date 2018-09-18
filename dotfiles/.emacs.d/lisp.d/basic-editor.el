@@ -92,15 +92,14 @@
 ;;                 (let ((mark-even-if-inactive transient-mark-mode))
 ;;                   (indent-region (region-beginning) (region-end) nil))))))
 
-(use-package whitespace :init
-  (add-hook 'prog-mode-hook 'whitespace-mode)
-  (add-hook 'before-save-hook 'whitespace-cleanup)
-  :config
-  (setq whitespace-style '(face empty tabs lines-tail trailing)))
+(require 'whitespace)
+(add-hook 'prog-mode-hook 'whitespace-mode)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
 
 ;; per project code style settings
 (use-package editorconfig :init
-  (add-hook 'after-init-hook 'editorconfig-mode))
+  (add-hook 'prog-mode-hook 'editorconfig-mode))
 
 (add-hook 'text-mode-hook 'abbrev-mode)
 

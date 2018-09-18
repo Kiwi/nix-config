@@ -5,6 +5,7 @@
 
 (use-package smart-mode-line :demand
   :init (setq sml/theme 'respectful)
+  (setq sml/no-confirm-load-theme t)
   :config (sml/setup))
 
 (use-package rich-minority
