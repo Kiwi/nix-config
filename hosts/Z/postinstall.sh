@@ -11,5 +11,6 @@ umount /tmp/Private
 cat << EOF | nixos-enter
 chown -R adam:users /nix-config
 chown -R adam:users /home/adam
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
 sudo -u adam /home/adam/bin/clonerepos.sh
 EOF
