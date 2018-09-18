@@ -5,12 +5,12 @@ cp -rp /tmp/Private/Private /mnt/"${nix_repo_name}"/dotfiles
 umount /tmp/Private
 
 # make my symlinks
-/mnt/nix-config/dotfiles/bin/ghettolinker.sh
+/mnt/"${nix_repo_name}"/dotfiles/bin/ghettolinker.sh
 
 # own my files and clone my git repos
 cat << EOF | nixos-enter
-chown -R adam:users /nix-config
+chown -R adam:users /"${nix_repo_name}"
 chown -R adam:users /home/adam
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
-sudo -u adam /home/adam/bin/clonerepos.sh
+sudo -u adam /"${nix_repo_name}"/dotfiles/bin/clonerepos.sh
 EOF
