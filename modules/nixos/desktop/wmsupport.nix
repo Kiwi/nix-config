@@ -10,6 +10,7 @@ sessionCommands = ''
 /nix-config/dotfiles/bin/ghettolinker.sh
 ${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
 ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
+${pkgs.xlibs.xrdb}/bin/xrdb ~/.Xresources
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50
 ${pkgs.numlockx}/bin/numlockx
 ${pkgs.numlockx}/bin/dunst &
