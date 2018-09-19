@@ -1,2 +1,3 @@
 [[ -f ~/.bashrc ]] && . ~/.bashrc
-pgrep sway /dev/null || sway
+
+[[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && sway

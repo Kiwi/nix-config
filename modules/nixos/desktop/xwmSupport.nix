@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 {
-options.modules.desktop.wmsupport.enable = mkEnableOption "modules.desktop.wmsupport";
-config = mkIf config.modules.desktop.wmsupport.enable {
+options.modules.desktop.xwmSupport.enable = mkEnableOption "modules.desktop.wmsupport";
+config = mkIf config.modules.desktop.xwmSupport.enable {
 
 services.xserver.displayManager = {
 lightdm.enable = true;
@@ -23,11 +23,6 @@ backend = "glx";
 };
 
 environment.systemPackages = with pkgs; [
-lxappearance
-numix-cursor-theme
-arc-theme
-arc-icon-theme
-
 libnotify dunst
 wmctrl
 scrot

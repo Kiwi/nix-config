@@ -1,4 +1,4 @@
-URxvt*font:           xft:DejaVu Sans Mono:size=12
+URxvt*font:           xft:Source Code Pro:size=13
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.scrollBar_floating: false

@@ -7,7 +7,7 @@ config = mkIf config.modules.desktop.enable {
 
 # misc desktop-ish services I don't really use
 
-# boot.plymouth.enable = true;
+boot.plymouth.enable = true;
 # services.samba.enable = true;
 # services.locate.enable = true;
 # services.printing.enable = true;
@@ -35,7 +35,7 @@ modules.desktop = enableMultiple [
 "sway"
 "opengl"
 # "exwm"
-# "wmsupport"
+# "xwmSupport"
 # "xorg"
 "security"
 "developer"
