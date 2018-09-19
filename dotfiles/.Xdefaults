@@ -3,6 +3,8 @@ URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.scrollBar_floating: false
 URxvt.scrollstyle: rxvt
+URxvt*depth: 32
+URxvt*background: rgba:0000/0000/0200/c800
 
 *background: #0f0f0f
 *foreground: #c8c8c8
