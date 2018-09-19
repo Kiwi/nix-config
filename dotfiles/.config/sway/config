@@ -2,7 +2,6 @@
 exec emacs
 font pango:DejaVu Sans Mono 10
 
-
 Set $mod Mod4
 
 set $up w
@@ -16,7 +15,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in __DATADIR__/backgrounds/sway/)
-output * bg /nix-config/dotfiles/wallpaper/Sway_Wallpaper_Blue_1366x768.png fill
+output * bg /nix-config/dotfiles/wallpaper/github.jpeg fill
 
 #
 # Example configuration:
@@ -59,11 +58,14 @@ pointer_accel 0.75
 #
 # Basics:
 #
+bindsym $mod+Control+Backspace exec pkill sway
+
 # start a terminal
 bindsym $mod+Return exec $term
 
 # kill focused window
 bindsym $mod+q kill
+bindsym $mod+Backspace kill
 
 # start your launcher
 bindsym Menu exec $menu
@@ -127,7 +129,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 # Layout stuff:
 #
 
-bindsym $mod+x split toggle
+bindsym $mod+t split toggle
 bindsym $mod+e layout toggle split
 
 # Make the current focus fullscreen
@@ -165,22 +167,12 @@ bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
-#
-# Status Bar:
-#
-# bar {
-# position bottom
-# colors {
-# statusline #ffffff
-# background #323232
-# inactive_workspace #32323200 #32323200 #5c5c5c
-# }
-# }
 
-for_window [class="^.*"] border pixel 0
+for_window [class="^.*"] border pixel 3
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume $(pacmd list-sinks |awk '/* index:/{print $3}') +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume $(pacmd list-sinks |awk '/* index:/{print $3}') -5%
 bindsym XF86AudioMute exec pactl set-sink-mute $(pacmd list-sinks |awk '/* index:/{print $3}') toggle
 bindsym XF86MonBrightnessDown exec light -U 10
 bindsym XF86MonBrightnessUp exec light -A 10
+bindsym $mod+l exec swaylock -c 000000

@@ -13,7 +13,9 @@ VISUAL = "emacsclient";
 };
 
 environment.systemPackages = with pkgs; [
+# emacs without gtk
 myEmacs
+# for emacs pdf-tools https://github.com/politza/pdf-tools
 poppler_utils poppler_gi libpng12 zlib
 
 gitAndTools.gitFull gitAndTools.gitflow
