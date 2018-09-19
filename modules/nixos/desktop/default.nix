@@ -5,11 +5,9 @@ with import ../../../util;
 options.modules.desktop.enable = mkEnableOption "modules.desktop";
 config = mkIf config.modules.desktop.enable {
 
-# splash screen.
-boot.plymouth.enable = true;
-
 # misc desktop-ish services I don't really use
 
+# boot.plymouth.enable = true;
 # services.samba.enable = true;
 # services.locate.enable = true;
 # services.printing.enable = true;
@@ -19,19 +17,6 @@ boot.plymouth.enable = true;
 # pulseaudio
 sound.enable = true;
 hardware.pulseaudio.enable = true;
-
-# Xorg
-services.xserver = {
-enable = true;
-layout = "us";
-useGlamor = true;
-};
-
-# mesa
-hardware.opengl = {
-driSupport = true;
-driSupport32Bit = true;
-};
 
 # some basic xft fonts
 fonts.fonts = with pkgs; [
@@ -43,12 +28,15 @@ source-code-pro
 environment.systemPackages = with pkgs; [
 glxinfo libva-utils vdpauinfo
 
-firefox thunderbird qbittorrent mpv ffmpeg youtube-dl pavucontrol
+firefox qbittorrent mpv ffmpeg youtube-dl pavucontrol
 ];
 
 modules.desktop = enableMultiple [
-"exwm"
-"wmsupport"
+"sway"
+"opengl"
+# "exwm"
+# "wmsupport"
+# "xorg"
 "security"
 "developer"
 ];

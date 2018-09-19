@@ -12,6 +12,7 @@
 (setq uniquify-buffer-name-style 'forward)
 
 (setq
+ x-select-enable-clipboard-manager nil
  select-enable-clipboard t
  select-enable-primary nil
  save-interprogram-paste-before-kill t

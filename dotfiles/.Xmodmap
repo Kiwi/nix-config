@@ -1,5 +1,5 @@
 !| 66 | 37 | 133 | 64 | <SPACE> | 108 | 134 | 135 | 105 |
-!| capslock | control | super | meta | | meta | super | menu | control |
+!| capslock | control | super | meta | <Space> | meta | super | menu | control |
 !| f16 | f17 | hyper | control | <SPACE> | meta | super | f18 | f19 |
 
 clear lock

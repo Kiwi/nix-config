@@ -6,7 +6,7 @@
 ;; (setq edebug-all-forms t)
 ;; (setq exwm-debug-on t)
 ;; (setq use-package-verbose t)
-(toggle-frame-fullscreen) ;; Helps when using Exwm.
+(toggle-frame-maximized) ;; Helps when using Exwm.
 
 ;;; Set garbage collection temporarily to a large number, then back to default.
 (setq gc-cons-threshold 64000000)

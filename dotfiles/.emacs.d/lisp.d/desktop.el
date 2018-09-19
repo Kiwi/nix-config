@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package xelb :demand)
-(use-package exwm :demand
+(use-package xelb :demand :disabled)
+(use-package exwm :demand :disabled
   :config
   (require 'exwm-randr)
   (exwm-randr-enable)
@@ -58,6 +58,7 @@
   (exwm-input--update-global-prefix-keys))
 
 (with-eval-after-load "desktop-environment"
+  :disabled
   (exwm-input-set-key (kbd "s-s") 'my/shell)
   (exwm-input-set-key (kbd "<s-return>") 'my/shell)
   (exwm-input-set-key (kbd "s-a") 'my/ansi-term)
