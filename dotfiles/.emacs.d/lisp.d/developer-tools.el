@@ -92,7 +92,7 @@
   (add-hook 'after-init-hook 'global-hl-todo-mode))
 
 ;; git diff's in the fringe/ modeline
-(use-package diff-hl :init
+(use-package diff-hl :init :disabled
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   (add-hook 'after-init-hook 'global-diff-hl-mode)
   :config
