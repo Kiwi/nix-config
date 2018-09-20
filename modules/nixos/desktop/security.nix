@@ -7,6 +7,7 @@ config = mkIf config.modules.desktop.security.enable {
 environment.systemPackages = with pkgs; [
 (python36.withPackages(ps: with ps; [ certifi ]))
 gnutls gnupg gnupg1compat
+nmap
 ];
 
 security.sudo.wheelNeedsPassword = false;
