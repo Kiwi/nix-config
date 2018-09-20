@@ -5,6 +5,7 @@ with import ../../../util;
 options.modules.desktop.enable = mkEnableOption "modules.desktop";
 config = mkIf config.modules.desktop.enable {
 
+# alsa
 sound.enable = true;
 
 # some basic xft fonts

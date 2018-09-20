@@ -5,7 +5,6 @@ options.modules.desktop.sway.enable = mkEnableOption "modules.desktop.sway";
 config = mkIf config.modules.desktop.sway.enable {
 
 users.users.adam.extraGroups = [ "sway" ];
-services.mingetty.autologinUser = "adam";
 
 programs.sway = {
 enable = true;
