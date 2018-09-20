@@ -1,6 +1,13 @@
 ### Variables
-exec emacs
+for_window [class="^.*"] border pixel 3
+assign [class="URxvt"] 1
+assign [class="Emacs"] 2
+assign [class="Firefox"] 3
+assign [class="Chromium"] 3
 font pango:DejaVu Sans Mono 10
+exec emacs
+exec urxvt
+exec firefox
 
 Set $mod Mod4
 
@@ -15,7 +22,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in __DATADIR__/backgrounds/sway/)
-output * bg /nix-config/dotfiles/wallpaper/github.jpeg fill
+output * bg /nix-config/dotfiles/wallpaper/Sway_Wallpaper_Blue_2048x1536.png fill
 
 #
 # Example configuration:
@@ -23,20 +30,6 @@ output * bg /nix-config/dotfiles/wallpaper/github.jpeg fill
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-
-### Idle configuration
-#
-# Example configuration:
-#
-exec swayidle \
-timeout 300 'swaylock -c 000000' \
-timeout 600 'swaymsg "output * dpms off"' \
-resume 'swaymsg "output * dpms on"' \
-before-sleep 'swaylock -c 000000'
-
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 600 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
 #
@@ -61,15 +54,13 @@ pointer_accel 0.75
 bindsym $mod+Control+Backspace exec pkill sway
 
 # start a terminal
-bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $term
 
 # kill focused window
 bindsym $mod+q kill
-bindsym $mod+Backspace kill
 
 # start your launcher
-bindsym Menu exec $menu
-bindsym $mod+m exec $menu
+bindsym $mod+Return exec $menu
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -166,9 +157,6 @@ bindsym Return mode "default"
 bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-
-
-for_window [class="^.*"] border pixel 3
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume $(pacmd list-sinks |awk '/* index:/{print $3}') +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume $(pacmd list-sinks |awk '/* index:/{print $3}') -5%
