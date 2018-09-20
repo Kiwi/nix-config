@@ -11,7 +11,7 @@ gnutls gnupg gnupg1compat
 
 security.sudo.wheelNeedsPassword = false;
 
-programs.gnupg.agent.enable = true;  #= { enable = true; enableSSHSupport = true; };
+programs.gnupg.agent.enable = true;
 
 services.openssh.permitRootLogin = "yes";
 

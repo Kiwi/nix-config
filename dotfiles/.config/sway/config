@@ -7,7 +7,7 @@ assign [class="Chromium"] 3
 font pango:DejaVu Sans Mono 10
 exec emacs
 exec urxvt
-exec firefox
+exec chromium
 
 Set $mod Mod4
 
@@ -51,7 +51,7 @@ pointer_accel 0.75
 #
 # Basics:
 #
-bindsym $mod+Control+Backspace exec pkill sway
+bindsym Control+Mod1+Backspace exec pkill sway
 
 # start a terminal
 bindsym $mod+Shift+Return exec $term
