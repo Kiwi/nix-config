@@ -8,14 +8,14 @@ users.users.adam.extraGroups = [ "sway" ];
 
 programs.sway = {
 enable = true;
+extraPackages = with pkgs; [ dmenu xwayland rxvt_unicode xorg.setxkbmap xclip xsel ];
 extraSessionCommands =  ''
-/nix-config/dotfiles/bin/ghettolinker.sh
+/nix-config/dotfiles/bin/ghettolinker.sh |& > /dev/null
 export XKB_DEFAULT_OPTIONS=ctrl:swap_lalt_lctl,caps:swapescape
 export WLC_REPEAT_DELAY=250
 export WLC_REPEAT_RATE=35
 export _JAVA_AWT_WM_NONREPARENTING=1
 '';
-extraPackages = with pkgs; [ dmenu xwayland rxvt_unicode xorg.setxkbmap xclip xsel ];
 };
 
 };

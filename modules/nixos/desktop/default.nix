@@ -8,7 +8,7 @@ config = mkIf config.modules.desktop.enable {
 # alsa
 sound.enable = true;
 
-# some basic xft fonts
+# some basic fonts
 fonts.fonts = with pkgs; [
 dejavu_fonts
 source-code-pro
@@ -16,13 +16,13 @@ source-code-pro
 
 modules.desktop = enableMultiple [
 "plymouth"
-"sway"
-"opengl"
 "pulse"
 "security"
 "apps"
 "developer"
 # "xorg"
+"opengl"
+"sway"
 # "exwm"
 # "xwmSupport"
 # "kitchenSink"

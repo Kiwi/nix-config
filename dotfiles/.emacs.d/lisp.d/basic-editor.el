@@ -105,7 +105,7 @@
 (add-hook 'text-mode-hook 'abbrev-mode)
 
 ;; default browser
-(setq browse-url-browser-function 'browse-url-firefox)
+(setq browse-url-browser-function 'browse-url-chromium)
 
 ;; ediff winner-undo hook afterwards to resume layout.
 (add-hook 'ediff-after-quit-hook-internal 'winner-undo)

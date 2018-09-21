@@ -6,7 +6,7 @@
 ;; (setq edebug-all-forms t)
 ;; (setq exwm-debug-on t)
 ;; (setq use-package-verbose t)
-(toggle-frame-maximized) ;; Helps when using Exwm.
+(toggle-frame-maximized)
 
 ;;; Set garbage collection temporarily to a large number, then back to default.
 (setq gc-cons-threshold 64000000)
@@ -18,8 +18,8 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; Allow access from emacsclient.
-;; (server-start)
+;; allow access from emacsclient.
+(server-start)
 
 ;; User information.
 (setq user-full-name "Adam Schaefers"
