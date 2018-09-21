@@ -8,7 +8,7 @@ services.xserver.displayManager = {
 lightdm.enable = true;
 sessionCommands = ''
 /nix-config/dotfiles/bin/ghettolinker.sh
-${pkgs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
+${pkgs.xlibs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
 # [[ -f ~/.Xmodmap ]] && ${pkgs.xlibs.xmodmap}/bin/xmodmap ~/.Xmodmap
 [[ -f ~/.Xresources ]] && ${pkgs.xlibs.xrdb}/bin/xrdb ~/.Xresources
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50

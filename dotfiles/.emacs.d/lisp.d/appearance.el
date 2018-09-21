@@ -15,8 +15,8 @@
 (set-face-attribute 'default nil :font "Source Code Pro 15")
 
 ;; transparency
-(set-frame-parameter (selected-frame) 'alpha '(50 . 50))
-(add-to-list 'default-frame-alist '(alpha . (50 . 50)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 
 ;; show clock on modeline
 (setq display-time-default-load-average nil
@@ -35,6 +35,9 @@
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (setq visible-bell nil)
+
+;; needed for ratpoison
+(setq frame-resize-pixelwise t)
 
 ;; Local Variables:
 ;; coding: utf-8

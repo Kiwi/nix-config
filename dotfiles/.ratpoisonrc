@@ -5,38 +5,39 @@ bind Escape abort
 
 set font "Source Code Pro:size=10"
 
-set winname title
-set wingravity center
-set transgravity center
-set border 3
-set barborder 3
+set border 0
+set barborder 0
 set padding 0 1 0 0
 set barpadding 1 1
-set inputwidth 800
-set bargravity center
-set font "Liberation Mono:size=10"
-set bgcolor black
-set fgcolor purple
-set fwcolor chocolate
-set bwcolor black
 
 bind b exec chromium
 bind C-b exec chromium
 
+bind e exec emacs
+bind C-e exec emacs
+
 # Navigation
-definekey top C-S-Up focusup
-definekey top C-S-Left focusleft
-definekey top C-S-Down focusdown
-definekey top C-S-Right focusright
+definekey top s-k focusup
+definekey top s-K exchangeup
+definekey top s-h focusleft
+definekey top s-L exchangeleft
+definekey top s-j focusdown
+definekey top s-J exchangedown
+definekey top s-l focusright
+definekey top s-L exchangeright
 definekey top s-n next
 definekey top s-p prev
 definekey top s-u undo
 definekey top s-r redo
+definekey top s-v hsplit
+definekey top s-s split
+definekey top s-o only
+definekey top s-0 delete
+definekey top s-d kill
 
 # Volume
 definekey top XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 definekey top XF86AudioMute exec pactl set-sink-mute 0 toggle
 definekey top XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
-definekey top XF86AudioRaiseVolume exec ratvolume PCM 3%+
 definekey top XF86MonBrightnessDown exec light -U 10
 definekey top XF86MonBrightnessUp exec light -A 10
