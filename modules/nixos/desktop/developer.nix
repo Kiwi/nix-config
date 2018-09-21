@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
+# myEmacs = (pkgs.emacs.override {withGTK3=false; withGTK2=false; withX=true;});
 in
 {
 options.modules.desktop.developer.enable = mkEnableOption "modules.desktop.developer";
@@ -13,8 +13,7 @@ VISUAL = "emacsclient";
 };
 
 environment.systemPackages = with pkgs; [
-# emacs without gtk
-myEmacs
+emacs # myEmacs
 # for emacs pdf-tools https://github.com/politza/pdf-tools
 poppler_utils poppler_gi libpng12 zlib
 
