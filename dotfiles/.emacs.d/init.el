@@ -19,7 +19,7 @@
   (load custom-file))
 
 ;; allow access from emacsclient.
-(server-start)
+;; (server-start)
 
 ;; User information.
 (setq user-full-name "Adam Schaefers"

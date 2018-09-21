@@ -21,6 +21,11 @@
 
 (global-set-key (kbd "s-/") 'winner-undo)
 (global-set-key (kbd "s-?") 'winner-redo)
+(global-set-key (kbd "s-1") 'delete-other-windows)
+(global-set-key (kbd "s-2") 'split-window-below)
+(global-set-key (kbd "s-3") 'split-window-right)
+(global-set-key (kbd "s-0") 'delete-window)
+
 
 ;; Local Variables:
 ;; coding: utf-8
