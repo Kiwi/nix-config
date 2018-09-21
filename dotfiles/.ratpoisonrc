@@ -1,0 +1,42 @@
+startup_message off
+
+escape C-t
+bind Escape abort
+
+set font "Source Code Pro:size=10"
+
+set winname title
+set wingravity center
+set transgravity center
+set border 3
+set barborder 3
+set padding 0 1 0 0
+set barpadding 1 1
+set inputwidth 800
+set bargravity center
+set font "Liberation Mono:size=10"
+set bgcolor black
+set fgcolor purple
+set fwcolor chocolate
+set bwcolor black
+
+bind b exec chromium
+bind C-b exec chromium
+
+# Navigation
+definekey top C-S-Up focusup
+definekey top C-S-Left focusleft
+definekey top C-S-Down focusdown
+definekey top C-S-Right focusright
+definekey top s-n next
+definekey top s-p prev
+definekey top s-u undo
+definekey top s-r redo
+
+# Volume
+definekey top XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
+definekey top XF86AudioMute exec pactl set-sink-mute 0 toggle
+definekey top XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
+definekey top XF86AudioRaiseVolume exec ratvolume PCM 3%+
+definekey top XF86MonBrightnessDown exec light -U 10
+definekey top XF86MonBrightnessUp exec light -A 10

@@ -15,17 +15,18 @@ source-code-pro
 ];
 
 modules.desktop = enableMultiple [
+# "kitchenSink"
 "plymouth"
 "pulse"
 "security"
 "apps"
 "developer"
-# "xorg"
+"xorg"
+"xwmSupport"
 "opengl"
-"sway"
+# "sway" # comment xwmSupport and xorg if using this one.
 # "exwm"
-# "xwmSupport"
-# "kitchenSink"
+"ratpoison"
 ];
 
 };
