@@ -7,7 +7,7 @@ set barborder 0
 set padding 0 1 0 0
 set barpadding 1 1
 
-definekey top s-e exec emacs
+definekey top s-e exec emacsclient -c -a emacs
 definekey top s-b exec chromium
 
 definekey top s-n next
