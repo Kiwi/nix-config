@@ -1,4 +1,4 @@
-application/pdf; emacsclient -c -a emacs %s
-image/png; emacsclient -c -a emacs %s
-image/jpeg; emacsclient -c -a emacs %s
-image/gif; emacsclient -c -a emacs %s
+application/pdf; emacsclient -create-frame --alternate-editor="" %s
+image/png; emacsclient -create-frame --alternate-editor="" %s
+image/jpeg; emacsclient -create-frame --alternate-editor="" %s
+image/gif; emacsclient -create-frame --alternate-editor="" %s

@@ -1,4 +1,4 @@
-exec emacsclient -c -a emacs
+exec emacs --daemon
 
 startup_message off
 set font "Source Code Pro:size=10"
@@ -7,7 +7,7 @@ set barborder 0
 set padding 0 1 0 0
 set barpadding 1 1
 
-definekey top s-e exec emacsclient -c -a emacs
+definekey top s-e exec emacsclient -create-frame --alternate-editor=""
 definekey top s-b exec chromium
 
 definekey top s-n next
@@ -25,7 +25,7 @@ definekey top s-l focusright
 definekey top s-L exchangeright
 definekey top s-u undo
 definekey top s-U redo
-definekey top s-q kill
+definekey top s-q delete
 definekey top s-Escape quit
 
 definekey top XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%

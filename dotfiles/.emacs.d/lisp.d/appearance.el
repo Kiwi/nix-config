@@ -11,13 +11,10 @@
 (use-package rich-minority
   :config (setf rm-blacklist ""))
 
-;; set font and size
-(set-face-attribute 'default t :font "Source Code Pro 15" )
+;; set "emacsclient" frame font and size
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-15" ))
+;; set "emacs" font and size
 (set-face-attribute 'default nil :font "Source Code Pro 15")
-
-;; transparency
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 
 ;; show clock on modeline
 (setq display-time-default-load-average nil
