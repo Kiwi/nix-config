@@ -18,9 +18,6 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; allow access from emacsclient.
-;; (server-start)
-
 ;; User information.
 (setq user-full-name "Adam Schaefers"
       user-mail-address "sch@efers.org")

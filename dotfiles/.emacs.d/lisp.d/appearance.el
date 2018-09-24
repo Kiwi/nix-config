@@ -12,6 +12,7 @@
   :config (setf rm-blacklist ""))
 
 ;; set font and size
+(set-face-attribute 'default t :font "Source Code Pro 15" )
 (set-face-attribute 'default nil :font "Source Code Pro 15")
 
 ;; transparency

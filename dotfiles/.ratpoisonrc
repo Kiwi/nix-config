@@ -1,4 +1,4 @@
-exec emacs
+exec emacsclient -c -a emacs
 
 startup_message off
 set font "Source Code Pro:size=10"

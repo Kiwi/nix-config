@@ -29,12 +29,5 @@ modules.desktop = enableMultiple [
 "ratpoison"
 ];
 
-environment.systemPackages = with pkgs; [
-arc-theme
-arc-icon-theme
-numix-cursor-theme
-];
-
-
 };
 }

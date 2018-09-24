@@ -1,4 +1,4 @@
-application/pdf; emacsclient %s
-image/png; emacsclient %s
-image/jpeg; emacsclient %s
-image/gif; emacsclient %s
+application/pdf; emacsclient -c -a emacs %s
+image/png; emacsclient -c -a emacs %s
+image/jpeg; emacsclient -c -a emacs %s
+image/gif; emacsclient -c -a emacs %s
