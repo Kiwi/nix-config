@@ -10,7 +10,13 @@ config = mkIf config.modules.desktop.developer.enable {
 environment.sessionVariables = {
 ALTERNATE_EDITOR = "";
 EDITOR = "emacsclient -t";
-VISUAL = "emacsclient -c -a emacs";
+VISUAL = "-create-frame --alternate-editor=\"\"";
+};
+
+services.emacs = {
+package = myEmacs;
+install = true;
+enable = true;
 };
 
 environment.systemPackages = with pkgs; [

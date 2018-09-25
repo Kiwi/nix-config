@@ -113,8 +113,8 @@
 (use-package aggressive-indent :init
   (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 
-;; ;; Auto-indent current and new lines
-;; (electric-indent-mode 1)
+;; Auto-indent current and new lines
+(electric-indent-mode 1)
 
 ;; ;; Auto-indent yanked (pasted) code
 ;; (dolist (command '(yank yank-pop))
@@ -162,8 +162,7 @@
   :config
   (setq midnight-period 7200))
 
-(require 'recentf)
-(recentf-mode 1)
+(recentf-mode)
 (setq recentf-max-menu-items 25)
 
 ;; enable narrowing commands

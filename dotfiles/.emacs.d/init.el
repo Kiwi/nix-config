@@ -24,7 +24,7 @@
 
 ;; Startup settings.
 (setq inhibit-startup-screen nil
-      initial-major-mode 'emacs-lisp-mode
+      initial-major-mode 'org-mode
       initial-scratch-message nil)
 
 ;; Make Emacs verify tls certificates (depends: gnutls-cli certifi)

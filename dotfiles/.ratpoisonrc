@@ -1,4 +1,4 @@
-exec emacs --daemon
+exec emacsclient -create-frame --alternate-editor=""
 
 startup_message off
 set font "Source Code Pro:size=10"
@@ -8,7 +8,7 @@ set padding 0 1 0 0
 set barpadding 1 1
 
 definekey top s-e exec emacsclient -create-frame --alternate-editor=""
-definekey top s-b exec chromium
+definekey top s-w exec chromium
 
 definekey top s-n next
 definekey top s-p prev
