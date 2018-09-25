@@ -6,6 +6,7 @@ config = mkIf config.modules.desktop.pulse.enable {
 
 # pulse audio
 hardware.pulseaudio.enable = true;
+hardware.pulseaudio.support32Bit = true;
 
 environment.systemPackages = with pkgs; [ pavucontrol ];
 
