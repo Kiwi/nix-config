@@ -1,5 +1,3 @@
-exec emacsclient -create-frame --alternate-editor=""
-
 startup_message off
 set font "Source Code Pro:size=10"
 set border 0
