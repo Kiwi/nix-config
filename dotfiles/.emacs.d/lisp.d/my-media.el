@@ -1,15 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package emms
-  :after hydra
-  :init
-  (defhydra emms-hydra ()
-    "Emacs Multimedia System"
-    ("h" helm-emms "helm-emms")
-    ("f" emms-play-file "play file")
-    ("d" emms-play-directory "play directory")
-    ("p" emms "playlist")
-    ("q" nil "Quit" :color blue))
   :config
   (setq emms-source-file-default-directory "~/Downloads")
   (emms-all)

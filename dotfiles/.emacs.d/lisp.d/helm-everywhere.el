@@ -1,5 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
+;; Adapted to my config from "Prelude". :)
+;; Please check them out and give them github stars. https://github.com/bbatsov/prelude
+
 (use-package helm :demand
   :config (require 'helm-config)
 
@@ -11,7 +14,6 @@
   ;; raise helm-external windows using wmctrl
   (when (executable-find "wmctrl")
     (setq helm-raise-command "wmctrl -xa %s"))
-
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
@@ -45,9 +47,6 @@
   (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
   (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
 
-  ;; shell history.
-  (define-key shell-mode-map (kbd "C-c C-r") 'helm-comint-input-ring)
-
   (helm-mode 1))
 
 (use-package helm-projectile :demand :after helm
@@ -56,13 +55,8 @@
 (use-package helm-descbinds :demand :after helm
   :config (helm-descbinds-mode))
 
-;; add swoop
-(use-package helm-swoop :demand :after helm)
-
 ;; add emms
 (use-package helm-emms)
-
-;; nixos specific, remove hidden files from helm launcher
 
 ;; Local Variables:
 ;; coding: utf-8

@@ -45,25 +45,6 @@
   :config (dumb-jump-mode 1)
   (setq dumb-jump-selector 'helm))
 
-;; one search to rule them all. C-s / C-r
-(use-package ace-isearch :demand
-  :after avy
-  :config
-  (global-ace-isearch-mode +1)
-  (custom-set-variables
-   '(ace-isearch-input-length 7)
-   '(ace-isearch-jump-delay 0.50)
-   '(ace-isearch-function 'avy-goto-char)
-   '(ace-isearch-use-jump 'printing-char))
-  (define-key isearch-mode-map (kbd "C-'") 'ace-isearch-jump-during-isearch))
-
-;; precise char jumping (used by ace-isearch)
-(use-package avy :demand
-  :after helm-swoop
-  :config
-  (setq avy-background t)
-  (setq avy-style 'at-full))
-
 ;; discoverable binds
 (use-package which-key :init
   (add-hook 'after-init-hook 'which-key-mode)
@@ -103,19 +84,40 @@
   (setq diff-hl-side 'right))
 
 ;; show the function your working with on the modeline
-(use-package which-func :init
-  (add-hook 'after-init-hook 'which-function-mode)
-  :config
-  (with-eval-after-load 'which-func
-    (setq which-func-modes '(emacs-lisp-mode
-                             common-lisp-mode
-                             clojure-mode
-                             cc-mode
-                             js2-mode
-                             css-mode
-                             scss-mode
-                             web-mode
-                             org-mode))))
+(require 'which-func)
+(setq which-func-modes '(emacs-lisp-mode
+                         common-lisp-mode
+                         clojure-mode
+                         cc-mode
+                         js2-mode
+                         css-mode
+                         scss-mode
+                         web-mode
+                         org-mode))
+
+(use-package hydra :demand)
+
+(use-package crux :demand)
+
+(use-package smartparens :demand
+  :config (require 'smartparens-config)
+  (sp-use-paredit-bindings)
+  (show-smartparens-global-mode +1)
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
+  (add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
+
+  ;; these next two functions get used by some prelude lang configs
+  (defun prelude-wrap-with (s)
+    "Create a wrapper function for smartparens using S."
+    `(lambda (&optional arg)
+       (interactive "P")
+       (sp-wrap-with-pair ,s)))
+  ;; smart curly braces
+  (sp-pair "{" nil :post-handlers
+           '(((lambda (&rest _ignored)
+		(crux-smart-open-line-above)) "RET"))))
 
 ;; a final place to put general programming things
 (defun my-prog-mode-hook ()

@@ -13,9 +13,6 @@
 (add-hook 'after-init-hook #'(lambda ()
                                (setq gc-cons-threshold 800000)))
 
-;; allow access from emacsclient.
-;; (server-start)
-
 ;; Use an external custom.el file instead of appending customization variables to init.el.
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)

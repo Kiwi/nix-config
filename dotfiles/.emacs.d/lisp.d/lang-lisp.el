@@ -1,6 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
-;; some shared keys and functions for all lisp modes.
+;; Adapted to my config from "Prelude". :)
+;; Please check them out and give them github stars. https://github.com/bbatsov/prelude
 
 (use-package rainbow-delimiters)
 
@@ -8,11 +9,10 @@
 (define-key read-expression-map (kbd "TAB") 'completion-at-point)
 
 ;; wrap keybindings
-(with-eval-after-load 'smartparens
-  (lambda ()
-    (define-key lisp-mode-shared-map (kbd "M-(") (prelude-wrap-with "("))
-    (define-key lisp-mode-shared-map (kbd "M-[") (prelude-wrap-with "["))
-    (define-key lisp-mode-shared-map (kbd "M-\"") (prelude-wrap-with "\""))))
+(define-key lisp-mode-shared-map (kbd "M-(") (prelude-wrap-with "("))
+;; FIXME: Pick terminal-friendly binding.
+;;(define-key lisp-mode-shared-map (kbd "M-[") (prelude-wrap-with "["))
+(define-key lisp-mode-shared-map (kbd "M-\"") (prelude-wrap-with "\""))
 
 ;; a great lisp coding hook
 (defun prelude-lisp-coding-defaults ()

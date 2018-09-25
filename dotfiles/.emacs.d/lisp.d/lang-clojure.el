@@ -1,24 +1,35 @@
 ;;; -*- lexical-binding: t; -*-
 
+;; Adapted to my config from "Prelude". :)
+;; Please check them out and give them github stars. https://github.com/bbatsov/prelude
+
 (use-package clojure-snippets)
-(use-package clojure-mode
-  :init
-  (add-hook 'clojure-mode-hook 'prelude-clojure-mode-defaults)
-  :config
+(use-package clojure-mode)
+(use-package cider)
+
+(with-eval-after-load 'clojure-mode
   (defun prelude-clojure-mode-defaults ()
     (subword-mode +1)
-    (run-hooks 'prelude-lisp-coding-hook)))
+    (run-hooks 'prelude-lisp-coding-hook))
 
-(use-package cider
-  :init
-  (add-hook 'cider-mode-hook 'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook 'prelude-cider-repl-mode-defaults)
-  :config
+  (setq prelude-clojure-mode-hook 'prelude-clojure-mode-defaults)
+
+  (add-hook 'clojure-mode-hook (lambda ()
+                                 (run-hooks 'prelude-clojure-mode-hook))))
+
+(with-eval-after-load 'cider
   (setq nrepl-log-messages t)
+
+  (add-hook 'cider-mode-hook 'eldoc-mode)
 
   (defun prelude-cider-repl-mode-defaults ()
     (subword-mode +1)
-    (run-hooks 'prelude-interactive-lisp-coding-hook)))
+    (run-hooks 'prelude-interactive-lisp-coding-hook))
+
+  (setq prelude-cider-repl-mode-hook 'prelude-cider-repl-mode-defaults)
+
+  (add-hook 'cider-repl-mode-hook (lambda ()
+                                    (run-hooks 'prelude-cider-repl-mode-hook))))
 
 ;; Local Variables:
 ;; coding: utf-8

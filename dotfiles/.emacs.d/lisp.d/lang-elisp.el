@@ -1,9 +1,10 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package elisp-slime-nav :init
-  ;; enable elisp-slime-nav-mode
-  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-    (add-hook hook 'elisp-slime-nav-mode)))
+;; Adapted to my config from "Prelude". :)
+;; Please check them out and give them github stars. https://github.com/bbatsov/prelude
+
+(use-package elisp-slime-nav)
+(use-package rainbow-mode)
 
 (defun prelude-visit-ielm ()
   "Switch to default `ielm' buffer.
@@ -29,7 +30,10 @@ Start `ielm' if it's not already running."
   (setq mode-name "EL")
   (prelude-conditional-emacs-lisp-checker))
 
-(add-hook 'emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
+(setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
+
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (run-hooks 'prelude-emacs-lisp-mode-hook)))
 
 (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
@@ -39,18 +43,26 @@ Start `ielm' if it's not already running."
   (run-hooks 'prelude-interactive-lisp-coding-hook)
   (eldoc-mode +1))
 
-(add-hook 'ielm-mode-hook 'prelude-ielm-mode-defaults)
+(setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
 
-(with-eval-after-load 'ielm
-  (lambda ()
-    (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
-    (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\""))))
+(add-hook 'ielm-mode-hook (lambda ()
+                            (run-hooks 'prelude-ielm-mode-hook)))
+
+(with-eval-after-load "ielm"
+  (define-key ielm-map (kbd "M-(") (prelude-wrap-with "("))
+  (define-key ielm-map (kbd "M-\"") (prelude-wrap-with "\"")))
+
+;; enable elisp-slime-nav-mode
+(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+  (add-hook hook 'elisp-slime-nav-mode))
 
 (defun conditionally-enable-smartparens-mode ()
   "Enable `smartparens-mode' in the minibuffer, during `eval-expression'."
   (if (eq this-command 'eval-expression)
       (smartparens-mode 1)))
+
 (add-hook 'minibuffer-setup-hook 'conditionally-enable-smartparens-mode)
+
 
 ;; Local Variables:
 ;; coding: utf-8
