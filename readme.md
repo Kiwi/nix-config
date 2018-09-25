@@ -25,7 +25,6 @@ corresponding hosts/machine-name/default.nix file determines which modules shoul
 
 3. I use Emacs for nearly everything I do, it is the central hub of my workflow. The following are
 just a few of my favorite Emacs packages that I use daily:
-  - exwm (window manager)
   - gnus (email)
   - erc (irc)
   - emms (media player)

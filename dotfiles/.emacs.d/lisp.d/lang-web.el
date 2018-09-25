@@ -3,6 +3,7 @@
 ;; Adapted to my config from "Prelude". :)
 ;; Please check them out and give them github stars. https://github.com/bbatsov/prelude
 
+(use-package markdown-mode)
 (use-package web-mode)
 
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
