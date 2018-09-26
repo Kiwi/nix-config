@@ -10,6 +10,7 @@ definekey top s-w exec chromium
 
 definekey top s-n next
 definekey top s-p prev
+definekey top s-r resize
 definekey top s-s split
 definekey top s-v hsplit
 definekey top s-o only

@@ -3,9 +3,6 @@
 
 # this script to (re)generates symlinks in a user's $HOME based on a dotfiles directory.
 
-# It will run itself in a nixos chroot if it finds itself mounted in /mnt
-# (non-nixos users might want to modify or comment the chrootlink() lines)
-
 dotuser="adam"
 dotroot="/nix-config/dotfiles"
 
@@ -33,19 +30,10 @@ special_directions() {
 # initial checks
 dotroot=${dotroot%/}
 
-# rerun the script in a nixos-enter (chroot) if my config is found to be in /mnt
-chrootlink() {
-    cat << EOF | nixos-enter
-${dotroot}/bin/ghettolinker.sh
-exit
-EOF
-}
-[[ -d /mnt/${dotroot} ]] && chrootlink
-
-# go to right place.
+# go to right place
 cd "$dotroot" || exit
 
-# make empty dirtree
+# find all directories
 dirray=($(find . -type d | grep "./"))
 
 # remove ignore dirs from tree
@@ -53,6 +41,7 @@ for ignore_dir in "${ignore_dirs[@]}"; do
     dirray=(${dirray[@]//*$ignore_dir*})
 done
 
+# make empty dirtree
 for d in "${dirray[@]}"
 do
     d=$(echo "$d" | sed 's|^./||')
@@ -80,4 +69,5 @@ do
     ln -sfn ${dotroot}/"$spdir" /home/${dotuser}/"$spdir"
 done
 
+# run user specified last things
 special_directions
