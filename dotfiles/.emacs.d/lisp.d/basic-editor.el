@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package doom-themes :demand
+(use-package doom-themes :demand :disabled
   :config (load-theme 'doom-one t))
 
 (use-package smart-mode-line :demand
@@ -8,13 +8,17 @@
   (setq sml/no-confirm-load-theme t)
   :config (sml/setup))
 
+(use-package plan9-theme :demand
+  :config (load-theme 'plan9 t))
+
 (use-package rich-minority
-  :config (setf rm-blacklist ""))
+  :config
+  (setf rm-blacklist ""))
 
 ;; set "emacsclient" frame font and size
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-15" ))
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-18" ))
 ;; set "emacs" font and size
-(set-face-attribute 'default nil :font "Source Code Pro 15")
+(set-face-attribute 'default nil :font "Source Code Pro-18")
 
 ;; show clock on modeline
 (setq display-time-default-load-average nil

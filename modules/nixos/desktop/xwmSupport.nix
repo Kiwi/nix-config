@@ -26,6 +26,12 @@ enable = true;
 backend = "glx";
 };
 
+services.redshift = {
+enable = true;
+latitude = "43.3665";
+longitude = "-124.2179";
+};
+
 environment.systemPackages = with pkgs; [
 libnotify dunst
 wmctrl
