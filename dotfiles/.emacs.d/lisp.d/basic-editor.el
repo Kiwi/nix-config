@@ -16,9 +16,9 @@
   (setf rm-blacklist ""))
 
 ;; set "emacsclient" frame font and size
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-18" ))
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-16" ))
 ;; set "emacs" font and size
-(set-face-attribute 'default nil :font "Source Code Pro-18")
+(set-face-attribute 'default nil :font "Source Code Pro-16")
 
 ;; show clock on modeline
 (setq display-time-default-load-average nil

@@ -7,7 +7,6 @@ users.users.adam.extraGroups = [ "networkmanager" ];
 networking = {
 networkmanager = {
 enable = true;
-dhcp = "dhcpcd";
 };
 firewall = {
 allowedTCPPorts = [ 22 ];
