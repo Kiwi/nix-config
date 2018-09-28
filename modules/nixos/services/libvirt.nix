@@ -14,11 +14,17 @@ networking.firewall.checkReversePath = false;
 environment.variables.LIBVIRT_DEFAULT_URI = "qemu:///system";
 
 environment.systemPackages = with pkgs; [
+OVMF
 virtmanager
 pkgs.gnome3.dconf # https://github.com/NixOS/nixpkgs/issues/42433
 ];
 
 virtualisation.libvirtd.onShutdown = "shutdown";
+
+virtualisation.libvirtd.qemuVerbatimConfig = ''
+nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
+'';
+
 };
 
 }
