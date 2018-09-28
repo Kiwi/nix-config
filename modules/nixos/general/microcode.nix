@@ -1,4 +1,4 @@
 { config, pkgs, ... }:
 {
-boot.kernelModules = [ "microcode" ];
+hardware.cpu.intel.updateMicrocode = true;
 }
