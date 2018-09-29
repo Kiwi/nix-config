@@ -3,3 +3,5 @@
 	email = sch@efers.org
 [pull]
 	rebase = true
+[commit]
+        gpgsign = true
