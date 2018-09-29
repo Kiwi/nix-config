@@ -1,7 +1,7 @@
 [user]
-	name = Adam Schaefers
-	email = sch@efers.org
+        name = Adam Schaefers
+        email = sch@efers.org
 [pull]
-	rebase = true
+        rebase = true
 [commit]
         gpgsign = true
