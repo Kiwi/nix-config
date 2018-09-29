@@ -9,6 +9,7 @@ config = mkIf config.modules.hardware.platform.hpZ620.enable {
 modules.hardware = enableMultiple [
 "metal"
 "power"
+"intel-microcode"
 ];
 
 };

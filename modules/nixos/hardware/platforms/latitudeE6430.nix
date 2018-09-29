@@ -11,6 +11,7 @@ modules.hardware = enableMultiple [
 "powerSave"
 "intelgfx"
 "touchpad"
+"intel-microcode"
 ];
 
 services.xserver.libinput.accelSpeed = "0.9";
