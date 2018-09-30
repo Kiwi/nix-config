@@ -10,7 +10,7 @@ gg() { git grep "$@" "$(git rev-list --all)"; }
 ch_bind() { mount -t proc none proc ; mount --rbind /sys sys ; mount --rbind /dev dev; }
 ch_ubind() { umount -lR {dev,proc,sys}; }
 ch_root() { env -i HOME=/root TERM="$TERM" "$(which chroot)" . bash -l; }
-alias my_keys="xset r rate 250 50; setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape"
+alias keyswaps="xset r rate 250 50; setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape"
 
 extract () {
     if [ -f $1 ] ; then
