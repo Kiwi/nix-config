@@ -5,9 +5,9 @@ options.modules.desktop.xwmSupport.enable = mkEnableOption "modules.desktop.wmsu
 config = mkIf config.modules.desktop.xwmSupport.enable {
 
 services.xserver.displayManager = {
-lightdm.enable = true;
-lightdm.autoLogin.enable = true;
-lightdm.autoLogin.user = "adam";
+# lightdm.enable = true;
+# lightdm.autoLogin.enable = true;
+# lightdm.autoLogin.user = "adam";
 sessionCommands = ''
 /nix-config/dotfiles/bin/ghettolinker.sh
 ${pkgs.xlibs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape

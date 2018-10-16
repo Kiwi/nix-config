@@ -8,11 +8,10 @@ environment.systemPackages = with pkgs; [
 (python36.withPackages(ps: with ps; [ certifi ]))
 gnutls gnupg gnupg1compat
 nmap
+keychain
 ];
 
 security.sudo.wheelNeedsPassword = false;
-
-programs.gnupg.agent.enable = true;
 
 services.openssh.permitRootLogin = "yes";
 

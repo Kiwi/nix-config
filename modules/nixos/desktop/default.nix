@@ -12,11 +12,15 @@ sound.enable = true;
 fonts.fonts = with pkgs; [
 dejavu_fonts
 source-code-pro
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+liberation_ttf
 ];
 
 modules.desktop = enableMultiple [
 # "kitchenSink"
-"plymouth"
+# "plymouth"
 "pulse"
 "security"
 "apps"

@@ -6,9 +6,13 @@ config = mkIf config.modules.desktop.apps.enable {
 
 # typical desktop apps
 environment.systemPackages = with pkgs; [
-libnotify glxinfo libva-utils vdpauinfo
+glxinfo libva-utils vdpauinfo
 
-chromium transmission-gtk mpv youtube-dl ffmpeg
+libnotify
+
+chromium thunderbird transmission-gtk mpv youtube-dl ffmpeg
+
+libreoffice-fresh texlive.combined.scheme-small
 ];
 
 };

@@ -13,6 +13,4 @@ extraGroups = [
 ];
 initialPassword = "password";
 };
-programs.ssh.startAgent = true;
-programs.gnupg.agent.enable = true;
 }

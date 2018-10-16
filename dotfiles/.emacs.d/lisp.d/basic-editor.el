@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 (use-package doom-themes :demand
-  :config (load-theme 'doom-one-light t))
+  :config (load-theme 'doom-one t))
 
 (use-package smart-mode-line :demand
   :init (setq sml/theme 'respectful)
@@ -79,7 +79,7 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
-(set-default 'truncate-lines t)
+;; (set-default 'truncate-lines t)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 8)
 
@@ -121,7 +121,7 @@
   (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 
 ;; Auto-indent current and new lines
-(electric-indent-mode 1)
+;; (electric-indent-mode 1)
 
 ;; ;; Auto-indent yanked (pasted) code
 ;; (dolist (command '(yank yank-pop))
