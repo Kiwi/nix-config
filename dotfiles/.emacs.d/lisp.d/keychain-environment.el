@@ -1,6 +1,6 @@
 ;;; keychain-environment.el --- load keychain environment variables  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2011-2018  Jonas Bernoulli
+;;; Copyright (C) 2011-2018  Jonas Bernoulli
 ;; Copyright (C) 2008-2011  Paul Tipper
 
 ;; Author: Paul Tipper <bluefoo at googlemail dot com>
