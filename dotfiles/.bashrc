@@ -5,6 +5,8 @@ fi
 
 # Put your fun stuff here.
 
+eval `keychain --eval id_rsa`
+
 watch() { while true; do "$@"; sleep 2; done; }
 gg() { git grep "$@" "$(git rev-list --all)"; }
 ch_bind() { mount -t proc none proc ; mount --rbind /sys sys ; mount --rbind /dev dev; }
@@ -31,8 +33,6 @@ extract () {
 	echo "'$1' is not a valid file"
     fi
 }
-
-eval `keychain --eval --agents ssh id_rsa`
 
 #output error codes
 EC() { echo -e '\e[1;33m'$?'\e[m'; }
