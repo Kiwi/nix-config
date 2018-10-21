@@ -6,7 +6,7 @@
   (global-set-key (kbd "<f1>") 'my/shell)
   (global-set-key (kbd "<f2>") 'gnus)
   (global-set-key (kbd "<f3>") 'my/erc-bounce)
-  (defhydra emms-hydra ()
+  (defhydra emms-hydra (:exit t)
     "Emacs Multimedia System"
     ("h" helm-emms "helm-emms")
     ("f" emms-play-file "play file")
@@ -29,7 +29,7 @@
   (global-set-key (kbd "s-0") 'delete-window)
 
   ;; primary text-editing hydra on CAPS via setxkbmap -option caps:swapescape
-  (defhydra smartparens-hydra ()
+  (defhydra smartparens-hydra (:exit t)
     "Smartparens"
     ("d" sp-down-sexp "Down")
     ("e" sp-up-sexp "Up")

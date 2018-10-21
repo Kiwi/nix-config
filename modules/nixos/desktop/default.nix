@@ -19,8 +19,6 @@ liberation_ttf
 ];
 
 modules.desktop = enableMultiple [
-# "kitchenSink"
-# "plymouth"
 "pulse"
 "security"
 "apps"
@@ -28,8 +26,6 @@ modules.desktop = enableMultiple [
 "xorg"
 "xwmSupport"
 "opengl"
-# "sway" # comment xwmSupport and xorg if using this one.
-# "exwm"
 "ratpoison"
 ];
 

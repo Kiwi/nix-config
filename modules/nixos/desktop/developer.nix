@@ -33,7 +33,7 @@ awscli ansible
 
 gimp krita inkscape darktable
 
-pandoc
+pandoc aspell
 ];
 
 };

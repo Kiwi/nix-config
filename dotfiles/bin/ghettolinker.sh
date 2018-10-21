@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ghettolinker.sh - no warranty. :)
 
-# this script to (re)generates symlinks in a user's $HOME based on a dotfiles directory.
+# this script (re)generates symlinks in a user's $HOME based on a dotfiles directory.
 
 dotuser="adam"
 dotroot="/nix-config/dotfiles"

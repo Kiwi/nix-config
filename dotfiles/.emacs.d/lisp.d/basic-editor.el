@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 
-(use-package doom-themes :demand
+(use-package doom-themes :disabled
   :config (load-theme 'doom-one t))
 
 (use-package smart-mode-line :demand
@@ -8,7 +8,7 @@
   (setq sml/no-confirm-load-theme t)
   :config (sml/setup))
 
-(use-package plan9-theme :disabled
+(use-package plan9-theme :demand
   :config (load-theme 'plan9 t))
 
 (use-package github-theme :disabled
