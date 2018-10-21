@@ -29,6 +29,8 @@ tmux
 vim
 shellcheck
 
+awscli ansible
+
 gimp krita inkscape darktable
 
 pandoc

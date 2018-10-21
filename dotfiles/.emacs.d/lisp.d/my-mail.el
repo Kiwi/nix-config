@@ -2,7 +2,7 @@
 
 (use-package gnus :config
   ;; don't use ~/.gnus, use gnus file with my other lisp files instead.
-  (setq gnus-site-init-file "~/.emacs.d/lisp.d/gnus.el")
+  (setq gnus-site-init-file "~/.emacs.d/lisp.d/my-mail.el")
 
   ;; keep clutter out of $HOME
   (setq gnus-save-newsrc-file nil)
@@ -81,7 +81,7 @@
   ;; work around issue of gnus demon hang emacs upon connection loss
   ;; (hang for only 10 seconds instead of indefinitely.)
   (defadvice gnus-demon-scan-news (around gnus-demon-timeout activate)
-    "10 second Timeout for Gnus."
+    "3 second Timeout for Gnus."
     (with-timeout
         (3 (message "Gnus timed out."))
       ad-do-it))

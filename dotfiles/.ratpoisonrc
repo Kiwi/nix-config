@@ -7,6 +7,7 @@ set barpadding 1 1
 
 definekey top s-e exec emacsclient -create-frame --alternate-editor=""
 definekey top s-w exec chromium
+definekey top F9 exec pkill -USR1 redshift
 
 definekey top s-n next
 definekey top s-p prev

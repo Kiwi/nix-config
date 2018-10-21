@@ -8,12 +8,19 @@ config = mkIf config.modules.desktop.apps.enable {
 environment.systemPackages = with pkgs; [
 glxinfo libva-utils vdpauinfo
 
-libnotify
-
-chromium thunderbird transmission-gtk mpv youtube-dl ffmpeg
+transmission-gtk youtube-dl ffmpeg
 
 libreoffice-fresh texlive.combined.scheme-small
 ];
+
+programs.firejail = {
+enable = true;
+wrappedBinaries = {
+chromium = "${lib.getBin pkgs.chromium}/bin/chromium";
+mpv = "${lib.getBin pkgs.mpv}/bin/mpv";
+};
+};
+
 
 };
 }

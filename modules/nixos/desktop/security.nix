@@ -17,5 +17,6 @@ services.openssh.permitRootLogin = "yes";
 
 nix.allowedUsers = [ "root" "@wheel" ];
 nix.trustedUsers = [ "root" "@wheel" ];
+
 };
 }
