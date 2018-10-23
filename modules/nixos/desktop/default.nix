@@ -5,6 +5,8 @@ with import ../../../util;
 options.modules.desktop.enable = mkEnableOption "modules.desktop";
 config = mkIf config.modules.desktop.enable {
 
+boot.plymouth.enable = true;
+
 # alsa
 sound.enable = true;
 
