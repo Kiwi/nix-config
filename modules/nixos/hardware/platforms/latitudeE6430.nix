@@ -14,6 +14,6 @@ modules.hardware = enableMultiple [
 "intel-microcode"
 ];
 
-services.xserver.libinput.accelSpeed = "0.9";
+services.xserver.libinput.accelSpeed = "0.75";
 };
 }

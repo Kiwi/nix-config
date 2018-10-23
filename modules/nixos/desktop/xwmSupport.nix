@@ -22,6 +22,10 @@ ${pkgs.feh}/bin/feh --no-fehbg --bg-fill ~/.wallpaper
 '';
 };
 
+powerManagement.resumeCommands = ''
+${pkgs.sudo}/bin/sudo -u adam DISPLAY=:0.0 ${pkgs.xlibs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
+'';
+
 services.compton = {
 enable = true;
 backend = "glx";
