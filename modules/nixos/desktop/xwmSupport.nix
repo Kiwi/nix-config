@@ -8,9 +8,9 @@ services.xserver.displayManager = {
 # lightdm.enable = true;
 # lightdm.autoLogin.enable = true;
 # lightdm.autoLogin.user = "adam";
-slim.enable = true;
-slim.autoLogin = true;
-slim.defaultUser = "adam";
+# slim.enable = true;
+# slim.autoLogin = true;
+# slim.defaultUser = "adam";
 sessionCommands = ''
 /nix-config/dotfiles/bin/ghettolinker.sh
 ${pkgs.xlibs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
