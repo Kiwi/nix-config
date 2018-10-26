@@ -8,12 +8,6 @@
   (setq sml/no-confirm-load-theme t)
   :config (sml/setup))
 
-(use-package plan9-theme :disabled
-  :config (load-theme 'plan9 t))
-
-(use-package github-theme :disabled
-  :config (load-theme 'github t))
-
 (use-package rich-minority
   :config
   (setf rm-blacklist ""))
@@ -43,6 +37,9 @@
 
 ;; needed for ratpoison
 (setq frame-resize-pixelwise t)
+
+;; allows pinentry to work better on some window managers.
+(setq epa-pinentry-mode 'loopback)
 
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))

@@ -1,4 +1,5 @@
 ;;; -*- lexical-binding: t; -*-
+(global-unset-key (kbd "C-z"))
 
 (defun my/binds ()
   ;; general

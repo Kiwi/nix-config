@@ -4,29 +4,22 @@
   (defun my/erc-bounce ()
     "Connect to an irc server using creds in .authinfo or .authinfo.gpg."
     (interactive)
-    (erc-tls :server "140.82.47.107" :port "6698")
-    ;; leave this here incase bouncer is down
-    ;; (setq erc-autojoin-timing ‘ident)
-    ;; (setq erc-autojoin-channels-alist '(("freenode.net"
-    ;;                                ;; "#bash"
-    ;;                                "#commanduser"
-    ;;                                ;; "#emacs"
-    ;;                                "#cooslug"
-    ;;                                ;; "#funtoo"
-    ;;                                ;; "#funtoo-dev"
-    ;;                                ;; "#zfsonlinux"
-    ;;                                )))
-    ;; (erc-tls :server "chat.freenode.net" :port "6697")
-    )
+    (setq erc-autojoin-timing "ident"
+          erc-prompt-for-password nil
+          erc-nick "adamantium"
+          erc-autojoin-channels-alist '(("freenode.net"
+                                         ;; "#emacs"
+                                         ;; "#nixos"
+                                         "#cooslug"
+                                         "##appoptosis")))
+    (erc-tls :server "chat.freenode.net" :port "6697"))
   :config
+
   ;; hide join/part/quit messages
   (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
   ;; friends list
-  (setq erc-pals '("bayprogrammer"
-                   "asx"
-                   "hotaronohanako"
-                   "ldlework"))
+  (setq erc-pals '("bayprogrammer"))
 
   ;; show only mentions and pals on my modeline
   (setq erc-format-query-as-channel-p t
@@ -43,6 +36,7 @@
   (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
                                   "324" "329" "332" "333" "353" "477"))
   (setq erc-track-exclude '("140.82.47.107:6698"
+                            "chat.freenode.net:6697"
                             "freenode.net"))
 
   ;; "bury" private message buffers, but notify also on the modeline.

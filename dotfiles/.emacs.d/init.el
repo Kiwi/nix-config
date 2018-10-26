@@ -6,12 +6,18 @@
 ;; (setq edebug-all-forms t)
 ;; (setq exwm-debug-on t)
 ;; (setq use-package-verbose t)
-(toggle-frame-maximized)
+;; (toggle-frame-maximized)
 
 ;;; Set garbage collection temporarily to a large number, then back to default.
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook #'(lambda ()
                                (setq gc-cons-threshold 800000)))
+
+;; Start the emacsclient server.
+(server-start)
+
+;; Startup to shell
+(add-hook 'emacs-startup-hook 'my/shell)
 
 ;; Use an external custom.el file instead of appending customization variables to init.el.
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -23,7 +29,7 @@
       user-mail-address "sch@efers.org")
 
 ;; Startup settings.
-(setq inhibit-startup-screen nil
+(setq inhibit-startup-screen t
       initial-major-mode 'org-mode
       initial-scratch-message nil)
 

@@ -5,14 +5,19 @@ fi
 
 # Put your fun stuff here.
 
-eval `keychain --eval id_rsa`
+eval $(DISPLAY="" keychain --agents gpg,ssh --eval id_rsa 59AF55B230F3A044AF17DB6D09C5261E6305B722) &&
+    emacsclient --eval "(keychain-refresh-environment)"
+alias keykill="keychain -k all --agents gpg,ssh"
 
 watch() { while true; do "$@"; sleep 2; done; }
 gg() { git grep "$@" "$(git rev-list --all)"; }
 ch_bind() { mount -t proc none proc ; mount --rbind /sys sys ; mount --rbind /dev dev; }
 ch_ubind() { umount -lR {dev,proc,sys}; }
 ch_root() { env -i HOME=/root TERM="$TERM" "$(which chroot)" . bash -l; }
-alias keyswaps="xset r rate 250 50; setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape"
+keyswaps() {
+    xset r rate 250 50
+    setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
+}
 
 extract () {
     if [ -f $1 ] ; then
