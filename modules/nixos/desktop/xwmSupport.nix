@@ -40,7 +40,6 @@ feh
 xorg.setxkbmap xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
 numlockx
 xclip xsel
-rxvt_unicode
 ];
 
 };
