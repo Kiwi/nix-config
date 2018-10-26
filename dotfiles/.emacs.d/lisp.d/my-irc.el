@@ -8,8 +8,8 @@
           erc-prompt-for-password nil
           erc-nick "adamantium"
           erc-autojoin-channels-alist '(("freenode.net"
-                                         ;; "#emacs"
-                                         ;; "#nixos"
+                                         "#emacs"
+                                         "#nixos"
                                          "#cooslug"
                                          "##appoptosis")))
     (erc-tls :server "chat.freenode.net" :port "6697"))

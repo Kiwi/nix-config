@@ -6,7 +6,7 @@ fi
 # Put your fun stuff here.
 
 eval $(DISPLAY="" keychain --agents gpg,ssh --eval id_rsa 59AF55B230F3A044AF17DB6D09C5261E6305B722) &&
-    emacsclient --eval "(keychain-refresh-environment)"
+    echo "tell Emacs what's up..."; emacsclient --eval "(keychain-refresh-environment)"
 alias keykill="keychain -k all --agents gpg,ssh"
 
 watch() { while true; do "$@"; sleep 2; done; }

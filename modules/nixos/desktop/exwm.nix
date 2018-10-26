@@ -32,6 +32,7 @@ _JAVA_AWT_WM_NONREPARENTING = "1";
 # };
 
 environment.systemPackages = with pkgs; [
+#myEmacs
 emacs
 
 # for emacs pdf-tools https://github.com/politza/pdf-tools

@@ -10,9 +10,11 @@ slim.autoLogin = true;
 slim.defaultUser = "adam";
 sessionCommands = ''
 /nix-config/dotfiles/bin/ghettolinker.sh
+${pkgs.numlockx}/bin/numlockx
 ${pkgs.xlibs.setxkbmap}/bin/setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
 ${pkgs.xlibs.xset}/bin/xset r rate 250 50
-${pkgs.numlockx}/bin/numlockx
+${pkgs.xlibs.xsetroot}/bin/xsetroot -cursor_name left_ptr
+${pkgs.xlibs.xrdb}/bin/xrdb ~/.Xresources
 '';
 };
 
@@ -38,6 +40,7 @@ feh
 xorg.setxkbmap xorg.xmodmap xorg.xev xorg.xrdb xorg.xset xorg.xsetroot
 numlockx
 xclip xsel
+rxvt_unicode
 ];
 
 };
