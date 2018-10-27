@@ -25,12 +25,6 @@ VISUAL = "emacsclient";
 _JAVA_AWT_WM_NONREPARENTING = "1";
 };
 
-# services.emacs = {
-# package = myEmacs;
-# install = true;
-# enable = true;
-# };
-
 environment.systemPackages = with pkgs; [
 #myEmacs
 emacs

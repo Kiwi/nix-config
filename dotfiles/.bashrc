@@ -2,11 +2,17 @@ if [[ $- != *i* ]] ; then
     # Shell is non-interactive.  Be done now!
     return
 fi
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 # Put your fun stuff here.
 
+export PATH="$HOME/.cabal/bin:$PATH"
+
 eval $(DISPLAY="" keychain --agents gpg,ssh --eval id_rsa 59AF55B230F3A044AF17DB6D09C5261E6305B722) &&
-    echo "tell Emacs what's up..."; emacsclient --eval "(keychain-refresh-environment)"
+    emacsclient --eval "(keychain-refresh-environment)"
 alias keykill="keychain -k all --agents gpg,ssh"
 
 watch() { while true; do "$@"; sleep 2; done; }
@@ -18,6 +24,31 @@ keyswaps() {
     xset r rate 250 50
     setxkbmap -option ctrl:swap_lalt_lctl -option caps:swapescape
 }
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+echo
+cat <<EOF
+    nnnnnnnn        nnnnnnnniiiiiiiiiixxxxxxx       xxxxxxx
+    n:::::::n       n::::::ni::::::::ix:::::x       x:::::x
+    n::::::::n      n::::::ni::::::::ix:::::x       x:::::x
+    n:::::::::n     n::::::nii::::::iix::::::x     x::::::x
+    n::::::::::n    n::::::n  i::::i  xxx:::::x   x:::::xxx
+    n:::::::::::n   n::::::n  i::::i     x:::::x x:::::x
+    n:::::::n::::n  n::::::n  i::::i      x:::::x:::::x
+    n::::::n n::::n n::::::n  i::::i       x:::::::::x
+    n::::::n  n::::n:::::::n  i::::i       x:::::::::x
+    n::::::n   n:::::::::::n  i::::i      x:::::x:::::x
+    n::::::n    n::::::::::n  i::::i     x:::::x x:::::x
+    n::::::n     n:::::::::n  i::::i  xxx:::::x   x:::::xxx
+    n::::::n      n::::::::nii::::::iix::::::x     x::::::x
+    n::::::n       n:::::::ni::::::::ix:::::x       x:::::x
+    n::::::n        n::::::ni::::::::ix:::::x       x:::::x
+    nnnnnnnn         nnnnnnniiiiiiiiiixxxxxxx       xxxxxxx
+EOF
+echo
 
 extract () {
     if [ -f $1 ] ; then
