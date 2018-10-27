@@ -20,9 +20,6 @@ sbcl lispPackages.quicklisp
 # clojure
 clojure leiningen
 
-# haskell
-ghc cabal-install
-
 # dev-ops
 awscli ansible
 
