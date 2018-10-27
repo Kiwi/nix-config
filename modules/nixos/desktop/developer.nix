@@ -8,25 +8,10 @@ options.modules.desktop.developer.enable = mkEnableOption "modules.desktop.devel
 config = mkIf config.modules.desktop.developer.enable {
 
 environment.systemPackages = with pkgs; [
-# misc
 gitAndTools.gitFull gitAndTools.gitflow
-
-# sh / bash
 shellcheck
-
-# common lisp
-sbcl lispPackages.quicklisp
-
-# clojure
-clojure leiningen
-
-# dev-ops
 awscli ansible
-
-# graphics
 gimp krita inkscape darktable
-
-# word processing
 pandoc aspell libreoffice-fresh texlive.combined.scheme-small
 ];
 
