@@ -11,7 +11,7 @@
                                          "#emacs"
                                          "#nixos"
                                          "#cooslug"
-                                         "##appoptosis")))
+                                         "##apoptosis")))
     (erc-tls :server "chat.freenode.net" :port "6697"))
   :config
 
