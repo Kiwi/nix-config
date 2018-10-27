@@ -11,8 +11,6 @@ glxinfo libva-utils vdpauinfo
 numix-cursor-theme arc-theme arc-icon-theme lxappearance
 
 transmission-gtk youtube-dl ffmpeg
-
-libreoffice-fresh texlive.combined.scheme-small
 ];
 
 programs.firejail = {
