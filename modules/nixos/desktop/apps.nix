@@ -8,7 +8,7 @@ config = mkIf config.modules.desktop.apps.enable {
 environment.systemPackages = with pkgs; [
 glxinfo libva-utils vdpauinfo
 
-numix-cursor-theme arc-theme arc-icon-theme lxappearance
+numix-cursor-theme arc-theme arc-icon-theme
 
 transmission-gtk youtube-dl ffmpeg
 ];
